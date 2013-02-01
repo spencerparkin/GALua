@@ -41,8 +41,6 @@ static luaL_Reg galua[] =
 extern "C" {
 GALUA_FUNC int luaopen_galua( lua_State* L )
 {
-	// TODO: Before this can link, I need to build Lua as a DLL library myself to get the LIB file that I need to link against.
-
 	luaL_setfuncs( L, galua, 0 );
 	return 1;
 }
@@ -51,14 +49,14 @@ GALUA_FUNC int luaopen_galua( lua_State* L )
 //=========================================================================================
 int l_from_string( lua_State* L )
 {
-	//lua_pushnumber( L, 5 );
+	lua_pushnumber( L, 5 );
 	return 1;
 }
 
 //=========================================================================================
 int l_to_string( lua_State* L )
 {
-	//lua_pushstring( L, "test" );
+	lua_pushstring( L, "test" );
 	return 1;
 }
 
