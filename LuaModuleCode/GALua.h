@@ -10,16 +10,13 @@
 #endif //GALUA_EXPORTS
 
 //=========================================================================================
+// This is the C++ include for Lua stuff.
 #include "lua.hpp"
 
 //=========================================================================================
+// Lua will grab this symbol from our DLL and call it to open our library module.
 extern "C" {
 extern GALUA_FUNC int luaopen_galua( lua_State* L );
 } //extern "C"
-
-//=========================================================================================
-/*__cdecl or __stdcall? */
-int l_from_string( lua_State* L );
-int l_to_string( lua_State* L );
 
 // GALua.h

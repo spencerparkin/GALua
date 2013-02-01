@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../lua-5.2.1/src"
+				AdditionalIncludeDirectories="../lua-5.2.1/src; ../../CalcLib/Code/"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GALUA_EXPORTS;LUA_BUILD_AS_DLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="LuaDLL.lib"
+				AdditionalDependencies="LuaDLL.lib CalcLib.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../lua-5.2.1/bin"
+				AdditionalLibraryDirectories="../lua-5.2.1/bin; ../../CalcLib/Build/Debug/"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -174,11 +174,43 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\LuaModuleCode\BasisVec.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\BasisVec.h"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Def.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Def.h"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Env.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Env.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\GALua.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\LuaModuleCode\GALua.h"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\String.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\String.h"
 				>
 			</File>
 		</Filter>

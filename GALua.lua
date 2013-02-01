@@ -4,11 +4,25 @@
 package.cpath = package.cpath .. ";C:\\GALua\\Build\\Debug\\?.dll"
 print( package.cpath )
 
+-- Acquire the GALua API.
 local galua = require 'galua'
 
-local blah = "blah"
-local bloop = galua.from_string( blah )
-local bloopy = galua.to_string( bloop )
+-- Define our basis vectors.  These span the vector space
+-- that generates the geometric algebra that we will use.
+local basisVecs = { "e1", "e2", "e3" }
+galua.def_basis( basisVecs )
 
-print( "bloop = " .. bloop )
-print( "bloopy = " .. bloopy )
+-- Define the signature of our GA.
+local basisVecIPFunc = function( i, j )
+	local ip_table =
+	{
+		{ 1, 0, 0 },
+		{ 0, 1, 0 },
+		{ 0, 0, 1 },
+	}
+	return ip_table[i][j]
+end
+galua.def_sig( basisVecIPFunc )
+
+-- We're now ready to do some GA!
+-- ...do that here...
