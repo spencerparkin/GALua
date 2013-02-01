@@ -63,7 +63,7 @@
 				AdditionalDependencies="LuaDLL.lib"
 				OutputFile="../lua-5.2.1/bin/$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../lua-5.2.1/lib"
+				AdditionalLibraryDirectories="../lua-5.2.1/bin"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
