@@ -23,7 +23,7 @@ int l_def_basis( lua_State* L )
 		// Verify that only one item is on the stack.
 		// Our function takes one and only one argument.
 		int stack_top = lua_gettop(L);
-		if( stack_top > 1 )
+		if( stack_top != 1 )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"def_basis\" expects 1 and only 1 argument, not %d arguments.", stack_top );
 			throw( error );
@@ -93,7 +93,7 @@ int l_def_sig( lua_State* L )
 		// Verify that only one item is on the stack.
 		// Our function takes one and only one argument.
 		int stack_top = lua_gettop(L);
-		if( stack_top > 1 )
+		if( stack_top != 1 )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"def_dig\" expects 1 and only 1 argument, not %d arguments.", stack_top );
 			throw( error );
@@ -119,6 +119,7 @@ int l_def_sig( lua_State* L )
 				lua_pushinteger( L, j + 1 );
 
 				// Make the call in protected mode.
+				// TODO: How do I get the error information from Lua for this call if this call fails?
 				int pcall_result = lua_pcall( L, 2, 1, 0 );
 				if( pcall_result != 0 )
 				{
@@ -146,7 +147,7 @@ int l_def_sig( lua_State* L )
 			}
 		}
 	}
-	catch( const char* )
+	catch(...)
 	{
 	}
 

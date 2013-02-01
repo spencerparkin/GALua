@@ -50,19 +50,19 @@ GALuaEnv::GALuaEnv( void )
 //=========================================================================================
 /*virtual*/ CalcLib::Evaluator* GALuaEnv::CreateBinaryOperator( const char* operatorName, CalcLib::Evaluator* leftOperand, CalcLib::Evaluator* rightOperand, bool& isBinaryOperationEvaluator )
 {
-	return 0;
+	return GeometricAlgebraEnvironment::CreateBinaryOperator( operatorName, leftOperand, rightOperand, isBinaryOperationEvaluator );
 }
 
 //=========================================================================================
 /*virtual*/ CalcLib::Evaluator* GALuaEnv::CreateUnaryOperator( const char* operatorName, CalcLib::Evaluator* operand, bool& isUnaryOperationEvaluator )
 {
-	return 0;
+	return GeometricAlgebraEnvironment::CreateUnaryOperator( operatorName, operand, isUnaryOperationEvaluator );
 }
 
 //=========================================================================================
 /*virtual*/ CalcLib::Number* GALuaEnv::CreateNumber( void )
 {
-	return 0;
+	return GeometricAlgebraEnvironment::CreateNumber();
 }
 
 //=========================================================================================
