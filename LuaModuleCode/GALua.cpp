@@ -41,7 +41,7 @@ static luaL_Reg galua[] =
 extern "C" {
 GALUA_FUNC int luaopen_galua( lua_State* L )
 {
-	luaL_setfuncs( L, galua, 0 );
+	luaL_newlib( L, galua );
 	return 1;
 }
 } //extern "C"
