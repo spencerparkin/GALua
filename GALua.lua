@@ -1,10 +1,10 @@
 -- Test the GALua module.
 
 --package.cpath = package.cpath .. ";.\\Debug\\?.dll"
-package.cpath = package.cpath .. ";C:\\GALua\\Debug\\?.dll"
+package.cpath = package.cpath .. ";C:\\GALua\\Build\\Debug\\?.dll"
 print( package.cpath )
 
-local galua = require 'galua'
+require 'galua'
 
 --[[
 local blah = "blah"
