@@ -16,6 +16,13 @@
 *.ncb
 *.suo
 *.user
+*.exp
+*.ilk
+*.pdb
 
 # Intermediates and built files
 Build/
+LuaDll/Debug/
+LuaDll/Release/
+LuaInterpreter/Debug/
+LuaInterpreter/Release/
