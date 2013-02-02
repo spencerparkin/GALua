@@ -9,38 +9,16 @@
 #include "UnaryOp.h"
 
 //=========================================================================================
+// By avoiding the use of DllMain, our Lua module has the potential to be portable to other platforms.
+#if 0
 BOOL APIENTRY DllMain( HANDLE module, DWORD reason, LPVOID reserved )
 {
-	switch( reason )
-	{
-		case DLL_PROCESS_ATTACH:
-		{
-			gaLuaEnv = new GALuaEnv();
-			if( !gaLuaEnv )
-				return FALSE;
-			break;
-		}
-		case DLL_PROCESS_DETACH:
-		{
-			delete gaLuaEnv;
-			gaLuaEnv = 0;
-			break;
-		}
-		case DLL_THREAD_ATTACH:
-		{
-			break;
-		}
-		case DLL_THREAD_DETACH:
-		{
-			break;
-		}
-	}
-
 	return TRUE;
 }
+#endif
 
 //=========================================================================================
-static luaL_Reg galua[] =
+static luaL_Reg galua_api[] =
 {
 	{ "def_basis", l_def_basis },
 	{ "def_sig", l_def_sig },
@@ -59,13 +37,41 @@ static luaL_Reg galua[] =
 };
 
 //=========================================================================================
+static void ModuleInitialize( void )
+{
+	// Create our GA calculation environment.
+	gaLuaEnv = new GALuaEnv();
+}
+
+//=========================================================================================
+static void ModuleFinalize( void )
+{
+	delete gaLuaEnv;
+	gaLuaEnv = 0;
+}
+
+//=========================================================================================
+// Unfortunately, Lua doesn't call this itself.  We have to rig it into the system.
+int luaclose_galua( lua_State* L )
+{
+	ModuleFinalize();
+
+	return 0;
+}
+
+//=========================================================================================
+// Lua will find this symbol and call it to open our library module.
 extern "C" {
 GALUA_FUNC int luaopen_galua( lua_State* L )
 {
-	luaL_newlib( L, galua );
+	ModuleInitialize();
+
+	luaL_newlib( L, galua_api );
 
 	// Using the API table in function syntax should be a nice way to create multi-vectors.
 	lua_newtable( L );
+	lua_pushcfunction( L, &luaclose_galua );
+	lua_setfield( L, -2, "__gc" );
 	lua_pushcfunction( L, &l_from_string );
 	lua_setfield( L, -2, "__call" );
 	lua_setmetatable( L, -2 );
