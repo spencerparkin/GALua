@@ -24,18 +24,17 @@ static int PerformBinaryOp( lua_State* L, const char* funcName, BinaryOp binaryO
 
 	try
 	{
-		// Make sure we were given exactly two arguments.
+		// Make sure we were given at least two arguments.  We use the top two stack values and ignore the rest.
 		int stack_top = lua_gettop(L);
-		if( stack_top != 2 )
+		if( stack_top < 2 )
 		{
-			sprintf_s( error, sizeof( error ), "The function \"%s\" expects 2 and only 2 arguments.", funcName );
+			sprintf_s( error, sizeof( error ), "The function \"%s\" expects 2 arguments.", funcName );
 			throw( error );
 		}
 
-		// TODO: It would be nice if this function was able to handle built-in Lua types by converting them into user-data types.
-
 		// Try to grab the first argument.
-		GALuaUserData* leftArgUserData = GrabGALuaUserData( L, -2 );
+		bool coercedUserData = false;
+		GALuaUserData* leftArgUserData = GrabGALuaUserData( L, -2, &coercedUserData );
 		if( !leftArgUserData )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to grab its first argument.  Is it the right type?", funcName );
@@ -43,7 +42,8 @@ static int PerformBinaryOp( lua_State* L, const char* funcName, BinaryOp binaryO
 		}
 
 		// Try to grab the second argument.
-		GALuaUserData* rightArgUserData = GrabGALuaUserData( L, -1 );
+		int argumentIdx = coercedUserData ? -2 : -1;
+		GALuaUserData* rightArgUserData = GrabGALuaUserData( L, argumentIdx, &coercedUserData );
 		if( !rightArgUserData )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to grab its second argument.  Is it the right type?", funcName );

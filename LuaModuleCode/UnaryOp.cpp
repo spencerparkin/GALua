@@ -24,16 +24,17 @@ int PerformUnaryOp( lua_State* L, const char* funcName, UnaryOp unaryOp )
 
 	try
 	{
-		// Make sure we were given exactly one argument.
+		// Make sure we were given an argument.  We use the top stack value and ignore the rest.
 		int stack_top = lua_gettop(L);
-		if( stack_top != 1 && /* Hack: Unary overloads get 2 arguments? */ stack_top != 2 )
+		if( stack_top < 1 )
 		{
-			sprintf_s( error, sizeof( error ), "The function \"%s\" expects 1 and only 1 argument.", funcName );
+			sprintf_s( error, sizeof( error ), "The function \"%s\" expects 1 argument.", funcName );
 			throw( error );
 		}
 
 		// Try to grab our argument.
-		GALuaUserData* argUserData = GrabGALuaUserData( L, -1 );
+		bool coercedUserData = false;
+		GALuaUserData* argUserData = GrabGALuaUserData( L, -1, &coercedUserData );
 		if( !argUserData )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to grab its one and only argument.", funcName );
@@ -123,6 +124,8 @@ int PerformUnaryOp( lua_State* L, const char* funcName, UnaryOp unaryOp )
 		luaL_error( L, error );
 	}
 
+	// Return just the value at the top of the stack.
+	// We may have added more stack items, but only the top is returned.
 	return 1;
 }
 

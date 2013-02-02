@@ -18,18 +18,18 @@ int l_from_string( lua_State* L )
 
 	try
 	{
-		// Make sure we were given exactly one argument.
+		// Make sure we were given an argument.  We will only use the top value in the stack and ignore the rest.
 		int stack_top = lua_gettop(L);
-		if( stack_top != 1 && /* Hack: Unary overloads get 2 arguments? */ stack_top != 2  )
+		if( stack_top < 1 )
 		{
-			sprintf_s( error, sizeof( error ), "The function \"from_string\" expects 1 and only 1 argument." );
+			sprintf_s( error, sizeof( error ), "The function \"from_string\" expects an argument." );
 			throw( error );
 		}
 
 		// Make sure our argument is a string.
 		if( !lua_isstring( L, -1 ) )
 		{
-			sprintf_s( error, sizeof( error ), "The function \"from_string\" expects its one and only argument to be a string." );
+			sprintf_s( error, sizeof( error ), "The function \"from_string\" expects its argument to be a string." );
 			throw( error );
 		}
 

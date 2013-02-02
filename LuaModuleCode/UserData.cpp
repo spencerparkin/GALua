@@ -4,6 +4,7 @@
 #include "UnaryOp.h"
 #include "BinaryOp.h"
 #include "String.h"
+#include "Debug.h"
 
 //=========================================================================================
 GALuaUserData* NewGALuaUserData( lua_State* L )
@@ -59,25 +60,60 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 }
 
 //=========================================================================================
-GALuaUserData* GrabGALuaUserData( lua_State* L, int idx )
+// If the coercion pointer is not given, then coercion is not allowed!
+// If coercion happens, we should be adding the coerced value on the
+// top of the stack and nothing else.
+GALuaUserData* GrabGALuaUserData( lua_State* L, int idx, bool* coercedUserData /*= 0*/ )
 {
-	// Make sure that user data exists at the given stack location.
-	if( !lua_isuserdata( L, idx ) )
-		return 0;
-	
-	// Make sure we can get a pointer to it.
-	GALuaUserData* userData = ( GALuaUserData* )lua_touserdata( L, idx );
-	if( !userData )
-		return 0;
+	// Ultimately return this.
+	GALuaUserData* userData = 0;
 
-	// It is likely that if the following safety check fails, then
-	// the user data we were given is the type of user data our
-	// module is designed to handle.
-	char safetyString[6];
-	strncpy_s( safetyString, sizeof( safetyString ), userData->safetyString, 5 );
-	safetyString[5] = '\0';
-	if( 0 != strcmp( safetyString, "gaLua" ) )
-		return 0;
+	// Assume that no type coercion will occur.
+	if( coercedUserData )
+		*coercedUserData = false;
+
+	// Do we have user-data at the given stack location?
+	if( lua_isuserdata( L, idx ) )
+	{
+		// Make sure we can get a pointer to it.
+		userData = ( GALuaUserData* )lua_touserdata( L, idx );
+		if( userData )
+		{
+			// It is likely that if the following safety check passes, then
+			// the user data we were given is the type of user data our
+			// module is designed to handle.
+			char safetyString[6];
+			strncpy_s( safetyString, sizeof( safetyString ), userData->safetyString, 5 );
+			safetyString[5] = '\0';
+			if( 0 != strcmp( safetyString, "gaLua" ) )
+				userData = 0;	// When the stack gets cleaned up, this will get cleaned up, so don't feel bad about losing our pointer to the data.
+		}
+	}
+	else if( coercedUserData )	// Is coercion allowed?
+	{
+		// Yes.  We can coerce numbers and strings.
+		if( lua_isnumber( L, idx ) )
+		{
+			// In the case of numbers, we can always coerce the data-type into our user-data type.
+			*coercedUserData = true;
+			GeometricAlgebra::Scalar scalar = lua_tonumber( L, idx );
+			userData = NewGALuaUserData( L );
+			if( userData )
+			{
+				userData->multiVec = new GeometricAlgebra::SumOfBlades();
+				userData->multiVec->AssignScalar( scalar );
+			}
+		}
+		else if( lua_isstring( L, idx ) )
+		{
+			// In the case of strings, we might be able to coerce the data-type into our user-data type.
+			*coercedUserData = true;
+			lua_pushvalue( L, idx );	// Getting read for l_from_string, make sure it's at the stack top.
+			l_from_string( L );			// If this fails, the entire script fails, so no need to check return value.
+			lua_remove( L, -2 );		// Make sure that our only addition to the stack is the coerced value.
+			userData = GrabGALuaUserData( L, -1 );		// Find our user-data at the top of the stack.
+		}
+	}
 
 	// Let'em have it!
 	return userData;

@@ -190,6 +190,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\LuaModuleCode\Debug.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Debug.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\Def.cpp"
 				>
 			</File>

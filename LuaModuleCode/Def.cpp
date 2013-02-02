@@ -20,12 +20,11 @@ int l_def_basis( lua_State* L )
 		// We're about to recreate the basis vector map.
 		gaLuaEnv->DeleteBasisVecMap();
 
-		// Verify that only one item is on the stack.
-		// Our function takes one and only one argument.
+		// Make sure we were given an argument.  We use the top stack value and ignore the rest.
 		int stack_top = lua_gettop(L);
-		if( stack_top != 1 )
+		if( stack_top < 1 )
 		{
-			sprintf_s( error, sizeof( error ), "The function \"def_basis\" expects 1 and only 1 argument, not %d arguments.", stack_top );
+			strcpy_s( error, sizeof( error ), "The function \"def_basis\" expects 1 argument." );
 			throw( error );
 		}
 
