@@ -190,19 +190,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\LuaModuleCode\Def.cpp"
+				RelativePath="..\LuaModuleCode\Definition.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\LuaModuleCode\Def.h"
+				RelativePath="..\LuaModuleCode\Definition.h"
 				>
 			</File>
 			<File
-				RelativePath="..\LuaModuleCode\Env.cpp"
+				RelativePath="..\LuaModuleCode\Environment.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\LuaModuleCode\Env.h"
+				RelativePath="..\LuaModuleCode\Environment.h"
 				>
 			</File>
 			<File

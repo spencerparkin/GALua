@@ -1,4 +1,4 @@
-// Env.h
+// Environment.h
 
 #pragma once
 
@@ -41,4 +41,4 @@ private:
 //=========================================================================================
 extern GALuaEnv* gaLuaEnv;
 
-// Env.h
+// Environment.h

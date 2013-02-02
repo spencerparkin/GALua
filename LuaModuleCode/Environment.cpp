@@ -1,7 +1,7 @@
-// Env.cpp
+// Environment.cpp
 
 //=========================================================================================
-#include "Env.h"
+#include "Environment.h"
 #include "BasisVec.h"
 
 //=========================================================================================
@@ -143,4 +143,4 @@ bool GALuaEnv::GetBasisVecIpTableEntry( int i, int j, double& scalar )
 	return true;
 }
 
-// Env.cpp
+// Environment.cpp

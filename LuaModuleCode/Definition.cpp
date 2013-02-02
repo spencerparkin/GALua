@@ -1,7 +1,7 @@
-// Def.cpp
+// Definition.cpp
 
 #include "Lua.hpp"
-#include "Def.h"
+#include "Definition.h"
 #include "Env.h"
 #include "Calculator/CalcLib.h"
 
@@ -158,4 +158,4 @@ int l_def_sig( lua_State* L )
 	return 0;
 }
 
-// Def.cpp
+// Definition.cpp
