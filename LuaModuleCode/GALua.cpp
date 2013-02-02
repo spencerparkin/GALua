@@ -6,6 +6,7 @@
 #include "Def.h"
 #include "String.h"
 #include "BinaryOp.h"
+#include "UnaryOp.h"
 
 //=========================================================================================
 BOOL APIENTRY DllMain( HANDLE module, DWORD reason, LPVOID reserved )
@@ -49,9 +50,11 @@ static luaL_Reg galua[] =
 	{ "gp", l_gp },
 	{ "ip", l_ip },
 	{ "op", l_op },
-	//{ "negate", l_negate },
-	//{ "invert", l_invert },
-	//{ "reverse", l_reverse },
+	{ "copy", l_copy },
+	{ "negate", l_negate },
+	{ "invert", l_invert },
+	{ "reverse", l_reverse },
+	{ "mag", l_mag },
 	{ NULL, NULL },
 };
 

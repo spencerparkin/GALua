@@ -222,6 +222,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\LuaModuleCode\UnaryOp.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\UnaryOp.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\UserData.cpp"
 				>
 			</File>

@@ -27,6 +27,10 @@ galua.def_sig( basisVecIPFunc )
 -- We're now ready to do some GA!
 local multiVecA = galua.from_string( "3*e1 + 2*e1^e2 - 4" )
 local multiVecB = galua.from_string( "-2 + e3 + e3^e1" )
-local multiVecC = galua.sum( multiVecA, multiVecB )
+local multiVecC = galua.gp( multiVecA, multiVecB )
 local result = galua.to_string( multiVecC )
+print( "result = " .. result )
+
+local mag = galua.mag( multiVecC )
+result = galua.to_string( mag )
 print( "result = " .. result )
