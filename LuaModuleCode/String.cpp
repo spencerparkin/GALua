@@ -20,17 +20,17 @@ int l_from_string( lua_State* L )
 	{
 		// Make sure we were given exactly one argument.
 		int stack_top = lua_gettop(L);
-		if( stack_top != 1 )
+		if( stack_top != 1 && /* Hack: Unary overloads get 2 arguments? */ stack_top != 2  )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"from_string\" expects 1 and only 1 argument." );
-			throw;
+			throw( error );
 		}
 
 		// Make sure our argument is a string.
 		if( !lua_isstring( L, -1 ) )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"from_string\" expects its one and only argument to be a string." );
-			throw;
+			throw( error );
 		}
 
 		// Try to compile the given expression.
@@ -44,7 +44,7 @@ int l_from_string( lua_State* L )
 			gaLuaEnv->PrintBuffer( printBuffer, sizeof( printBuffer ) );
 			gaLuaEnv->PrintAllErrors();
 			strcat_s( error, sizeof( error ), printBuffer );
-			throw;
+			throw( error );
 		}
 
 		// Try to create a number for the result.  That we have to do this cast is fairly annoying.
@@ -53,14 +53,14 @@ int l_from_string( lua_State* L )
 		if( !numberResult )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"from_string\" failed to allocate memory for the result of the given expression." );
-			throw;
+			throw( error );
 		}
 
 		// Try to evaluate the result.
 		if( !evaluator->EvaluateResult( *numberResult, *gaLuaEnv ) )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"from_string\" failed to evaluate the expression \"%s\".", expression );
-			throw;
+			throw( error );
 		}
 
 		// Try to create a multivector for the result.
@@ -68,7 +68,7 @@ int l_from_string( lua_State* L )
 		if( !opResult )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"from_string\" failed to allocate memory for the result of the given expression." );
-			throw;
+			throw( error );
 		}
 
 		// Try to create some user-data for the result.
@@ -76,7 +76,7 @@ int l_from_string( lua_State* L )
 		if( !resultUserData )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"from_string\" failed to create user-data for the result of the given expression." );
-			throw;
+			throw( error );
 		}
 
 		// Assign the result and save off the pointer to Lua.
@@ -84,7 +84,7 @@ int l_from_string( lua_State* L )
 		multiVecNumber->AssignTo( *opResult, *gaLuaEnv );
 		resultUserData->multiVec = opResult;
 	}
-	catch(...)
+	catch( const char* )
 	{
 	}
 
@@ -121,7 +121,7 @@ int l_to_string( lua_State* L )
 		if( stack_top != 1 )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"to_string\" expects 1 and only 1 argument." );
-			throw;
+			throw( error );
 		}
 
 		// Try to grab our argument.
@@ -129,7 +129,7 @@ int l_to_string( lua_State* L )
 		if( !userData )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"to_string\" failed to grab its one and only argument." );
-			throw;
+			throw( error );
 		}
 
 		// Print the argument to a buffer in a way that it can be read back in using "from_string".
@@ -138,13 +138,13 @@ int l_to_string( lua_State* L )
 		if( !userData->multiVec->Print( printBuffer, sizeof( printBuffer ), ScalarAlgebra::PRINT_FOR_READING ) )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"to_string\" failed to print the given multivector." );
-			throw;
+			throw( error );
 		}
 
 		// Push the string to return it to the caller.
 		lua_pushstring( L, printBuffer );
 	}
-	catch(...)
+	catch( const char* )
 	{
 	}
 

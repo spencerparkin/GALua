@@ -63,6 +63,13 @@ extern "C" {
 GALUA_FUNC int luaopen_galua( lua_State* L )
 {
 	luaL_newlib( L, galua );
+
+	// Using the API table in function syntax should be a nice way to create multi-vectors.
+	lua_newtable( L );
+	lua_pushcfunction( L, &l_from_string );
+	lua_setfield( L, -2, "__call" );
+	lua_setmetatable( L, -2 );
+
 	return 1;
 }
 } //extern "C"

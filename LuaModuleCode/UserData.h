@@ -16,5 +16,6 @@ struct GALuaUserData
 //=========================================================================================
 GALuaUserData* NewGALuaUserData( lua_State* L );
 GALuaUserData* GrabGALuaUserData( lua_State* L, int idx );
+int DeleteGALuaUserData( lua_State* L );
 
 // UserData.h

@@ -26,14 +26,14 @@ int l_def_basis( lua_State* L )
 		if( stack_top != 1 )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"def_basis\" expects 1 and only 1 argument, not %d arguments.", stack_top );
-			throw;
+			throw( error );
 		}
 
 		// Verify that we were actually given a table.
 		if( !lua_istable( L, -1 ) )
 		{
 			strcpy_s( error, sizeof( error ), "The function \"def_basis\" expects a table (array of strings) as its one and only argument." );
-			throw;
+			throw( error );
 		}
 
 		// Iterate over the array.
@@ -52,7 +52,7 @@ int l_def_basis( lua_State* L )
 			if( !lua_isstring( L, -1 ) )
 			{
 				strcpy_s( error, sizeof( error ), "The function \"def_basis\" encountered a non-string value in the given array." );
-				throw;
+				throw( error );
 			}
 
 			// Try to register the basis vector with our GA environment.
@@ -60,7 +60,7 @@ int l_def_basis( lua_State* L )
 			if( !gaLuaEnv->RegisterBasisVec( basisVec ) )
 			{
 				sprintf_s( error, sizeof( error ), "The function \"def_basis\" failed to register the basis vector \"%s\".  It may be a duplicate.\n", basisVec );
-				throw;
+				throw( error );
 			}
 
 			// Pop the string value off the stack.
@@ -147,7 +147,7 @@ int l_def_sig( lua_State* L )
 			}
 		}
 	}
-	catch(...)
+	catch( const char* )
 	{
 	}
 

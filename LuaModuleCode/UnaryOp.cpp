@@ -26,10 +26,10 @@ int PerformUnaryOp( lua_State* L, const char* funcName, UnaryOp unaryOp )
 	{
 		// Make sure we were given exactly one argument.
 		int stack_top = lua_gettop(L);
-		if( stack_top != 1 )
+		if( stack_top != 1 && /* Hack: Unary overloads get 2 arguments? */ stack_top != 2 )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"%s\" expects 1 and only 1 argument.", funcName );
-			throw;
+			throw( error );
 		}
 
 		// Try to grab our argument.
@@ -37,7 +37,7 @@ int PerformUnaryOp( lua_State* L, const char* funcName, UnaryOp unaryOp )
 		if( !argUserData )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to grab its one and only argument.", funcName );
-			throw;
+			throw( error );
 		}
 
 		// Try to allocate memory for the result.
@@ -45,7 +45,7 @@ int PerformUnaryOp( lua_State* L, const char* funcName, UnaryOp unaryOp )
 		if( !opResult )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to allocate memory for the result.", funcName );
-			throw;
+			throw( error );
 		}
 
 		// Try to perform the desired operation.
@@ -96,21 +96,21 @@ int PerformUnaryOp( lua_State* L, const char* funcName, UnaryOp unaryOp )
 		if( !operationPerformed )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to perform the desired operation.", funcName );
-			throw;
+			throw( error );
 		}
 
 		// Create some user data for the result.
-		GALuaUserData* resultUserData = NewGALuaUserData(L);		// TODO: How do we make sure our user-data gets cleaned up by Lua properly?
+		GALuaUserData* resultUserData = NewGALuaUserData(L);
 		if( !resultUserData )
 		{
 			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to create Lua user-data for the result.", funcName );
-			throw;
+			throw( error );
 		}
 
 		// Save off the pointer in Lua.
 		resultUserData->multiVec = opResult;
 	}
-	catch(...)
+	catch( const char* )
 	{
 	}
 
