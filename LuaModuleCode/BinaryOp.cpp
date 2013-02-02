@@ -32,6 +32,8 @@ static int PerformBinaryOp( lua_State* L, const char* funcName, BinaryOp binaryO
 			throw( error );
 		}
 
+		// TODO: It would be nice if this function was able to handle built-in Lua types by converting them into user-data types.
+
 		// Try to grab the first argument.
 		GALuaUserData* leftArgUserData = GrabGALuaUserData( L, -2 );
 		if( !leftArgUserData )
