@@ -1,8 +1,7 @@
 // UserData.cpp
 
 #include "UserData.h"
-#include "UnaryOp.h"
-#include "BinaryOp.h"
+#include "Operation.h"
 #include "String.h"
 #include "Debug.h"
 
@@ -38,8 +37,11 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 	lua_pushcfunction( L, &l_to_string );
 	lua_setfield( L, -2, "__tostring" );
 
-	// TODO: Have __index and __newindex let you set and get grade parts of the multi-vector.
-	// TODO: Have __eq let you compare multi-vectors.
+	// Provide a convenient way to get and set the grade parts of a multi-vector.
+	lua_pushcfunction( L, &l_get_grade_part );
+	lua_setfield( L, -2, "__index" );
+	//lua_puscfunction( L, &l_set_grade_part );
+	//lua_setfield( L, -2, "__newindex" );
 
 	// TODO: Figure this out.  It doesn't work.  What are the two args?
 	lua_pushcfunction( L, &l_mag );

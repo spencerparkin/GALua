@@ -182,14 +182,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\LuaModuleCode\BinaryOp.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\LuaModuleCode\BinaryOp.h"
-				>
-			</File>
-			<File
 				RelativePath="..\LuaModuleCode\Debug.cpp"
 				>
 			</File>
@@ -222,19 +214,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\LuaModuleCode\Operation.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Operation.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\String.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\LuaModuleCode\String.h"
-				>
-			</File>
-			<File
-				RelativePath="..\LuaModuleCode\UnaryOp.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\LuaModuleCode\UnaryOp.h"
 				>
 			</File>
 			<File

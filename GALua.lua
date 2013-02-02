@@ -52,6 +52,7 @@ mvArray[ #mvArray + 1 ] = galua.ip( mvArray[1], mvArray[2] )
 mvArray[ #mvArray + 1 ] = galua.op( mvArray[1], mvArray[2] )
 mvArray[ #mvArray + 1 ] = galua.negate( mvArray[1] )
 mvArray[ #mvArray + 1 ] = galua.reverse( mvArray[2] )
+mvArray[ #mvArray + 1 ] = galua.get_grade_part( 3, mvArray[2] )
 local mag = galua.mag( mvArray[1] )
 PrintMultiVecArray( mvArray )
 print( "mag = " .. galua.to_string( mag ) )
@@ -70,6 +71,7 @@ mvArray[ #mvArray + 1 ] = mvArray[1] % mvArray[2]
 mvArray[ #mvArray + 1 ] = mvArray[1] ^ mvArray[2]
 mvArray[ #mvArray + 1 ] = -mvArray[1]
 mvArray[ #mvArray + 1 ] = galua.reverse( mvArray[2] )	-- No overload for this.
+mvArray[ #mvArray + 1 ] = mvArray[2][3]
 local mag = #mvArray[1]
 PrintMultiVecArray( mvArray )
 print( "mag = " .. tostring( mag ) )
@@ -88,6 +90,7 @@ mvArray[ #mvArray + 1 ] = mvStringA % mvArray[2]
 mvArray[ #mvArray + 1 ] = mvArray[1] ^ mvStringB
 mvArray[ #mvArray + 1 ] = galua.negate( mvStringA )
 mvArray[ #mvArray + 1 ] = galua.reverse( mvStringB )
+mvArray[ #mvArray + 1 ] = galua.get_grade_part( 3, mvStringB )
 local mag = galua.mag( mvStringA )
 PrintMultiVecArray( mvArray )
 print( "mag = " .. galua.to_string( mag ) )

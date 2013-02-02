@@ -5,8 +5,7 @@
 #include "Env.h"
 #include "Def.h"
 #include "String.h"
-#include "BinaryOp.h"
-#include "UnaryOp.h"
+#include "Operation.h"
 
 //=========================================================================================
 // By avoiding the use of DllMain, our Lua module has the potential to be portable to other platforms.
@@ -31,6 +30,8 @@ static luaL_Reg galua_api[] =
 	{ "gp", l_gp },
 	{ "ip", l_ip },
 	{ "op", l_op },
+	{ "get_grade_part", l_get_grade_part },
+	{ "set_grade_part", l_set_grade_part },
 	{ "copy", l_copy },
 	{ "negate", l_negate },
 	{ "invert", l_invert },
