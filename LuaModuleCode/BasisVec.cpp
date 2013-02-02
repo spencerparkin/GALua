@@ -10,7 +10,7 @@
  */
 
 #include "BasisVec.h"
-#include "Env.h"
+#include "Environment.h"
 
 //=========================================================================================
 GALuaBasisVec::GALuaBasisVec( const char* name )

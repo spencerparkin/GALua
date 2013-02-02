@@ -14,7 +14,7 @@
 #include "String.h"
 #include "Calculator/CalcLib.h"
 #include "UserData.h"
-#include "Env.h"
+#include "Environment.h"
 
 //=========================================================================================
 int l_from_string( lua_State* L )

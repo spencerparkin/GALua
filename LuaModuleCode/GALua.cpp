@@ -11,8 +11,8 @@
 
 #include <windows.h>
 #include "GALua.h"
-#include "Env.h"
-#include "Def.h"
+#include "Environment.h"
+#include "Definition.h"
 #include "String.h"
 #include "Operation.h"
 
