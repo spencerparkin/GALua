@@ -206,6 +206,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\LuaModuleCode\Error.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Error.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\GALua.cpp"
 				>
 			</File>

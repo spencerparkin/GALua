@@ -12,6 +12,7 @@
 #include "Lua.hpp"
 #include "Operation.h"
 #include "UserData.h"
+#include "Error.h"
 #include "Calculator/CalcLib.h"
 
 //=========================================================================================
@@ -37,185 +38,156 @@ enum GALuaOp
 };
 
 //=========================================================================================
+// In following with Lua design principles, this function operates on top
+// stack values, replacing them in the stack with the result of operating upon them.
 static int PerformOp( lua_State* L, const char* funcName, GALuaOp binaryOp, int argCount )
 {
-	char error[256];
-	error[0] = '\0';
 	GALuaUserData** argUserData = 0;
 	GeometricAlgebra::SumOfBlades* opResult = 0;
 
-	try
+	// Operations take one or more arguments.
+	if( argCount <= 0 )
+		GALuaError( L, "The function \"%s\" doesn't take any arguments, yet is expected to grab arguments.", funcName );
+
+	// Make sure we were given at least the desired number of arguments.  We use the top stack values and ignore the rest.
+	int stack_top = lua_gettop(L);
+	if( stack_top < argCount )
+		GALuaError( L, "The function \"%s\" expects %d argument(s).", funcName, argCount );
+
+	// Allocate room for our arguments and create a map of where they are on the Lua stack.
+	argUserData = new GALuaUserData*[ argCount ];
+	for( int i = 0; i < argCount; i++ )
+		argUserData[i] = 0;
+
+	// Try to go grab all of our arguments.
+	int offset = 0;
+	for( int index = 0; index < argCount; index++ )
 	{
-		// Operations take one or more arguments.
-		if( argCount <= 0 )
-		{
-			sprintf_s( error, sizeof( error ), "The function \"%s\" doesn't take any arguments, yet is expected to grab arguments.", funcName );
-			throw( error );
-		}
+		bool coercedUserData = false;
+		int argIdx = -argCount + index - offset;
+		argUserData[ index ] = GrabGALuaUserData( L, argIdx, &coercedUserData );
+		if( !argUserData[ index ] )
+			GALuaError( L, "The function \"%s\" failed to grab argument %d.  Is it the right type?", funcName, index + 1 );
 
-		// Make sure we were given at least the desired number of arguments.  We use the top stack values and ignore the rest.
-		int stack_top = lua_gettop(L);
-		if( stack_top < argCount )
-		{
-			sprintf_s( error, sizeof( error ), "The function \"%s\" expects %d argument(s).", funcName, argCount );
-			throw( error );
-		}
-
-		// Allocate room for our arguments and create a map of where they are on the Lua stack.
-		argUserData = new GALuaUserData*[ argCount ];
-		for( int i = 0; i < argCount; i++ )
-			argUserData[i] = 0;
-
-		// Try to go grab all of our arguments.
-		int offset = 0;
-		for( int index = 0; index < argCount; index++ )
-		{
-			bool coercedUserData = false;
-			int argIdx = -argCount + index - offset;
-			argUserData[ index ] = GrabGALuaUserData( L, argIdx, &coercedUserData );
-			if( !argUserData[ index ] )
-			{
-				sprintf_s( error, sizeof( error ), "The function \"%s\" failed to grab argument %d.  Is it the right type?", funcName, index + 1 );
-				throw( error );
-			}
-
-			// If coercion occurred, we must adjust our knowledge of the stack location of each argument relative to the top of the stack.
-			// This is because the coerced user-data value is always pushed onto the top of the stack.
-			if( coercedUserData )
-				offset++;
-		}
-
-		// Try to allocate memory for the result.
-		opResult = new GeometricAlgebra::SumOfBlades();
-		if( !opResult )
-		{
-			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to allocate memory for the result.", funcName );
-			throw( error );
-		}
-
-		// Try to perform the desired operation.
-		bool operationPerformed = false;
-		switch( binaryOp )
-		{
-			case UNARY_OP_COPY:
-			{
-				operationPerformed = opResult->AssignSumOfBlades( *argUserData[0]->multiVec );
-				break;
-			}
-			case UNARY_OP_NEGATE:
-			{
-				operationPerformed = opResult->AssignSumOfBlades( *argUserData[0]->multiVec );
-				if( operationPerformed )
-					operationPerformed = opResult->Scale( GeometricAlgebra::Scalar( -1.0 ) );
-				break;
-			}
-			case UNARY_OP_INVERT:
-			{
-				operationPerformed = false;
-
-				// TODO: This algorithm needs to be revisited.
-				//operationPerformed = opResult->AssignGeometricInverse( *argUserData[0]->multiVec );
-				break;
-			}
-			case UNARY_OP_REVERSE:
-			{
-				operationPerformed = opResult->AssignSumOfBlades( *argUserData[0]->multiVec );
-				if( operationPerformed )
-					operationPerformed = opResult->Reverse();
-				break;
-			}
-			case UNARY_OP_MAGNITUDE:
-			{
-				GeometricAlgebra::Scalar squareMagnitude;
-				operationPerformed = argUserData[0]->multiVec->AssignSquareMagnitudeTo( squareMagnitude );
-				if( operationPerformed )
-				{
-					double magnitude = sqrt( squareMagnitude );
-					operationPerformed = opResult->AssignScalarFrom( magnitude );
-				}
-				break;
-			}
-			case BINARY_OP_SUM:
-			{
-				operationPerformed = opResult->AssignSum( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
-				break;
-			}
-			case BINARY_OP_DIF:
-			{
-				operationPerformed = opResult->AssignDifference( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
-				break;
-			}
-			case BINARY_OP_GP:
-			{
-				operationPerformed = opResult->AssignGeometricProduct( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
-				break;
-			}
-			case BINARY_OP_IP:
-			{
-				operationPerformed = opResult->AssignInnerProduct( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
-				break;
-			}
-			case BINARY_OP_OP:
-			{
-				operationPerformed = opResult->AssignOuterProduct( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
-				break;
-			}
-			case BINARY_OP_GET_GRADE_PART:
-			{
-				// TODO: This has bugs.  Fix it.
-				GeometricAlgebra::Scalar scalar;
-				operationPerformed = argUserData[0]->multiVec->AssignScalar( scalar );
-				if( operationPerformed )
-				{
-					int gradePart = int( scalar );
-					operationPerformed = argUserData[1]->multiVec->GradePart( gradePart, *opResult );
-				}
-				break;
-			}
-			case TURNARY_OP_SET_GRADE_PART:
-			{
-				break;
-			}
-		}
-
-		// Did it work?!
-		if( !operationPerformed )
-		{
-			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to perform the desired operation.", funcName );
-			throw( error );
-		}
-
-		// Create some user data for the result.
-		GALuaUserData* resultUserData = NewGALuaUserData(L);
-		if( !resultUserData )
-		{
-			sprintf_s( error, sizeof( error ), "The function \"%s\" failed to create Lua user-data for the result.", funcName );
-			throw( error );
-		}
-
-		// Save off the pointer in Lua.
-		resultUserData->multiVec = opResult;
+		// If coercion occurred, we must adjust our knowledge of the stack location of each argument relative to the top of the stack.
+		// This is because the coerced user-data value is always pushed onto the top of the stack.
+		if( coercedUserData )
+			offset++;
 	}
-	catch( const char* )
+
+	// Try to allocate memory for the result.
+	opResult = new GeometricAlgebra::SumOfBlades();
+	if( !opResult )
+		GALuaError( L, "The function \"%s\" failed to allocate memory for the result.", funcName );
+
+	// Try to perform the desired operation.
+	bool operationPerformed = false;
+	switch( binaryOp )
 	{
+		case UNARY_OP_COPY:
+		{
+			operationPerformed = opResult->AssignSumOfBlades( *argUserData[0]->multiVec );
+			break;
+		}
+		case UNARY_OP_NEGATE:
+		{
+			operationPerformed = opResult->AssignSumOfBlades( *argUserData[0]->multiVec );
+			if( operationPerformed )
+				operationPerformed = opResult->Scale( GeometricAlgebra::Scalar( -1.0 ) );
+			break;
+		}
+		case UNARY_OP_INVERT:
+		{
+			operationPerformed = false;
+
+			// TODO: This algorithm needs to be revisited.
+			//operationPerformed = opResult->AssignGeometricInverse( *argUserData[0]->multiVec );
+			break;
+		}
+		case UNARY_OP_REVERSE:
+		{
+			operationPerformed = opResult->AssignSumOfBlades( *argUserData[0]->multiVec );
+			if( operationPerformed )
+				operationPerformed = opResult->Reverse();
+			break;
+		}
+		case UNARY_OP_MAGNITUDE:
+		{
+			GeometricAlgebra::Scalar squareMagnitude;
+			operationPerformed = argUserData[0]->multiVec->AssignSquareMagnitudeTo( squareMagnitude );
+			if( operationPerformed )
+			{
+				double magnitude = sqrt( squareMagnitude );
+				operationPerformed = opResult->AssignScalarFrom( magnitude );
+			}
+			break;
+		}
+		case BINARY_OP_SUM:
+		{
+			operationPerformed = opResult->AssignSum( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
+			break;
+		}
+		case BINARY_OP_DIF:
+		{
+			operationPerformed = opResult->AssignDifference( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
+			break;
+		}
+		case BINARY_OP_GP:
+		{
+			operationPerformed = opResult->AssignGeometricProduct( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
+			break;
+		}
+		case BINARY_OP_IP:
+		{
+			operationPerformed = opResult->AssignInnerProduct( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
+			break;
+		}
+		case BINARY_OP_OP:
+		{
+			operationPerformed = opResult->AssignOuterProduct( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
+			break;
+		}
+		case BINARY_OP_GET_GRADE_PART:
+		{
+			// TODO: This has bugs.  Fix it.
+			GeometricAlgebra::Scalar scalar;
+			operationPerformed = argUserData[0]->multiVec->AssignScalar( scalar );
+			if( operationPerformed )
+			{
+				int gradePart = int( scalar );
+				operationPerformed = argUserData[1]->multiVec->GradePart( gradePart, *opResult );
+			}
+			break;
+		}
+		case TURNARY_OP_SET_GRADE_PART:
+		{
+			break;
+		}
 	}
+
+	// Did it work?!
+	if( !operationPerformed )
+		GALuaError( L, "The function \"%s\" failed to perform the desired operation.", funcName );
+
+	// Create some user data for the result.
+	GALuaUserData* resultUserData = NewGALuaUserData(L);
+	if( !resultUserData )
+		GALuaError( L, "The function \"%s\" failed to create Lua user-data for the result.", funcName );
+
+	// Save off the pointer in Lua.
+	resultUserData->multiVec = opResult;
 
 	// Clean up our mess, if any.
 	if( argUserData )
 		delete[] argUserData;
 
-	// If something went wrong, tell Lua.
-	if( error[0] != '\0' )
-	{
-		// If a failure occured, Lua should not have a pointer to the memory
-		// we allocated, so it should be safe to delete it here.
-		delete opResult;
-		luaL_error( L, error );
-	}
-
 	// We return one argument.  This counts values starting from the top of the stack,
 	// so the stack doesn't have to contain our returned value(s) exclusively.
 	// We may have added more stack items, but only the top is returned.
+	// In other cases it is important that we follow a convention that keeps
+	// the stack clean of any temporary values, but here we're fine.  In any case,
+	// any function that manipulates the Lua stack should be well defined so that
+	// callers can know the expected behavior.
 	return 1;
 }
 
