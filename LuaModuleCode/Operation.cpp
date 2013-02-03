@@ -42,7 +42,6 @@ static int PerformOp( lua_State* L, const char* funcName, GALuaOp binaryOp, int 
 	char error[256];
 	error[0] = '\0';
 	GALuaUserData** argUserData = 0;
-	int* argStackIdx = 0;
 	GeometricAlgebra::SumOfBlades* opResult = 0;
 
 	try
@@ -64,33 +63,26 @@ static int PerformOp( lua_State* L, const char* funcName, GALuaOp binaryOp, int 
 
 		// Allocate room for our arguments and create a map of where they are on the Lua stack.
 		argUserData = new GALuaUserData*[ argCount ];
-		argStackIdx = new int[ argCount ];
 		for( int i = 0; i < argCount; i++ )
-		{
 			argUserData[i] = 0;
-			argStackIdx[i] = -argCount + i;
-		}
 
 		// Try to go grab all of our arguments.
-		for( int i = 0; i < argCount; i++ )
+		int offset = 0;
+		for( int index = 0; index < argCount; index++ )
 		{
 			bool coercedUserData = false;
-			int argIdx = argStackIdx[i];
-			argUserData[i] = GrabGALuaUserData( L, argIdx, &coercedUserData );
-			if( !argUserData[i] )
+			int argIdx = -argCount + index - offset;
+			argUserData[ index ] = GrabGALuaUserData( L, argIdx, &coercedUserData );
+			if( !argUserData[ index ] )
 			{
-				sprintf_s( error, sizeof( error ), "The function \"%s\" failed to grab argument %d.  Is it the right type?", funcName, i + 1 );
+				sprintf_s( error, sizeof( error ), "The function \"%s\" failed to grab argument %d.  Is it the right type?", funcName, index + 1 );
 				throw( error );
 			}
 
-			// Of coercion occurred, we must adjust our knowledge of the stack location of each argument relative to the top of the stack.
+			// If coercion occurred, we must adjust our knowledge of the stack location of each argument relative to the top of the stack.
 			// This is because the coerced user-data value is always pushed onto the top of the stack.
 			if( coercedUserData )
-			{
-				argStackIdx[i] = -1;
-				for( int j = i + 1; j < argCount; j++ )
-					argStackIdx[j]--;
-			}
+				offset++;
 		}
 
 		// Try to allocate memory for the result.
@@ -211,8 +203,6 @@ static int PerformOp( lua_State* L, const char* funcName, GALuaOp binaryOp, int 
 	// Clean up our mess, if any.
 	if( argUserData )
 		delete[] argUserData;
-	if( argStackIdx )
-		delete[] argStackIdx;
 
 	// If something went wrong, tell Lua.
 	if( error[0] != '\0' )
