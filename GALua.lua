@@ -1,7 +1,7 @@
 -- GALua.lua -- Test the GALua module.
 
---package.cpath = package.cpath .. ";.\\Debug\\?.dll"
 package.cpath = package.cpath .. ";C:\\GALua\\Build\\Debug\\?.dll"
+package.cpath = package.cpath .. ";D:\\GALua\\Build\\Debug\\?.dll"
 print( package.cpath )
 
 -- Acquire the GALua API.
