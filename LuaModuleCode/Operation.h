@@ -12,6 +12,31 @@
 #pragma once
 
 //=========================================================================================
+enum GALuaOp
+{
+	// Unary operations:
+	UNARY_OP_COPY,
+	UNARY_OP_NEGATE,
+	UNARY_OP_INVERT,
+	UNARY_OP_REVERSE,
+	UNARY_OP_MAGNITUDE,
+
+	// Binary operations:
+	BINARY_OP_SUM,
+	BINARY_OP_DIF,
+	BINARY_OP_GP,
+	BINARY_OP_IP,
+	BINARY_OP_OP,
+	BINARY_OP_GET_GRADE_PART,
+
+	// Turnary operations:
+	TURNARY_OP_SET_GRADE_PART,
+};
+
+//=========================================================================================
+int PerformOp( lua_State* L, GALuaOp gaLuaOp );
+
+//=========================================================================================
 // Unary operations:
 int l_copy( lua_State* L );
 int l_negate( lua_State* L );

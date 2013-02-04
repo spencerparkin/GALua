@@ -16,34 +16,57 @@
 #include "Calculator/CalcLib.h"
 
 //=========================================================================================
-enum GALuaOp
-{
-	// Unary operations:
-	UNARY_OP_COPY,
-	UNARY_OP_NEGATE,
-	UNARY_OP_INVERT,
-	UNARY_OP_REVERSE,
-	UNARY_OP_MAGNITUDE,
-
-	// Binary operations:
-	BINARY_OP_SUM,
-	BINARY_OP_DIF,
-	BINARY_OP_GP,
-	BINARY_OP_IP,
-	BINARY_OP_OP,
-	BINARY_OP_GET_GRADE_PART,
-
-	// Turnary operations:
-	TURNARY_OP_SET_GRADE_PART,
-};
-
-//=========================================================================================
 // In following with Lua design principles, this function operates on top
 // stack values, replacing them in the stack with the result of operating upon them.
-static int PerformOp( lua_State* L, const char* funcName, GALuaOp binaryOp, int argCount )
+int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 {
-	GALuaUserData** argUserData = 0;
-	GeometricAlgebra::SumOfBlades* opResult = 0;
+	// Translate the given enum into the name of the Lua function that got called.
+	const char* funcName = "???";
+	switch( gaLuaOp )
+	{
+		case UNARY_OP_COPY:					funcName = "copy";				break;
+		case UNARY_OP_NEGATE:				funcName = "negate";			break;
+		case UNARY_OP_INVERT:				funcName = "invert";			break;
+		case UNARY_OP_REVERSE:				funcName = "reverse";			break;
+		case UNARY_OP_MAGNITUDE:			funcName = "mag";				break;
+		case BINARY_OP_SUM:					funcName = "sum/add";			break;
+		case BINARY_OP_DIF:					funcName = "dif/sub";			break;
+		case BINARY_OP_GP:					funcName = "gp";				break;
+		case BINARY_OP_IP:					funcName = "ip";				break;
+		case BINARY_OP_OP:					funcName = "op";				break;
+		case BINARY_OP_GET_GRADE_PART:		funcName = "get_grade_part";	break;
+		case TURNARY_OP_SET_GRADE_PART:		funcName = "set_grade_part";	break;
+	}
+
+	// How many arguments does the operation take?
+	int argCount = 0;
+	switch( gaLuaOp )
+	{
+		case UNARY_OP_COPY:
+		case UNARY_OP_NEGATE:
+		case UNARY_OP_INVERT:
+		case UNARY_OP_REVERSE:
+		case UNARY_OP_MAGNITUDE:
+		{
+			argCount = 1;
+			break;
+		}
+		case BINARY_OP_SUM:
+		case BINARY_OP_DIF:
+		case BINARY_OP_GP:
+		case BINARY_OP_IP:
+		case BINARY_OP_OP:
+		case BINARY_OP_GET_GRADE_PART:
+		{
+			argCount = 2;
+			break;
+		}
+		case TURNARY_OP_SET_GRADE_PART:
+		{
+			argCount = 3;
+			break;
+		}
+	}
 
 	// Operations take one or more arguments.
 	if( argCount <= 0 )
@@ -55,16 +78,16 @@ static int PerformOp( lua_State* L, const char* funcName, GALuaOp binaryOp, int 
 		GALuaError( L, "The function \"%s\" expects %d argument(s).", funcName, argCount );
 
 	// Allocate room for our arguments and create a map of where they are on the Lua stack.
-	argUserData = new GALuaUserData*[ argCount ];
+	GALuaUserData** argUserData = new GALuaUserData*[ argCount ];
 	for( int i = 0; i < argCount; i++ )
 		argUserData[i] = 0;
 
 	// Try to go grab all of our arguments.
-	int offset = 0;
+	int coercionCount = 0;
 	for( int index = 0; index < argCount; index++ )
 	{
 		bool coercedUserData = false;
-		int argIdx = -argCount + index - offset;
+		int argIdx = -argCount + index - coercionCount;
 		argUserData[ index ] = GrabGALuaUserData( L, argIdx, &coercedUserData );
 		if( !argUserData[ index ] )
 			GALuaError( L, "The function \"%s\" failed to grab argument %d.  Is it the right type?", funcName, index + 1 );
@@ -72,17 +95,17 @@ static int PerformOp( lua_State* L, const char* funcName, GALuaOp binaryOp, int 
 		// If coercion occurred, we must adjust our knowledge of the stack location of each argument relative to the top of the stack.
 		// This is because the coerced user-data value is always pushed onto the top of the stack.
 		if( coercedUserData )
-			offset++;
+			coercionCount++;
 	}
 
 	// Try to allocate memory for the result.
-	opResult = new GeometricAlgebra::SumOfBlades();
+	GeometricAlgebra::SumOfBlades* opResult = new GeometricAlgebra::SumOfBlades();
 	if( !opResult )
 		GALuaError( L, "The function \"%s\" failed to allocate memory for the result.", funcName );
 
 	// Try to perform the desired operation.
 	bool operationPerformed = false;
-	switch( binaryOp )
+	switch( gaLuaOp )
 	{
 		case UNARY_OP_COPY:
 		{
@@ -181,86 +204,89 @@ static int PerformOp( lua_State* L, const char* funcName, GALuaOp binaryOp, int 
 	if( argUserData )
 		delete[] argUserData;
 
-	// We return one argument.  This counts values starting from the top of the stack,
-	// so the stack doesn't have to contain our returned value(s) exclusively.
-	// We may have added more stack items, but only the top is returned.
-	// In other cases it is important that we follow a convention that keeps
-	// the stack clean of any temporary values, but here we're fine.  In any case,
-	// any function that manipulates the Lua stack should be well defined so that
-	// callers can know the expected behavior.
+	// Called from Lua, there is no need to clean up the arguments we were
+	// given on the stack before returning our result.  However, being called
+	// internally, it is a good idea to adopt the convention of removing the
+	// given arguments.  Everything is done relative to the top of the stack.
+	// This allows other functions, that take input and given output to the stack,
+	// to easily call this function, because we have a well defined behavior.
+	for( int index = 0; index < argCount + coercionCount; index++ )
+		lua_remove( L, -2 );
+
+	// We return one argument at the top of the stack.
 	return 1;
 }
 
 //=========================================================================================
 int l_copy( lua_State* L )
 {
-	return PerformOp( L, "copy", UNARY_OP_COPY, 1 );
+	return PerformOp( L, UNARY_OP_COPY );
 }
 
 //=========================================================================================
 int l_negate( lua_State* L )
 {
-	return PerformOp( L, "negate", UNARY_OP_NEGATE, 1 );
+	return PerformOp( L, UNARY_OP_NEGATE );
 }
 
 //=========================================================================================
 int l_invert( lua_State* L )
 {
-	return PerformOp( L, "invert", UNARY_OP_INVERT, 1 );
+	return PerformOp( L, UNARY_OP_INVERT );
 }
 
 //=========================================================================================
 int l_reverse( lua_State* L )
 {
-	return PerformOp( L, "reverse", UNARY_OP_REVERSE, 1 );
+	return PerformOp( L, UNARY_OP_REVERSE );
 }
 
 //=========================================================================================
 int l_mag( lua_State* L )
 {
-	return PerformOp( L, "mag", UNARY_OP_MAGNITUDE, 1 );
+	return PerformOp( L, UNARY_OP_MAGNITUDE );
 }
 
 //=========================================================================================
 int l_sum( lua_State* L )
 {
-	return PerformOp( L, "sum", BINARY_OP_SUM, 2 );
+	return PerformOp( L, BINARY_OP_SUM );
 }
 
 //=========================================================================================
 int l_dif( lua_State* L )
 {
-	return PerformOp( L, "dif", BINARY_OP_DIF, 2 );
+	return PerformOp( L, BINARY_OP_DIF );
 }
 
 //=========================================================================================
 int l_gp( lua_State* L )
 {
-	return PerformOp( L, "gp", BINARY_OP_GP, 2 );
+	return PerformOp( L, BINARY_OP_GP );
 }
 
 //=========================================================================================
 int l_ip( lua_State* L )
 {
-	return PerformOp( L, "ip", BINARY_OP_IP, 2 );
+	return PerformOp( L, BINARY_OP_IP );
 }
 
 //=========================================================================================
 int l_op( lua_State* L )
 {
-	return PerformOp( L, "op", BINARY_OP_OP, 2 );
+	return PerformOp( L, BINARY_OP_OP );
 }
 
 //=========================================================================================
 int l_get_grade_part( lua_State* L )
 {
-	return PerformOp( L, "grade_part", BINARY_OP_GET_GRADE_PART, 2 );
+	return PerformOp( L, BINARY_OP_GET_GRADE_PART );
 }
 
 //=========================================================================================
 int l_set_grade_part( lua_State* L )
 {
-	return PerformOp( L, "set_grade_part", TURNARY_OP_SET_GRADE_PART, 3 );
+	return PerformOp( L, TURNARY_OP_SET_GRADE_PART );
 }
 
 // Operation.cpp
