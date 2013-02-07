@@ -178,13 +178,13 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		}
 		case BINARY_OP_GET_GRADE_PART:
 		{
-			// TODO: This has bugs.  Fix it.
-			GeometricAlgebra::Scalar scalar;
-			operationPerformed = argUserData[0]->multiVec->AssignScalar( scalar );
+			// The order of arguments here was chosen so that we can be compatible with the __index meta-method.
+			double scalar;
+			operationPerformed = argUserData[1]->multiVec->AssignScalarTo( scalar );
 			if( operationPerformed )
 			{
 				int gradePart = int( scalar );
-				operationPerformed = argUserData[1]->multiVec->GradePart( gradePart, *opResult );
+				operationPerformed = argUserData[0]->multiVec->GradePart( gradePart, *opResult );
 			}
 			break;
 		}
