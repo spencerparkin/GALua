@@ -26,7 +26,8 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 	{
 		case UNARY_OP_COPY:					funcName = "copy";				break;
 		case UNARY_OP_NEGATE:				funcName = "negate";			break;
-		case UNARY_OP_INVERT:				funcName = "invert";			break;
+		case UNARY_OP_INVERT_RIGHT:			funcName = "invert_r";			break;
+		case UNARY_OP_INVERT_LEFT:			funcName = "invert_l";			break;
 		case UNARY_OP_REVERSE:				funcName = "reverse";			break;
 		case UNARY_OP_MAGNITUDE:			funcName = "mag";				break;
 		case BINARY_OP_SUM:					funcName = "sum/add";			break;
@@ -44,7 +45,8 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 	{
 		case UNARY_OP_COPY:
 		case UNARY_OP_NEGATE:
-		case UNARY_OP_INVERT:
+		case UNARY_OP_INVERT_LEFT:
+		case UNARY_OP_INVERT_RIGHT:
 		case UNARY_OP_REVERSE:
 		case UNARY_OP_MAGNITUDE:
 		{
@@ -119,12 +121,16 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 				operationPerformed = opResult->Scale( GeometricAlgebra::Scalar( -1.0 ) );
 			break;
 		}
-		case UNARY_OP_INVERT:
+		case UNARY_OP_INVERT_LEFT:
 		{
-			operationPerformed = false;
-
-			// TODO: This algorithm needs to be revisited.
-			//operationPerformed = opResult->AssignGeometricInverse( *argUserData[0]->multiVec );
+			GeometricAlgebra::SumOfBlades::InverseResult inverseResult;
+			operationPerformed = opResult->AssignGeometricInverse( *argUserData[0]->multiVec, GeometricAlgebra::SumOfBlades::LEFT_INVERSE, inverseResult );
+			break;
+		}
+		case UNARY_OP_INVERT_RIGHT:
+		{
+			GeometricAlgebra::SumOfBlades::InverseResult inverseResult;
+			operationPerformed = opResult->AssignGeometricInverse( *argUserData[0]->multiVec, GeometricAlgebra::SumOfBlades::RIGHT_INVERSE, inverseResult );
 			break;
 		}
 		case UNARY_OP_REVERSE:
@@ -230,9 +236,15 @@ int l_negate( lua_State* L )
 }
 
 //=========================================================================================
-int l_invert( lua_State* L )
+int l_invert_l( lua_State* L )
 {
-	return PerformOp( L, UNARY_OP_INVERT );
+	return PerformOp( L, UNARY_OP_INVERT_LEFT );
+}
+
+//=========================================================================================
+int l_invert_r( lua_State* L )
+{
+	return PerformOp( L, UNARY_OP_INVERT_RIGHT );
 }
 
 //=========================================================================================

@@ -17,7 +17,8 @@ enum GALuaOp
 	// Unary operations:
 	UNARY_OP_COPY,
 	UNARY_OP_NEGATE,
-	UNARY_OP_INVERT,
+	UNARY_OP_INVERT_LEFT,
+	UNARY_OP_INVERT_RIGHT,
 	UNARY_OP_REVERSE,
 	UNARY_OP_MAGNITUDE,
 
@@ -40,7 +41,8 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp );
 // Unary operations:
 int l_copy( lua_State* L );
 int l_negate( lua_State* L );
-int l_invert( lua_State* L );
+int l_invert_l( lua_State* L );
+int l_invert_r( lua_State* L );
 int l_reverse( lua_State* L );
 int l_mag( lua_State* L );
 
