@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;LUA_BUILD_AS_DLL"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;LUA_BUILD_AS_DLL;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,7 +61,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="LuaDLL.lib"
-				OutputFile="../lua-5.2.1/bin/$(ProjectName).exe"
+				OutputFile="../lua-5.2.1/bin/Lua.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../lua-5.2.1/bin"
 				GenerateDebugInformation="true"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;LUA_BUILD_AS_DLL;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -135,7 +135,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="LuaDLL.lib"
+				OutputFile="../lua-5.2.1/bin/Lua.exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="../lua-5.2.1/bin"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
