@@ -1,28 +1,18 @@
--- GALua.lua -- Test the GALua module.
+-- SimpleTest.lua
 
 package.cpath = package.cpath .. ";C:\\GALua\\Build\\Debug\\?.dll"
 package.cpath = package.cpath .. ";D:\\GALua\\Build\\Debug\\?.dll"
-print( package.cpath )
 
 -- Acquire the GALua API.
 local galua = require 'galua'
 
--- Define our basis vectors.  These span the vector space
--- that generates the geometric algebra that we will use.
-local basisVecs = { "e1", "e2", "e3" }
-galua.def_basis( basisVecs )
-
--- Define the signature of our GA.
-local basisVecIPFunc = function( i, j )
-	local ip_table =
-	{
-		{ 1, 0, 0 },
-		{ 0, 1, 0 },
-		{ 0, 0, 1 },
-	}
-	return ip_table[i][j]
+-- Configure our algebra.
+local algebraFile = "../../Algebras/EGA3D.lua"
+local algebra = dofile( algebraFile )
+if not algebra then
+	error( "Failed to algebra function from file \"" .. algebraFile .. "\"." )
 end
-galua.def_sig( basisVecIPFunc )
+algebra( galua )
 
 -- Print out an array of multi-vectors.
 function PrintMultiVecArray( mvArray )
@@ -95,4 +85,4 @@ local mag = galua.mag( mvStringA )
 PrintMultiVecArray( mvArray )
 print( "mag = " .. galua.to_string( mag ) )
 
--- GALua.lua
+-- SimpleTest.lua
