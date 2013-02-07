@@ -10,7 +10,7 @@ local galua = require 'galua'
 local algebraFile = "../../Algebras/EGA3D.lua"
 local algebra = dofile( algebraFile )
 if not algebra then
-	error( "Failed to algebra function from file \"" .. algebraFile .. "\"." )
+	error( "Failed to get algebra function from file \"" .. algebraFile .. "\"." )
 end
 algebra( galua )
 

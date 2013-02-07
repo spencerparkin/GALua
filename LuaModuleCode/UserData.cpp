@@ -52,7 +52,7 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 	lua_pushcfunction( L, &l_set_grade_part );
 	lua_setfield( L, -2, "__newindex" );
 
-	// TODO: Figure this out.  It doesn't work.  What are the two args?
+	// Provide a convenient way to take the magnitude of and negate a multi-vector.
 	lua_pushcfunction( L, &l_mag );
 	lua_setfield( L, -2, "__len" );
 	lua_pushcfunction( L, &l_negate );
