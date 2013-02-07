@@ -184,12 +184,22 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 			if( operationPerformed )
 			{
 				int gradePart = int( scalar );
-				operationPerformed = argUserData[0]->multiVec->GradePart( gradePart, *opResult );
+				operationPerformed = argUserData[0]->multiVec->GetGradePart( gradePart, *opResult );
 			}
 			break;
 		}
 		case TURNARY_OP_SET_GRADE_PART:
 		{
+			// The order of arguments here was chosen to that we can be compatible with the __newindex meta-method.
+			double scalar;
+			operationPerformed = argUserData[1]->multiVec->AssignScalarTo( scalar );
+			if( operationPerformed )
+			{
+				int gradePart = int( scalar );
+				operationPerformed = argUserData[0]->multiVec->SetGradePart( gradePart, *argUserData[2]->multiVec );
+				if( operationPerformed )
+					operationPerformed = opResult->AssignSumOfBlades( *argUserData[0]->multiVec );
+			}
 			break;
 		}
 	}

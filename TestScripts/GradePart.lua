@@ -38,4 +38,14 @@ print( "E1 = " .. tostring(E1) )
 print( "E2 = " .. tostring(E2) )
 print( "E3 = " .. tostring(E3) )
 
+print( "Now test modifications of parts..." )
+E[0] = 1
+print( "E = " .. tostring(E) )
+E[1] = 0
+print( "E = " .. tostring(E) )
+E[2] = e1^e3*-4
+print( "E = " .. tostring(E) )
+E[3] = e1^e3^e2
+print( "E = " .. tostring(E) )
+
 -- GradePart.lua

@@ -49,8 +49,8 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 	// Provide a convenient way to get and set the grade parts of a multi-vector.
 	lua_pushcfunction( L, &l_get_grade_part );
 	lua_setfield( L, -2, "__index" );
-	//lua_puscfunction( L, &l_set_grade_part );
-	//lua_setfield( L, -2, "__newindex" );
+	lua_pushcfunction( L, &l_set_grade_part );
+	lua_setfield( L, -2, "__newindex" );
 
 	// TODO: Figure this out.  It doesn't work.  What are the two args?
 	lua_pushcfunction( L, &l_mag );
