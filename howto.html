@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>How to use the GALua module</title>
+	</head>
+	<body>
+	
+	<h1>How to use the GALua module</h1>
+	
+	<p>
+	The GALua module is easy to use.  There are three basic steps to using the module.
+	First, you must, of course, require the module in your Lua script.  Second, define
+	the geometric algebra you would like to work in.  And lastly, simply make use of the
+	module functions.
+	</p>
+	
+	<h3>Requiring the module</h3>
+	
+	<p>
+	Before using the module, you have to gain access to it.  The following code snippet illustrates this.
+	</p>
+	
+	<code>
+	-- Grab the GALua API table.<br>
+	local galua_api = require "galua"
+	</code>
+	
+	<p>
+	Of course, this will fail if the GALua.dll file has not been installed in a place where Lua can find it.
+	It is up to you to make sure that it is installed correctly, or that you tell Lua where it can find the module.
+	</p>
+	
+	<h3>Defining the GA</h3>
+	
+	<p>
+	To define a geometric algebra, we give GALua a set of basis vectors and then define the behavior
+	of those basis vectors in the inner product.
+	</p>
+	
+	<code>
+	galua_api.def_basis{ "e1", "e2", "e3" }<br>
+	galua_api.
+	</code>
+    
+	</body>
+</html>
