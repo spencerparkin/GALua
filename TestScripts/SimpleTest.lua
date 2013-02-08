@@ -7,7 +7,7 @@ package.cpath = package.cpath .. ";D:\\GALua\\Build\\Debug\\?.dll"
 local galua = require 'galua'
 
 -- Configure our algebra.
-local algebraFile = "../../Algebras/EGA3D.lua"
+local algebraFile = "../Algebras/EGA3D.lua"
 local algebra = dofile( algebraFile )
 if not algebra then
 	error( "Failed to get algebra function from file \"" .. algebraFile .. "\"." )

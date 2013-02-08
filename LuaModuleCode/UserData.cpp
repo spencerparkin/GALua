@@ -13,6 +13,7 @@
 #include "Operation.h"
 #include "String.h"
 #include "Debug.h"
+#include "Index.h"
 
 //=========================================================================================
 GALuaUserData* NewGALuaUserData( lua_State* L )
@@ -22,6 +23,10 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 	GALuaUserData* userData = ( GALuaUserData* )lua_newuserdata( L, size );
 	if( !userData )
 		return 0;
+
+	// TODO: Could we speed this up by creating one meta-table somewhere and then just setting it here quickly for each new object?
+	//       What we're doing here is recreating the entire meta-table each time a new object is created.
+	//       Also, it doesn't make sense for every new object to have it's own copy of the exact same meta-table if they could all share the same one.
 
 	// Start a meta-table for the user-data value we'll hand back.
 	lua_newtable( L );
@@ -46,10 +51,13 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 	lua_pushcfunction( L, &l_to_string );
 	lua_setfield( L, -2, "__tostring" );
 
-	// Provide a convenient way to get and set the grade parts of a multi-vector.
-	lua_pushcfunction( L, &l_get_grade_part );
+	// These meta-methods will provide a convenient way to get and set the
+	// grade parts of a multi-vector if given an integer key.  Otherwise,
+	// we will use the given string key to look-up a desired user-data method.
+	// All other key types are ignored for now.
+	lua_pushcfunction( L, &l_index );
 	lua_setfield( L, -2, "__index" );
-	lua_pushcfunction( L, &l_set_grade_part );
+	lua_pushcfunction( L, &l_newindex );
 	lua_setfield( L, -2, "__newindex" );
 
 	// Provide a convenient way to take the magnitude of and negate a multi-vector.

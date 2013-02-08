@@ -84,46 +84,24 @@ int l_from_string( lua_State* L )
 // I should revisit in CalcLib, and even provide explicit support for.
 int l_to_string( lua_State* L )
 {
-	char error[2048];
-	error[0] = '\0';
-	
-	try
-	{
-		// Make sure we were given exactly one argument.
-		int stack_top = lua_gettop(L);
-		if( stack_top != 1 )
-		{
-			sprintf_s( error, sizeof( error ), "The function \"to_string\" expects 1 and only 1 argument." );
-			throw( error );
-		}
+	// Make sure we were given exactly one argument.
+	int stack_top = lua_gettop(L);
+	if( stack_top != 1 )
+		GALuaError( L, "The function \"to_string\" expects 1 and only 1 argument." );
 
-		// Try to grab our argument.
-		GALuaUserData* userData = GrabGALuaUserData( L, -1 );
-		if( !userData )
-		{
-			sprintf_s( error, sizeof( error ), "The function \"to_string\" failed to grab its one and only argument." );
-			throw( error );
-		}
+	// Try to grab our argument.
+	GALuaUserData* userData = GrabGALuaUserData( L, -1 );
+	if( !userData )
+		GALuaError( L, "The function \"to_string\" failed to grab its one and only argument." );
 
-		// Print the argument to a buffer in a way that it can be read back in using "from_string".
-		// TODO: There should be a "PRINT_FOR_PARSING" here so that we can insure we're an inverse for "from_string".
-		char printBuffer[1024];
-		if( !userData->multiVec->Print( printBuffer, sizeof( printBuffer ), ScalarAlgebra::PRINT_FOR_READING ) )
-		{
-			sprintf_s( error, sizeof( error ), "The function \"to_string\" failed to print the given multivector." );
-			throw( error );
-		}
+	// Print the argument to a buffer in a way that it can be read back in using "from_string".
+	// TODO: There should be a "PRINT_FOR_PARSING" here so that we can insure we're an inverse for "from_string".
+	char printBuffer[1024];
+	if( !userData->multiVec->Print( printBuffer, sizeof( printBuffer ), ScalarAlgebra::PRINT_FOR_READING ) )
+		GALuaError( L, "The function \"to_string\" failed to print the given multivector." );
 
-		// Push the string to return it to the caller.
-		lua_pushstring( L, printBuffer );
-	}
-	catch( const char* )
-	{
-	}
-
-	// If something went wrong, tell Lua.
-	if( error[0] != '\0' )
-		luaL_error( L, error );
+	// Push the string to return it to the caller.
+	lua_pushstring( L, printBuffer );
 	
 	// We return one value.
 	return 1;

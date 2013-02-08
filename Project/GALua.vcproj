@@ -222,6 +222,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\LuaModuleCode\Index.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Index.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\Operation.cpp"
 				>
 			</File>
