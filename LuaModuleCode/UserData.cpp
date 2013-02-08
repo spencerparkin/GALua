@@ -54,7 +54,6 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 	// These meta-methods will provide a convenient way to get and set the
 	// grade parts of a multi-vector if given an integer key.  Otherwise,
 	// we will use the given string key to look-up a desired user-data method.
-	// All other key types are ignored for now.
 	lua_pushcfunction( L, &l_index );
 	lua_setfield( L, -2, "__index" );
 	lua_pushcfunction( L, &l_newindex );

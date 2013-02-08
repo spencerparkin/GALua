@@ -11,6 +11,7 @@
 
 #include "Index.h"
 #include "Operation.h"
+#include "Scope.h"
 #include <string.h>
 
 //=========================================================================================
@@ -33,7 +34,19 @@ int l_index( lua_State* L )
 			return 1;
 		}
 		//else...More user-data methods go here...
+
+		// If we didn't recognize the method, it may be a variable containing a
+		// multi-vector, in which case we can use the dot operator as the inner product.
+		if( 1 == l_scope_lookup( L, key ) && lua_isuserdata( L, -1 ) )
+		{
+			lua_remove( L, -2 );
+			return l_ip(L);
+		}
 	}
+
+	// If given user-data, try to perform the inner product.
+	if( lua_isuserdata( L, -1 ) )
+		return l_ip(L);
 
 	// The fall-back case is to return nil.
 	lua_pushnil(L);
