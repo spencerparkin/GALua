@@ -238,12 +238,12 @@
 	<p>
 	For now, that's basically it.  There is actually an internal language
 	implemented by the GALua module, which is accessed by the overload to
-	the function-call syntax on the <code>galua</code> table.  We used it
+	the function-call syntax on the <code>galua_api</code> table.  We used it
 	to simply get at the basis vectors, but you can actually do math with it as well.
 	</p>
 	
 	<code>
-	multiVec = galua( "3*e1 + 4*e1 - 5*e1^e2 + e1.e1 + (e1^e2)*e3" )<br>
+	multiVec = galua_api( "3*e1 + 4*e1 - 5*e1^e2 + e1.e1 + (e1^e2)*e3" )<br>
 	</code>
 	
 	<p>
