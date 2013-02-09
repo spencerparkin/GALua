@@ -35,9 +35,26 @@ GALuaBasisVec::GALuaBasisVec( const char* name )
 }
 
 //=========================================================================================
+// The bar functionality can be implemented using GA calculations, but we provide
+// this implementation, because it is much, much faster!
 /*virtual*/ GeometricAlgebra::Vector* GALuaBasisVec::MakeBar( ScalarAlgebra::Scalar& sign ) const
 {
-	return 0;
+	// Which basis vector are we dealing with here?
+	int i;
+	if( !gaLuaEnv->LookupBasisVec( name, i ) )
+		return 0;
+
+	// Which basis vector do we map to?
+	int j, sign_int;
+	if( !gaLuaEnv->BarMapGet( i, j, sign_int ) )
+		return 0;
+	sign = double( sign_int );
+	const char* basisVecName;
+	if( !gaLuaEnv->LookupBasisVec( j, basisVecName ) )
+		return 0;
+
+	// Return the mapped basis vector.
+	return new GALuaBasisVec( basisVecName );
 }
 
 //=========================================================================================

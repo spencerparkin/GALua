@@ -21,6 +21,7 @@ enum GALuaOp
 	UNARY_OP_INVERT_RIGHT,
 	UNARY_OP_REVERSE,
 	UNARY_OP_MAGNITUDE,
+	UNARY_OP_BAR,
 
 	// Binary operations:
 	BINARY_OP_SUM,
@@ -45,6 +46,7 @@ int l_left_inverse( lua_State* L );
 int l_right_inverse( lua_State* L );
 int l_reverse( lua_State* L );
 int l_mag( lua_State* L );
+int l_bar( lua_State* L );
 
 //=========================================================================================
 // Binary operations:

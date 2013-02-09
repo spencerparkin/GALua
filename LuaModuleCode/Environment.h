@@ -34,17 +34,35 @@ public:
 	void DeleteBasisVecMap( void );
 	bool RegisterBasisVec( const char* basisVec );
 	bool LookupBasisVec( const char* basisVec, int& index );
+	bool LookupBasisVec( int index, const char*& basisVec );
 	int BasisVecCount( void );
 
 	void DeleteBasisVecIpTable( void );
 	bool SetBasisVecIpTableEntry( int i, int j, double scalar );
 	bool GetBasisVecIpTableEntry( int i, int j, double& scalar );
 
+	void DeleteBarMap( void );
+	bool BarMapSet( int i, int j, int sign );
+	bool BarMapGet( int i, int& j, int& sign );
+
 private:
 
+	// Yes, we could combine these into a single integer, by using
+	// the sign of the integer as the sign and the magnitude of the
+	// integer as an index, but that requires us to use 1-based, not
+	// 0-based indices.  To keep things simpler, I'm sticking to 0-based
+	// indices in C++, while using 1-based indices in Lua.
+	struct BarMapEntry
+	{
+		int index;
+		int sign;
+	};
+
 	int basisVecCount;
-	Utilities::Map< int > basisVecMap;
+	Utilities::Map< int > basisVecMapByName;
+	char** basisVecMapByIndex;
 	double** basisVecIpTable;
+	BarMapEntry* barMap;
 };
 
 //=========================================================================================

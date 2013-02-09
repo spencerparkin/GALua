@@ -30,6 +30,7 @@ static luaL_Reg galua_api[] =
 {
 	{ "def_basis", l_def_basis },
 	{ "def_sig", l_def_sig },
+	{ "def_bar", l_def_bar },
 	{ "from_string", l_from_string },
 	{ "to_string", l_to_string },
 	{ "sum", l_sum },

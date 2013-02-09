@@ -33,7 +33,11 @@ int l_index( lua_State* L )
 			lua_pushcfunction( L, &l_copy );
 			return 1;
 		}
-		//else...More user-data methods go here...
+		else if( 0 == strcmp( key, "bar" ) )
+		{
+			lua_pushcfunction( L, &l_bar );
+			return 1;
+		}
 
 		// If we didn't recognize the method, it may be a variable containing a
 		// multi-vector, in which case we can use the dot operator as the inner product.

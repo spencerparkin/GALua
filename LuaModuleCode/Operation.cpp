@@ -30,6 +30,7 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		case UNARY_OP_INVERT_LEFT:			funcName = "invert_l";			break;
 		case UNARY_OP_REVERSE:				funcName = "reverse";			break;
 		case UNARY_OP_MAGNITUDE:			funcName = "mag";				break;
+		case UNARY_OP_BAR:					funcName = "bar";				break;
 		case BINARY_OP_SUM:					funcName = "sum/add";			break;
 		case BINARY_OP_DIF:					funcName = "dif/sub";			break;
 		case BINARY_OP_GP:					funcName = "gp";				break;
@@ -49,6 +50,7 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		case UNARY_OP_INVERT_RIGHT:
 		case UNARY_OP_REVERSE:
 		case UNARY_OP_MAGNITUDE:
+		case UNARY_OP_BAR:
 		{
 			argCount = 1;
 			break;
@@ -149,6 +151,13 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 				double magnitude = sqrt( squareMagnitude );
 				operationPerformed = opResult->AssignScalarFrom( magnitude );
 			}
+			break;
+		}
+		case UNARY_OP_BAR:
+		{
+			operationPerformed = opResult->AssignSumOfBlades( *argUserData[0]->multiVec );
+			if( operationPerformed )
+				operationPerformed = opResult->Bar();
 			break;
 		}
 		case BINARY_OP_SUM:
@@ -267,6 +276,12 @@ int l_reverse( lua_State* L )
 int l_mag( lua_State* L )
 {
 	return PerformOp( L, UNARY_OP_MAGNITUDE );
+}
+
+//=========================================================================================
+int l_bar( lua_State* L )
+{
+	return PerformOp( L, UNARY_OP_BAR );
 }
 
 //=========================================================================================

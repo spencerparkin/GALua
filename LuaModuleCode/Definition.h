@@ -14,5 +14,6 @@
 //=========================================================================================
 int l_def_basis( lua_State* L );
 int l_def_sig( lua_State* L );
+int l_def_bar( lua_State* L );
 
 // Definition.h
