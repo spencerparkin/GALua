@@ -10,10 +10,11 @@
  */
 
 #include "UserData.h"
-#include "Operation.h"
-#include "String.h"
 #include "Debug.h"
 #include "Index.h"
+#include "Overload.h"
+#include "Operation.h"
+#include "String.h"
 
 //=========================================================================================
 GALuaUserData* NewGALuaUserData( lua_State* L )
@@ -24,50 +25,12 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 	if( !userData )
 		return 0;
 
-	// TODO: Could we speed this up by creating one meta-table somewhere and then just setting it here quickly for each new object?
-	//       What we're doing here is recreating the entire meta-table each time a new object is created.
-	//       Also, it doesn't make sense for every new object to have it's own copy of the exact same meta-table if they could all share the same one.
-
-	// Start a meta-table for the user-data value we'll hand back.
-	lua_newtable( L );
-
-	// Register this function so that when the value is garbage collected, we free the user-data memory.
-	lua_pushcfunction( L, &DeleteGALuaUserData );
-	lua_setfield( L, -2, "__gc" );
-
-	// Register useful overloads.
-	lua_pushcfunction( L, &l_sum );
-	lua_setfield( L, -2, "__add" );
-	lua_pushcfunction( L, &l_dif );
-	lua_setfield( L, -2, "__sub" );
-	lua_pushcfunction( L, &l_gp );
-	lua_setfield( L, -2, "__mul" );
-	lua_pushcfunction( L, &l_ip );
-	lua_setfield( L, -2, "__mod" );
-	lua_pushcfunction( L, &l_op );
-	lua_setfield( L, -2, "__pow" );
-
-	// Provide compatibility with the built-in "tostring" function.
-	lua_pushcfunction( L, &l_to_string );
-	lua_setfield( L, -2, "__tostring" );
-
-	// These meta-methods will provide a convenient way to get and set the
-	// grade parts of a multi-vector if given an integer key.  Otherwise,
-	// we will use the given string key to look-up a desired user-data method.
-	lua_pushcfunction( L, &l_index );
-	lua_setfield( L, -2, "__index" );
-	lua_pushcfunction( L, &l_newindex );
-	lua_setfield( L, -2, "__newindex" );
-
-	// Provide a convenient way to take the magnitude of and negate a multi-vector.
-	lua_pushcfunction( L, &l_mag );
-	lua_setfield( L, -2, "__len" );
-	lua_pushcfunction( L, &l_neg );
-	lua_setfield( L, -2, "__unm" );
-
-	// Finally, set the meta-table.  This also pops it, leaving only
-	// what we want to return from this function at the top of the stack.
-	lua_setmetatable( L, -2 );
+	// Set the meta-table.  This function will only create the
+	// table once, and then return the cached version on subsequent
+	// calls.  This not only saves time, but also memory, because
+	// all user-data values we create should share the same meta-table.
+	if( 1 == l_push_userdata_metatable( L ) )
+		lua_setmetatable( L, -2 );
 
 	// Fill out the user-data with the correct initial data.
 	memcpy( userData->safetyString, "gaLua", 5 );
