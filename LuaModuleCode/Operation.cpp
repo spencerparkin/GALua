@@ -240,19 +240,19 @@ int l_copy( lua_State* L )
 }
 
 //=========================================================================================
-int l_negate( lua_State* L )
+int l_neg( lua_State* L )
 {
 	return PerformOp( L, UNARY_OP_NEGATE );
 }
 
 //=========================================================================================
-int l_invert_l( lua_State* L )
+int l_left_inverse( lua_State* L )
 {
 	return PerformOp( L, UNARY_OP_INVERT_LEFT );
 }
 
 //=========================================================================================
-int l_invert_r( lua_State* L )
+int l_right_inverse( lua_State* L )
 {
 	return PerformOp( L, UNARY_OP_INVERT_RIGHT );
 }

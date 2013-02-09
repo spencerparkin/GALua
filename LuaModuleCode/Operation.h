@@ -40,9 +40,9 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp );
 //=========================================================================================
 // Unary operations:
 int l_copy( lua_State* L );
-int l_negate( lua_State* L );
-int l_invert_l( lua_State* L );
-int l_invert_r( lua_State* L );
+int l_neg( lua_State* L );
+int l_left_inverse( lua_State* L );
+int l_right_inverse( lua_State* L );
 int l_reverse( lua_State* L );
 int l_mag( lua_State* L );
 

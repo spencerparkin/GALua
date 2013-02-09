@@ -62,7 +62,7 @@ GALuaUserData* NewGALuaUserData( lua_State* L )
 	// Provide a convenient way to take the magnitude of and negate a multi-vector.
 	lua_pushcfunction( L, &l_mag );
 	lua_setfield( L, -2, "__len" );
-	lua_pushcfunction( L, &l_negate );
+	lua_pushcfunction( L, &l_neg );
 	lua_setfield( L, -2, "__unm" );
 
 	// Finally, set the meta-table.  This also pops it, leaving only
