@@ -28,7 +28,8 @@ int l_push_userdata_metatable( lua_State* L )
 	lua_pushglobaltable( L );
 
 	// This should never take more than 2 tries.
-	for( int tryCount = 0; tryCount < 2; tryCount++ )
+	int tryCount = 0;
+	while( true )
 	{
 		// Return the cached meta-table if it already exists.
 		lua_getfield( L, -1, userDataMetaTableName );
@@ -38,9 +39,13 @@ int l_push_userdata_metatable( lua_State* L )
 			lua_remove( L, -2 );
 			return 1;
 		}
-		
+
 		// Remove the nil value.
 		lua_pop( L, 1 );
+
+		// It should never take more than two tries.
+		if( ++tryCount >= 2 )
+			break;
 
 		// Start a meta-table for the user-data value we'll hand back.
 		lua_newtable( L );
