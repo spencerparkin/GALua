@@ -28,7 +28,24 @@ public:
 	virtual const char* Name( void ) const override;
 	virtual const char* LatexName( void ) const override;
 
-	char* name;
+	class BasisVecNameData
+	{
+	public:
+
+		BasisVecNameData( const char* name );
+		virtual ~BasisVecNameData( void );
+
+		char* name;
+		char* latexName;
+		int refCount;
+	};
+
+	BasisVecNameData* basisVecNameData;
+
+	static Utilities::Map< BasisVecNameData* > basisVecNameDataCache;
+	static bool deleteNameDataOnZeroRefCount;
+
+	static void WipeBasisVecNameCache( bool requireZeroRefCount = true );
 };
 
 // BasisVec.h

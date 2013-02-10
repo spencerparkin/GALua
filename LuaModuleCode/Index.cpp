@@ -12,6 +12,7 @@
 #include "Index.h"
 #include "Operation.h"
 #include "Scope.h"
+#include "String.h"
 #include <string.h>
 
 //=========================================================================================
@@ -27,6 +28,8 @@ int l_index( lua_State* L )
 	if( lua_isstring( L, -1 ) )
 	{
 		// Do we recognize the desired user-data method?
+		// If the list of functions here gets too big, we should consider
+		// putting the function in a table and then doing a table look-up.
 		const char* key = lua_tostring( L, -1 );
 		if( 0 == strcmp( key, "copy" ) )
 		{
@@ -36,6 +39,11 @@ int l_index( lua_State* L )
 		else if( 0 == strcmp( key, "bar" ) )
 		{
 			lua_pushcfunction( L, &l_bar );
+			return 1;
+		}
+		else if( 0 == strcmp( key, "latex" ) )
+		{
+			lua_pushcfunction( L, &l_to_latex_string );
 			return 1;
 		}
 

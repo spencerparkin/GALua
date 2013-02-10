@@ -14,6 +14,7 @@
 #include "Environment.h"
 #include "Definition.h"
 #include "String.h"
+#include "BasisVec.h"
 #include "Operation.h"
 
 //=========================================================================================
@@ -33,6 +34,7 @@ static luaL_Reg galua_api[] =
 	{ "def_bar", l_def_bar },
 	{ "from_string", l_from_string },
 	{ "to_string", l_to_string },
+	{ "to_latex_string", l_to_latex_string },
 	{ "sum", l_sum },
 	{ "add", l_sum },
 	{ "dif", l_dif },
@@ -64,6 +66,10 @@ static void ModuleFinalize( void )
 {
 	delete gaLuaEnv;
 	gaLuaEnv = 0;
+
+	// After the environment has been blown away, there
+	// should be no more references to basis vector names.
+	GALuaBasisVec::WipeBasisVecNameCache();
 }
 
 //=========================================================================================

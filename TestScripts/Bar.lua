@@ -35,6 +35,6 @@ local sphere_bar = sphere:bar()
 print( "sphere_bar = " .. tostring( sphere_bar ) )
 
 local V = sphere*sphere_bar
-print( "V = " .. tostring(V) )
+print( "V = " .. V:latex() )
 
 -- Bar.lua

@@ -84,15 +84,15 @@ int l_from_string( lua_State* L )
 // I should revisit in CalcLib, and even provide explicit support for.
 int l_to_string( lua_State* L )
 {
-	// Make sure we were given exactly one argument.
+	// Make sure we were given at least one argument.  We will only use the stack top and ignore the rest.
 	int stack_top = lua_gettop(L);
-	if( stack_top != 1 )
-		GALuaError( L, "The function \"to_string\" expects 1 and only 1 argument." );
+	if( stack_top < 1 )
+		GALuaError( L, "The function \"to_string\" expects 1 argument." );
 
 	// Try to grab our argument.
 	GALuaUserData* userData = GrabGALuaUserData( L, -1 );
 	if( !userData )
-		GALuaError( L, "The function \"to_string\" failed to grab its one and only argument." );
+		GALuaError( L, "The function \"to_string\" failed to grab its argument." );
 
 	// Print the argument to a buffer in a way that it can be read back in using "from_string".
 	// TODO: There should be a "PRINT_FOR_PARSING" here so that we can insure we're an inverse for "from_string".
@@ -104,6 +104,29 @@ int l_to_string( lua_State* L )
 	lua_pushstring( L, printBuffer );
 	
 	// We return one value.
+	return 1;
+}
+
+//=========================================================================================
+int l_to_latex_string( lua_State* L )
+{
+	// Make sure we were given at least one argument.  We will only use the stack top and ignore the rest.
+	int stack_top = lua_gettop(L);
+	if( stack_top < 1 )
+		GALuaError( L, "The function \"to_latex_string\" expects 1 argument." );
+
+	// Try to grab our argument.
+	GALuaUserData* userData = GrabGALuaUserData( L, -1 );
+	if( !userData )
+		GALuaError( L, "The function \"to_latex_string\" failed to grab its argument." );
+
+	// Print the argument to the buffer as latex code.
+	char printBuffer[2048];
+	if( !userData->multiVec->Print( printBuffer, sizeof( printBuffer ), ScalarAlgebra::PRINT_FOR_LATEX ) )
+		GALuaError( L, "The function \"to_latex_string\" failed to print the given multivector in latex format." );
+
+	// Return the string to the caller.
+	lua_pushstring( L, printBuffer );
 	return 1;
 }
 
