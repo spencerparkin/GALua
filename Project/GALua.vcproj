@@ -269,6 +269,14 @@
 				RelativePath="..\LuaModuleCode\UserData.h"
 				>
 			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Version.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Version.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

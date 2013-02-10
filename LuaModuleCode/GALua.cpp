@@ -16,6 +16,7 @@
 #include "String.h"
 #include "BasisVec.h"
 #include "Operation.h"
+#include "Version.h"
 
 //=========================================================================================
 // By avoiding the use of DllMain, our Lua module has the potential to be portable to other platforms.
@@ -29,6 +30,7 @@ BOOL APIENTRY DllMain( HANDLE module, DWORD reason, LPVOID reserved )
 //=========================================================================================
 static luaL_Reg galua_api[] =
 {
+	{ "version", l_version },
 	{ "def_basis", l_def_basis },
 	{ "def_sig", l_def_sig },
 	{ "def_bar", l_def_bar },
