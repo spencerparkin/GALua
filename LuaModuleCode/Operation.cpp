@@ -36,6 +36,7 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		case BINARY_OP_GP:					funcName = "gp";				break;
 		case BINARY_OP_IP:					funcName = "ip";				break;
 		case BINARY_OP_OP:					funcName = "op";				break;
+		case BINARY_OP_COEF:				funcName = "coef";				break;
 		case BINARY_OP_GET_GRADE_PART:		funcName = "get_grade_part";	break;
 		case TURNARY_OP_SET_GRADE_PART:		funcName = "set_grade_part";	break;
 	}
@@ -60,6 +61,7 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		case BINARY_OP_GP:
 		case BINARY_OP_IP:
 		case BINARY_OP_OP:
+		case BINARY_OP_COEF:
 		case BINARY_OP_GET_GRADE_PART:
 		{
 			argCount = 2;
@@ -183,6 +185,23 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		case BINARY_OP_OP:
 		{
 			operationPerformed = opResult->AssignOuterProduct( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
+			break;
+		}
+		case BINARY_OP_COEF:
+		{
+			// This operation can be performed by the inner product, but it is provided mainly as an optimization (supposedly)
+			// and also as a convenience or even something that might make the math easier to read, I guess.
+			if( argUserData[1]->multiVec->BladeCount() != 1 )
+				GALuaError( L, "The function \"coef\" expects its second argument to be a basis blade, not a blade in general and certainly not a non-homogeneous multivector." );
+			GeometricAlgebra::Blade blade;
+			operationPerformed = argUserData[1]->multiVec->AssignBladeTo( blade, 0 );
+			if( operationPerformed )
+			{
+				GeometricAlgebra::Scalar scalar;
+				operationPerformed = operationPerformed = argUserData[0]->multiVec->ScalarPart( blade, scalar );
+				if( operationPerformed )
+					operationPerformed = opResult->AssignScalar( scalar );
+			}
 			break;
 		}
 		case BINARY_OP_GET_GRADE_PART:
@@ -312,6 +331,12 @@ int l_ip( lua_State* L )
 int l_op( lua_State* L )
 {
 	return PerformOp( L, BINARY_OP_OP );
+}
+
+//=========================================================================================
+int l_coef( lua_State* L )
+{
+	return PerformOp( L, BINARY_OP_COEF );
 }
 
 //=========================================================================================

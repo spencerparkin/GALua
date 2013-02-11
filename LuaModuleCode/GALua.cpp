@@ -27,8 +27,6 @@ BOOL APIENTRY DllMain( HANDLE module, DWORD reason, LPVOID reserved )
 }
 #endif
 
-// TODO: Add function that grabs blade coeficients.
-
 //=========================================================================================
 static luaL_Reg galua_api[] =
 {
@@ -46,6 +44,7 @@ static luaL_Reg galua_api[] =
 	{ "gp", l_gp },
 	{ "ip", l_ip },
 	{ "op", l_op },
+	{ "coef", l_coef },
 	{ "get_grade_part", l_get_grade_part },
 	{ "set_grade_part", l_set_grade_part },
 	{ "copy", l_copy },

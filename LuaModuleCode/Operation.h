@@ -29,6 +29,7 @@ enum GALuaOp
 	BINARY_OP_GP,
 	BINARY_OP_IP,
 	BINARY_OP_OP,
+	BINARY_OP_COEF,
 	BINARY_OP_GET_GRADE_PART,
 
 	// Turnary operations:
@@ -55,6 +56,7 @@ int l_dif( lua_State* L );
 int l_gp( lua_State* L );
 int l_ip( lua_State* L );
 int l_op( lua_State* L );
+int l_coef( lua_State* L );
 int l_get_grade_part( lua_State* L );
 
 //=========================================================================================
