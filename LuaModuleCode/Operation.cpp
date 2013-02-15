@@ -252,7 +252,7 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 	// given on the stack before returning our result.  However, being called
 	// internally, it is a good idea to adopt the convention of removing the
 	// given arguments.  Everything is done relative to the top of the stack.
-	// This allows other functions, that take input and given output to the stack,
+	// This allows other functions, that take input and give output to the stack,
 	// to easily call this function, because we have a well defined behavior.
 	for( int index = 0; index < argCount + coercionCount; index++ )
 		lua_remove( L, -2 );
