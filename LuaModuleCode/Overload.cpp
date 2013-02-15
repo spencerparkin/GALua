@@ -15,6 +15,7 @@
 #include "String.h"
 #include "UserData.h"
 #include "Index.h"
+#include "Compare.h"
 
 //=========================================================================================
 static const char* userDataMetaTableName = "__galua_userdata_metatable__";
@@ -63,12 +64,16 @@ int l_push_userdata_metatable( lua_State* L )
 		lua_setfield( L, -2, "__mul" );
 		lua_pushcfunction( L, &l_ip );
 		lua_setfield( L, -2, "__mod" );
+		lua_pushcfunction( L, &l_ip );
+		lua_setfield( L, -2, "__concat" );
 		lua_pushcfunction( L, &l_op );
 		lua_setfield( L, -2, "__pow" );
 
 		// Provide compatibility with the built-in "tostring" function.
 		lua_pushcfunction( L, &l_to_string );
 		lua_setfield( L, -2, "__tostring" );
+
+		// TODO: Is there an "__tonumber" meta-method?
 
 		// These meta-methods will provide a convenient way to get and set the
 		// grade parts of a multi-vector if given an integer key.  Otherwise,
@@ -83,6 +88,15 @@ int l_push_userdata_metatable( lua_State* L )
 		lua_setfield( L, -2, "__len" );
 		lua_pushcfunction( L, &l_neg );
 		lua_setfield( L, -2, "__unm" );
+		
+		// TODO: How might we use the "__call" meta-method?
+
+		// Providing the equality comparison operation.  Note that we don't
+		// overload the "__lt" and "__le" meta-methods.  Those only make
+		// sense for scalars.  The user can get their multi-vector to a Lua
+		// number in some way, then use the built-in "__lt" or "__le" methods.
+		lua_pushcfunction( L, &l_cmp_eq );
+		lua_setfield( L, -2, "__eq" );
 
 		// Cache off the table for future use.  This also pops the table we just created.
 		lua_setfield( L, -2, userDataMetaTableName );

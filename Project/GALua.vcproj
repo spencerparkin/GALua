@@ -182,6 +182,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\LuaModuleCode\Compare.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Compare.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\Debug.cpp"
 				>
 			</File>
