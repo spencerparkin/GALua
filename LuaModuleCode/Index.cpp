@@ -47,6 +47,8 @@ int l_index( lua_State* L )
 			return 1;
 		}
 
+		// TODO: We should probably provide a way to get a Lua number from a multi-vector homogeneous of grade zero, or just the grade zero part.
+
 		// If we didn't recognize the method, it may be a variable containing a
 		// multi-vector, in which case we can use the dot operator as the inner product.
 		if( 1 == l_scope_lookup( L, key ) && lua_isuserdata( L, -1 ) )
