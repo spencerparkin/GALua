@@ -238,6 +238,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\LuaModuleCode\Number.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Number.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\Operation.cpp"
 				>
 			</File>
@@ -251,6 +259,10 @@
 			</File>
 			<File
 				RelativePath="..\LuaModuleCode\Overload.h"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\ProgrammerNotes.txt"
 				>
 			</File>
 			<File

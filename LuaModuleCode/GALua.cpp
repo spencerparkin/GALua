@@ -14,6 +14,7 @@
 #include "Environment.h"
 #include "Definition.h"
 #include "String.h"
+#include "Number.h"
 #include "BasisVec.h"
 #include "Operation.h"
 #include "Version.h"
@@ -37,6 +38,8 @@ static luaL_Reg galua_api[] =
 	{ "from_string", l_from_string },
 	{ "to_string", l_to_string },
 	{ "to_latex_string", l_to_latex_string },
+	{ "from_number", l_from_number },
+	{ "to_number", l_to_number },
 	{ "sum", l_sum },
 	{ "add", l_sum },
 	{ "dif", l_dif },

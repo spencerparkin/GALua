@@ -74,6 +74,9 @@ int l_from_string( lua_State* L )
 	delete evaluator;
 	delete numberResult;
 
+	// Remove our argument from the stack.  It is replaced with our returned result.
+	lua_remove( L, -2 );
+
 	// Return one result to the caller.
 	return 1;
 }

@@ -13,6 +13,7 @@
 #include "Operation.h"
 #include "Scope.h"
 #include "String.h"
+#include "Number.h"
 #include <string.h>
 
 //=========================================================================================
@@ -46,8 +47,11 @@ int l_index( lua_State* L )
 			lua_pushcfunction( L, &l_to_latex_string );
 			return 1;
 		}
-
-		// TODO: We should probably provide a way to get a Lua number from a multi-vector homogeneous of grade zero, or just the grade zero part.
+		else if( 0 == strcmp( key, "tonumber" ) )
+		{
+			lua_pushcfunction( L, &l_to_number );
+			return 1;
+		}
 
 		// If we didn't recognize the method, it may be a variable containing a
 		// multi-vector, in which case we can use the dot operator as the inner product.

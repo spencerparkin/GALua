@@ -15,6 +15,7 @@
 #include "Overload.h"
 #include "Operation.h"
 #include "String.h"
+#include "Number.h"
 
 //=========================================================================================
 GALuaUserData* NewGALuaUserData( lua_State* L )
@@ -75,27 +76,18 @@ GALuaUserData* GrabGALuaUserData( lua_State* L, int idx, bool* coercedUserData /
 		// Yes.  We can coerce numbers and strings.
 		if( lua_isnumber( L, idx ) )
 		{
-			// TODO: Don't do the conversion here.  Call an internal "l_from_number" function instead,
-			//       which we'll also support an an API call.  We'll also support "l_to_number"
-			//       as such a call, and we'll expose it through a user-data method.
-
 			// In the case of numbers, we can always coerce the data-type into our user-data type.
 			*coercedUserData = true;
-			GeometricAlgebra::Scalar scalar = lua_tonumber( L, idx );
-			userData = NewGALuaUserData( L );
-			if( userData )
-			{
-				userData->multiVec = new GeometricAlgebra::SumOfBlades();
-				userData->multiVec->AssignScalar( scalar );
-			}
+			lua_pushvalue( L, idx );	// Getting ready for l_from_number, make sure it's at the stack top.
+			l_from_number( L );			// If this fails, the entire script fails, so no need to check return value.
+			userData = GrabGALuaUserData( L, -1 );		// Find our user-data at the top of the stack.
 		}
 		else if( lua_isstring( L, idx ) )
 		{
 			// In the case of strings, we might be able to coerce the data-type into our user-data type.
 			*coercedUserData = true;
-			lua_pushvalue( L, idx );	// Getting read for l_from_string, make sure it's at the stack top.
+			lua_pushvalue( L, idx );	// Getting ready for l_from_string, make sure it's at the stack top.
 			l_from_string( L );			// If this fails, the entire script fails, so no need to check return value.
-			lua_remove( L, -2 );		// Make sure that our only addition to the stack is the coerced value.
 			userData = GrabGALuaUserData( L, -1 );		// Find our user-data at the top of the stack.
 		}
 	}
