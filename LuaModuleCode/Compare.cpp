@@ -1,5 +1,14 @@
 // Compare.cpp
 
+/*
+ * Copyright (C) 2013 Spencer T. Parkin
+ *
+ * This software has been released under the MIT License.
+ * See the "License.txt" file in the project root directory
+ * for more information about this license.
+ *
+ */
+
 #include "lua.hpp"
 #include "Compare.h"
 #include "UserData.h"
@@ -24,7 +33,7 @@ int l_cmp_eq( lua_State* L )
 
 	// Find the square magnitude of the difference between the two multi-vectors.
 	GeometricAlgebra::SumOfBlades difference;
-	if( !difference.AssignDifference( argUserData[0]->multiVec, argUserData[1]->multiVec ) )
+	if( !difference.AssignDifference( *argUserData[0]->multiVec, *argUserData[1]->multiVec ) )
 		GALuaError( L, "The function \"eq\" encountered an internal error while performing a difference operation." );
 	GeometricAlgebra::Scalar scalar;
 	if( !difference.AssignSquareMagnitudeTo( scalar ) )
