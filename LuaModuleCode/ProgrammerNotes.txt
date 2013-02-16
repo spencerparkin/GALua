@@ -1,0 +1,11 @@
+PROGRAMMER NOTES
+================
+
+A note about calling conventions is in order.  For any function named "l_*",
+I have adopted a convention that such functions always reference their arguments
+relative to the top of the stack, and that they remove those arguments before
+returning, replacing them with any results, the number of which should be returned
+by the C-function.  This allows the function to be easily called internally by
+any other function, or directly by Lua.  This convention was adopted later on as
+I learned more about writing a Lua module, so if this convention is not followed
+somewhere, it is my fault.
