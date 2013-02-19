@@ -17,3 +17,4 @@ THINGS TODO
 -- Learn about Lua packages so that we can put all our modules in a package?
 -- Create GAUtil.lua companion module to take care of GA definition scripts.
 -- Create CGAUtil.lua companion module to take care of CGA composition/decomposition.
+

@@ -22,7 +22,3 @@
 
 # Intermediates and built files
 Build/
-LuaDll/Debug/
-LuaDll/Release/
-LuaInterpreter/Debug/
-LuaInterpreter/Release/

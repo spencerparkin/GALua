@@ -1,18 +1,9 @@
 -- GradePart.lua
 
-package.cpath = package.cpath .. ";C:\\GALua\\Build\\Debug\\?.dll"
-package.cpath = package.cpath .. ";D:\\GALua\\Build\\Debug\\?.dll"
-
--- Acquire the GALua API.
 local galua = require 'galua'
+local gautil = require 'gautil'
 
--- Configure our algebra.
-local algebraFile = "../Algebras/EGA3D.lua"
-local algebra = dofile( algebraFile )
-if not algebra then
-	error( "Failed to get algebra function from file \"" .. algebraFile .. "\"." )
-end
-algebra( galua )
+gautil.EGA3D( galua )
 
 local e1 = galua( "e1" )
 local e2 = galua( "e2" )

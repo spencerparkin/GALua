@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../Build/$(ConfigurationName)"
-			IntermediateDirectory="../Build/$(ConfigurationName)"
+			OutputDirectory="../Build/GALua/$(ConfigurationName)"
+			IntermediateDirectory="../Build/GALua/$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
 			>
@@ -92,8 +92,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../Build/$(ConfigurationName)"
-			IntermediateDirectory="../Build/$(ConfigurationName)"
+			OutputDirectory="../Build/GALua/$(ConfigurationName)"
+			IntermediateDirectory="../Build/GALua/$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
