@@ -9,3 +9,11 @@ by the C-function.  This allows the function to be easily called internally by
 any other function, or directly by Lua.  This convention was adopted later on as
 I learned more about writing a Lua module, so if this convention is not followed
 somewhere, it is my fault.
+
+THINGS TODO
+===========
+
+-- Fix pathing issues.
+-- Learn about Lua packages so that we can put all our modules in a package?
+-- Create GAUtil.lua companion module to take care of GA definition scripts.
+-- Create CGAUtil.lua companion module to take care of CGA composition/decomposition.
