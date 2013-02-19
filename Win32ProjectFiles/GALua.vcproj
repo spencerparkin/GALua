@@ -265,10 +265,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\LuaModuleCode\ProgrammerNotes.txt"
-				>
-			</File>
-			<File
 				RelativePath="..\LuaModuleCode\Scope.cpp"
 				>
 			</File>
@@ -298,6 +294,14 @@
 			</File>
 			<File
 				RelativePath="..\LuaModuleCode\Version.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Notes"
+			>
+			<File
+				RelativePath="..\ProgrammerNotes.txt"
 				>
 			</File>
 		</Filter>
