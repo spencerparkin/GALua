@@ -55,6 +55,8 @@ int l_push_userdata_metatable( lua_State* L )
 		lua_pushcfunction( L, &DeleteGALuaUserData );
 		lua_setfield( L, -2, "__gc" );
 
+		// TODO: Implement the "__div" meta-method.  I probably don't want to do a full-blown inverse with the right-operand is a scalar.
+
 		// Register useful overloads.
 		lua_pushcfunction( L, &l_sum );
 		lua_setfield( L, -2, "__add" );
