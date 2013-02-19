@@ -32,4 +32,10 @@ print( "E_r_check = " .. tostring( E_r_check ) )
 local E_scaled = E / 3
 print( "E_scaled = " .. tostring( E_scaled ) )
 
+local vec = e1 + e2 + e3
+local norm_vec = vec / #vec
+print( "norm_vec = " .. tostring( norm_vec ) )
+local one = norm_vec * norm_vec
+print( "one = " .. tostring( one ) )
+
 -- Inverse.lua
