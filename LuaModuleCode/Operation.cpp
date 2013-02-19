@@ -36,6 +36,7 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		case BINARY_OP_GP:					funcName = "gp";				break;
 		case BINARY_OP_IP:					funcName = "ip";				break;
 		case BINARY_OP_OP:					funcName = "op";				break;
+		case BINARY_OP_GP_INV:				funcName = "gp_inv";			break;
 		case BINARY_OP_COEF:				funcName = "coef";				break;
 		case BINARY_OP_GET_GRADE_PART:		funcName = "get_grade_part";	break;
 		case TURNARY_OP_SET_GRADE_PART:		funcName = "set_grade_part";	break;
@@ -61,6 +62,7 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		case BINARY_OP_GP:
 		case BINARY_OP_IP:
 		case BINARY_OP_OP:
+		case BINARY_OP_GP_INV:
 		case BINARY_OP_COEF:
 		case BINARY_OP_GET_GRADE_PART:
 		{
@@ -185,6 +187,18 @@ int PerformOp( lua_State* L, GALuaOp gaLuaOp )
 		case BINARY_OP_OP:
 		{
 			operationPerformed = opResult->AssignOuterProduct( *argUserData[0]->multiVec, *argUserData[1]->multiVec );
+			break;
+		}
+		case BINARY_OP_GP_INV:
+		{
+			// This seems like over-kill if all you're trying to do is divide by a scalar.
+			GeometricAlgebra::SumOfBlades inverse;
+			GeometricAlgebra::SumOfBlades::InverseResult inverseResult;
+			operationPerformed = inverse.AssignGeometricInverse( *argUserData[1]->multiVec, GeometricAlgebra::SumOfBlades::RIGHT_INVERSE, inverseResult );
+			if( inverseResult == GeometricAlgebra::SumOfBlades::SINGULAR_MULTIVECTOR )
+				GALuaError( L, "The function \"%s\" encountered a singular multi-vector.", funcName );
+			if( operationPerformed )
+				operationPerformed = opResult->AssignGeometricProduct( *argUserData[0]->multiVec, inverse );
 			break;
 		}
 		case BINARY_OP_COEF:
@@ -331,6 +345,12 @@ int l_ip( lua_State* L )
 int l_op( lua_State* L )
 {
 	return PerformOp( L, BINARY_OP_OP );
+}
+
+//=========================================================================================
+int l_gp_inv( lua_State* L )
+{
+	return PerformOp( L, BINARY_OP_GP_INV );
 }
 
 //=========================================================================================

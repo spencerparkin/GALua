@@ -47,6 +47,7 @@ static luaL_Reg galua_api[] =
 	{ "gp", l_gp },
 	{ "ip", l_ip },
 	{ "op", l_op },
+	{ "gp_inv", l_gp_inv },
 	{ "coef", l_coef },
 	{ "get_grade_part", l_get_grade_part },
 	{ "set_grade_part", l_set_grade_part },
