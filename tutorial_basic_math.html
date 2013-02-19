@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>How to use the GALua module</title>
+	</head>
+	<body>
+	
+	<h1>Basic math operations</h1>
+	
+	<p>
+	Once we have a geometric algebra defined, we're ready to start making GA calculations.
+	One way to get started is by creating multi-vectors for each basis vector we registered with the module.
+	This can be accomplisehd as follows.
+	</p>
+
+<pre>
+  local e1 = galua_api( "e1" )
+  local e2 = galua_api( "e2" )
+  local e3 = galua_api( "e3" )
+  local no = galua_api( "no" )
+  local ni = galua_api( "ni" )</pre>
+
+	<p>
+	Here we see that the function call syntax has been implemented for the API table so that
+	we may call it with a string value.  Each of the strings given above correspond to the
+	one of the basis vectors we registered with the module earlier.
+	</p>
+	
+	<p>
+	We're now ready to get down to business!
+	</p>
+
+<pre>
+  local pos = 3*e1 + 2*e2 - e3
+  local radius = 5.5
+  local sphere = no + pos + 0.5*( pos*pos - radius*radius )*ni
+  pos = 2*e2
+  local norm = e2 + 2*e3
+  norm = norm / #norm
+  local plane = norm + ( norm .. pos )*ni
+  local circle = sphere ^ norm</pre>
+  
+	<p>
+	This example calculates the dual circle that is the intersection of a dual sphere and a dual plane.
+	Convenience methods for composing and decomposing such geometries are available in a companion module named CGAUtil,
+	but since this tutorial is just about GALua, we'll refrain from using those methods.
+	</p>
+  
+	<p>
+	The binary operations supported by the GALua module are summarized in the following table.
+	</p>
+	
+	<table border="1">
+	<tr><td>Binary Operation</td><td>Overload Lua Operator</td></tr>
+	<tr><td>Addition</td><td>"+"</td></tr>
+	<tr><td>Subtraction</td><td>"-"</td></tr>
+	<tr><td>Geometric Product</td><td>"*","/"</td></tr>
+	<tr><td>Outer Product</td><td>"^"</td></tr>
+	<tr><td>Inner Product</td><td>".", "..", "[]"</td></tr>
+	</table>
+	
+	<p>
+	As you can see, there are quite a few option available for the inner product.  Some effort has been made
+	to allow the use of the indexing operator ("."), but it is not recommended, because it requires the GALua
+	module to synthesize Lua's scoping algorithm.  Though its use may make your scripts easier to read, refraining
+	from its use gives you a greater guarentee of correctness.  The concationation operator ("..") is therefore the
+	preferred method while the indexing operator ("[]") is also supported for those that are assuming a left or
+	perhaps right contraction.  Of course, Lua syntax always requires that the indexing operator ("[]") appear
+	on the right, so this may not be entirely useful.  Never-the-less, it's there.
+	</p>
+	
+	<p>
+	The multilication operator ("*") implements the geometric product.  The division operator ("/") is
+	simply short-hand for multiplying its left operand by the inverse of its right operand.  If the
+	right operand is a singular multi-vector, a Lua exception will be thrown, and your program will
+	halt at this location.  A way to attempt the calculation of multi-vector inverses without incurring
+	such a fatal error will be covered in a subsequent tutorial.
+	</p>
+	
+	<p>
+	The idea of coercion is supported by all of the binary operations given in the earlier table.
+	This is important to realize, and means that the GALua module, if not given a multi-vector value
+	for both arguments in a call to one of its supported binary operations, will try to coerce the
+	value into a multi-vector value.  This is mainly useful for Lua number values as can be seen
+	in the formulation of the position of the dual sphere given above.
+	</p>
+	
+	<p>
+	There is more to talk about.  Do that here...
+	</p>
+		
+	</body>
+</html>

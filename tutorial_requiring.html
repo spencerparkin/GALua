@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>How to use the GALua module</title>
+	</head>
+	<body>
+	
+	<h1>Requiring the GALua module</h1>
+	
+	<p>
+	Before using the GALua module, you have to gain access to it.  The following code snippet illustrates this.
+	</p>
+	
+<pre>
+  -- Grab the GALua API table.
+  local galua_api = require "galua"</pre>
+	
+	<p>
+	Of course, this will fail if the GALua.dll file has not been installed in a place where Lua can find it.
+	It is up to you to make sure that it is installed correctly, or that you tell Lua where it can find the module.
+	Once you have access to the API table, almost everything you'd ever want to do with the module can be accessed
+	through this table.  (Everything else is accessible as a meta-method of the multi-vector data-type.  More on that later!)
+	To what's available, you might simply do a dump of the API table.
+	</p>
+	
+<pre>
+  for key, value in pairs( galua_api ) do
+    print( key .. " -> " .. tostring( value ) )
+  end</pre>
+	
+	<p>
+	This prints the following to the screen.
+	</p>
+	
+<pre>
+  Put output here...</pre>
+	
+	<p>
+	Many of these functions perform mathematical operations, but a program that uses these exclusively would get too wordy and
+	combersome to write.  Such operations, therefore, have been provided as meta-methods that overload
+	some of Lua's built-in binary and unary operators.  More on this is given in a later tutorial.
+	</p>
+	
+	<p>
+	Among the functions printed above you'll find the <code>version</code> function.  Taking no arguments,
+	this function simply returns the version number of the GALua module you're using.  At the time of
+	this writing, it would return 1.0.
+	</p>
+	
+	</body>
+</html>
