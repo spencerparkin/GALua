@@ -73,10 +73,6 @@ static void ModuleFinalize( void )
 {
 	delete gaLuaEnv;
 	gaLuaEnv = 0;
-
-	// After the environment has been blown away, there
-	// should be no more references to basis vector names.
-	GALuaBasisVec::WipeBasisVecNameCache();
 }
 
 //=========================================================================================
