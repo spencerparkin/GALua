@@ -4,337 +4,215 @@
 -- This will be the API table for this module.
 local CGAUtil = {}
 
--- TODO: A better way to do this module would be to use OOP, and
---       make all the CGA geometric primitives objects with methods.
---       These objects could be manipulated by tweaking their parameters,
---       or by decomposing a blade into them.  They will also support
---       the composition of a blade representative of them.
-
 ------------------------------------------------------------------------
--- The set of all geometric primitives supported by CGA can
--- be divided into two catagories: those that are round and
--- those that are flat.
-CGAUtil.round = {}
-CGAUtil.flat = {}
-
-------------------------------------------------------------------------
--- Here are the round geometries in order of increasing dimension.
--- The degenerate rounds will serve as the tangent points.
--- Rounds can be real or imaginary.
-CGAUtil.round.point = { dimension = 0, dualGrade = 4, dirGrade = 1, dualIsDirect = true }
-CGAUtil.round.pointpair = { dimension = 1, dualGrade = 3, dirGrade = 2, dualIsDirect = false }
-CGAUtil.round.circle = { dimension = 2, dualGrade = 2, dirGrade = 3, dualIsDirect = false }
-CGAUtil.round.sphere = { dimension = 3, dualGrade = 1, dirGrade = 4, dualIsDirect = false }
-
-------------------------------------------------------------------------
--- Here are the flat geometries in order of increasing dimension.
--- The flats at infinity will serve as the free blades.
-CGAUtil.flat.point = { dimension = 0, dualGrade = 3, dirGrade = 2, dualIsDirect = false }
-CGAUtil.flat.line = { dimension = 1, dualGrade = 2, dirGrade = 3, dualIsDirect = false }
-CGAUtil.flat.plane = { dimension = 2, dualGrade = 1, dirGrade = 4, dualIsDirect = false }
-
-------------------------------------------------------------------------
--- Keep our own reference to the GALua module's API table.
 local galua = nil
 
 ------------------------------------------------------------------------
 local e1, e2, e3, no, ni
-local no_ni
-local Ie, I
+local Ie, no_ni, I
 
-------------------------------------------------------------------------
--- Before using the module, this function must be called to create
--- and initialize some constants that we use in the various API calls.
 ------------------------------------------------------------------------
 function CGAUtil.Setup( galua_api )
-
-	-- Keep a reference to the GALua API table.
+	
+	-- Keep our own reference around to the GALua API table.
 	galua = galua_api
 	
-	-- Create the basis vectors.
+	-- Create a frequently recuring constant.
 	e1 = galua( "e1" )
 	e2 = galua( "e2" )
 	e3 = galua( "e3" )
 	no = galua( "no" )
 	ni = galua( "ni" )
-	
-	-- Create a frequently recuring constant.
-	no_ne = no ^ ni
-	
-	-- Create the Euclidean unit pseudo-scalar.
+	no_ni = no ^ ni
 	Ie = e1 ^ e2 ^ e3
-	
-	-- Create the unit pseudo-scalar.
 	I = Ie ^ no_ni
 	
 end
 
 ------------------------------------------------------------------------
--- Provide a convenient function that helps you create Euclidean vectors.
--- These often represent pure directions with magnitude or positions in space.
-------------------------------------------------------------------------
-function CGAUtil.EVec( x, y, z )
-	local eVec = x*e1 + y*e2 + z*e3
-	return eVec
+-- Provide a convenience routine for creating Euclidean vectors.
+function CGAUtil.evec( x, y, z )
+	return x * e1 + y * e2 + z * e3
 end
 
 ------------------------------------------------------------------------
--- Compose a dual or direct point.
--- A null vector may be thought of as a dual or direct point.
--- Likewise, the corresponding pseudo-vectors may be thought
--- of as dual or direct.  Here we are arbitrarily choosing to
--- refer to null vectors as dual points and the corresponding
--- pseudo-vectors as direct points.  We'll do this in the
--- corresponding decomposition routine too.
-------------------------------------------------------------------------
-function CGAUtil.round.point.Compose( pointInfo )
+-- Create a base class for all CGA geometries.
+local CGAGeometry = {}
 
-	-- Gather the point parameters.
-	local weight = pointInfo.weight and pointInfo.weight or 1
-	local center = pointInfo.center
+------------------------------------------------------------------------
+function CGAGeometry:Setup()
+	self.epsilon = 0.001
+end
+
+------------------------------------------------------------------------
+function CGAGeometry:New( geo )
+	local geo = geo or {}
+	setmetatable( geo, self )
+	self.__index = self
+	geo:Setup()
+	return geo
+end
+
+------------------------------------------------------------------------
+-- Create the CGA geometric primitives as derivatives of our CGA geometry base class.
+local CGAPoint = CGAGeometry:New()
+local CGAFlatPoint = CGAGeometry:New()
+local CGAPointPair = CGAGeometry:New()
+local CGALine = CGAGeometry:New()
+local CGACircle = CGAGeometry:New()
+local CGAPlane = CGAGeometry:New()
+local CGASphere = CGAGeometry:New()
+
+------------------------------------------------------------------------
+function CGAUtil.IdentifyBlade( blade )
+	-- TODO: Return here the class table that can decompose the given blade?
+	--       No maybe just an instance of an object that is its decomposition.
+	return nil
+end
+
+------------------------------------------------------------------------
+function CGAPoint:Setup()
+	self.dual = self.dual or true
+	self.weight = self.weight or 1
+	self.center = self.center or galua( "0" )
+end
+
+------------------------------------------------------------------------
+-- Something needs to be said here about dual point and direct points.
+-- The null-vectors of CGA are both dual and direct points.  The duals
+-- of all null-vectors are also both dual and direct points.  Here we
+-- are arbitrarily choosing to call the null-vectors dual points, and
+-- their duals the direct points.
+function CGAPoint:ComposeBlade()
+
+	-- Formulate a dual point.
+	local blade = self.weight * ( no + self.center + 0.5 * ( self.center .. self.center ) * ni )
 	
-	-- Make a dual point.
-	local point = weight * ( no + center + 0.5 * ( center .. center ) * ni )
-	
-	-- Make it a direct point if parameterized to do so.
-	if not pointInfo.dual then
-		point = point * I
+	-- Make it a direct point, if needed.
+	if not self.dual then
+		blade = blade * I
 	end
 	
-	-- Return the point!
-	return point
+	-- Return a vector representative of the point.
+	return blade
 	
 end
 
 ------------------------------------------------------------------------
--- Decompose a dual or direct point.
-------------------------------------------------------------------------
-function CGAUtil.round.point.Decompose( point )
+function CGAPoint:DecomposeBlade( blade )
 
-	-- Start the info table that we'll return.
-	local pointInfo = {}
-	
-	-- We'll decompose a dual point, but were we given a dual or direct point?
+	-- Try to find the dual point that is the point represented by the given blade.
+	local dual = true
 	local dualPoint
-	local dirPoint = point[4]
+	local dirPoint = blade[4]
 	if dirPoint ~= 0 then
 		dualPoint = dirPoint * -I
-		pointInfo.dual = false
+		dual = false
 	else
-		dualPoint = point[1]
-		pointInfo.dual = true
+		dualPoint = blade[1]
 	end
 	
-	-- If we were given neither, then the given element is not a CGA point.
+	-- If we didn't find it, then we were not given a point.
 	if dualPoint == 0 then
-		return nil
+		return false
 	end
 	
-	-- Decompose the point!
-	pointInfo.weight = dualPoint .. -ni
-	dualPoint = dualPoint / pointInfo.weight
-	pointInfo.center = no_ni .. ( dualPoint ^ no_ni )
-	
-	-- Return the info table!
-	return pointInfo
-	
-end
-
-------------------------------------------------------------------------
--- Compose a dual or direct point-pair.
-------------------------------------------------------------------------
-function CGAUtil.round.pointpair.Compose( pointPairInfo )
-	return nil
-end
-
-------------------------------------------------------------------------
--- Decompose a dual or direct point-pair.
-------------------------------------------------------------------------
-function CGAUtil.round.pointpair.Decompose( pointPair )
-	return nil
-end
-
-------------------------------------------------------------------------
--- Compose a dual or direct circle.
-------------------------------------------------------------------------
-function CGAUtil.round.circle.Compose( circleInfo )
-	return nil
-end
-
-------------------------------------------------------------------------
--- Decompose a dual or direct circle.
-------------------------------------------------------------------------
-function CGAUtil.round.circle.Decompose( circle )
-	return nil
-end
-
-------------------------------------------------------------------------
--- Compose a dual or direct sphere.
-------------------------------------------------------------------------
-function CGAUtil.round.sphere.Compose( sphereInfo )
-
-	-- Gather the sphere parameters.
-	local weight = sphereInfo.weight and sphereInfo.weight or 1
-	local center = sphereInfo.center
-	local radius = sphereInfo.radius
-	local imaginary = sphereInfo.imaginary and sphereInfo.imaginary or false
-	local dual = sphereInfo.dual and sphereInfo.dual or true
-	
-	-- Are we dealing with a real or imaginary sphere?
-	if radius < 0 then
-		radius = -radius
-		sphereInfo.imaginary = not sphereInfo.imaginary
+	-- Decompose the point.
+	local weight = dualPoint .. -ni
+	if ( #weight ):tonumber() < self.epsilon then
+		return false	-- In this case what we have is really a dual plane.
 	end
-	local sign = 1
-	if sphereInfo.imaginary then
-		sign = -1
+	self.dual = dual
+	self.weight = weight
+	dualPoint = dualPoint / weight
+	self.center = no_ni .. ( dualPoint ^ no_ni )
+	
+	-- Return success.
+	return true
+	
+end
+
+-- TODO: Implement the rest of the CGA geometries.
+
+------------------------------------------------------------------------
+-- The default sphere is a degenerate sphere, which is a point.
+function CGASphere:Setup()
+	self.dual = self.dual or true
+	self.weight = self.weight or 1
+	self.center = self.center or galua( "0" )
+	self.radius = self.radius or 0
+	self.imaginary = self.imaginary or false
+end
+
+------------------------------------------------------------------------
+function CGASphere:ComposeBlade()
+
+	-- Formulate a dual sphere.
+	local sign = self.imaginary and -1 or 1
+	local blade = self.weight * ( no + self.center + 0.5 * ( self.center .. self.center - sign * self.radius * self.radius ) * ni )
+	
+	-- Make it a direct sphere, if needed.
+	if not self.dual then
+		blade = blade * I
 	end
 	
-	-- Make a dual sphere.
-	local sphere = weight * ( no + center + 0.5 * ( center .. center - sign * radius * radius ) * ni )
-	
-	-- Make it a direct sphere if parameterized to do so.
-	if not sphereInfo.dual then
-		sphere = sphere * I
-	end
-	
-	-- Return the sphere!
-	return sphere
+	-- Return a vector representative of the sphere.
+	return blade
 	
 end
 
 ------------------------------------------------------------------------
--- Decompose a dual or direct sphere.
-------------------------------------------------------------------------
-function CGAUtil.round.sphere.Decompose( sphere )
-	
-	-- Start the info table that we'll return.
-	local sphereInfo = {}
-	
-	-- We'll decompose a dual sphere, but were we given a dual or direct sphere?
+function CGASphere:DecomposeBlade( blade )
+
+	-- Try to find the dual sphere that is the sphere represented by the given blade.
+	local dual = true
 	local dualSphere
-	local dirSphere = sphere[4]
+	local dirSphere = blade[4]
 	if dirSphere ~= 0 then
 		dualSphere = dirSphere * -I
-		sphereInfo.dual = false
+		dual = false
 	else
-		dualSphere = sphere[1]
-		sphereInfo.dual = true
+		dualSphere = blade[1]
 	end
 	
-	-- If we were given neither, then the given element is not a CGA sphere.
+	-- If we didn't find it, then we were not given a sphere.
 	if dualSphere == 0 then
-		return nil
+		return false
 	end
 	
-	-- Decompose the sphere!
-	sphereInfo.weight = dualSphere .. -ni
-	dualSphere = dualSphere / sphereInfo.weight
-	sphereInfo.center = no_ni .. ( dualPoint ^ no_ni )
-	local radicand = ( 2 * dualSphere .. no + sphereInfo.center * sphereInfo.center ):to_number()
-	sphereInfo.imaginary = false
+	-- Decompose the sphere.
+	local weight = dualSphere .. -ni
+	if ( #weight ):tonumber() < self.epsilon then
+		return false	-- In this case what we have is really a dual plane.
+	end
+	self.dual = dual
+	self.weight = weight
+	dualSphere = dualSphere / weight
+	self.center = no_ni .. ( dualSphere ^ no_ni )
+	local radicand = ( 2 * dualSphere .. no + self.center * self.center )[0]:tonumber()		-- Take zero part to kill round-off error.
+	self.imaginary = false
 	if radicand < 0 then
-		sphereInfo.imaginary = true
+		self.imaginary = true
 		radicand = -radicand
 	end
-	sphereInfo.radius = math.sqrt( radicand )
+	self.radius = math.sqrt( radicand )
 	
-	-- Return the info table!
-	return sphereInfo
-	
-end
-
-------------------------------------------------------------------------
--- Compose a dual or direct flat point.
-------------------------------------------------------------------------
-function CGAUtil.flat.point.Compose( flatPointInfo )
-	return nil
-end
-
-------------------------------------------------------------------------
--- Decompose a dual or direct flat point.
-------------------------------------------------------------------------
-function CGAUtil.flat.point.Decompose( flatPoint )
-	return nil
-end
-
-------------------------------------------------------------------------
--- Compose a dual or direct line.
-------------------------------------------------------------------------
-function CGAUtil.flat.line.Compose( lineInfo )
-	return nil
-end
-
-------------------------------------------------------------------------
--- Decompose a dual or direct line.
-------------------------------------------------------------------------
-function CGAUtil.flat.line.Decompose( line )
-	return nil
-end
-
-------------------------------------------------------------------------
--- Compose a dual or direct plane.
-------------------------------------------------------------------------
-function CGAUtil.flat.plane.Compose( planeInfo )
-
-	-- Gather the plane parameters.
-	local weight = planeInfo.weight
-	local center = planeInfo.center
-	local normal = planeInfo.normal
-	
-	-- Make sure the plane normal is a unit-length vector.
-	local normal_len = #normal
-	if normal_len ~= 1 then
-		normal = normal / normal_len
-	end
-	
-	-- Make a dual plane.
-	local plane = weight * ( normal + ( normal .. center ) * ni )
-	
-	-- Make it a direct plane if parameterized to do so.
-	if not planeInfo.dual then
-		plane = plane * I
-	end
-	
-	-- Return the plane!
-	return plane
+	-- Return success.
+	return true
 	
 end
 
 ------------------------------------------------------------------------
--- Decompose a dual or direct plane.
-------------------------------------------------------------------------
-function CGAUtil.flat.plane.Decompose( plane )
-
-	-- Start the info table that we'll return.
-	local planeInfo = {}
-	
-	-- We'll decompose a dual plane, but were we given a dual or direct plane?
-	local dualPlane
-	local dirPlane = plane[4]
-	if dualPlane ~= 0 then
-		dualSphere = dualPlane * -I
-		planeInfo.dual = false
-	else
-		dualPlane = plane[1]
-		planeInfo.dual = true
-	end
-	
-	-- Return the info table!
-	return planeInfo
-
-end
+-- Provide a way to create instances of the CGA geometry classes.
+function CGAUtil.NewPoint( point )				return CGAPoint:New( point ) end
+function CGAUtil.NewFlatPoint( flatPoint )		return CGAFlatPoint:New( flatPoint ) end
+function CGAUtil.NewPointPair( pointPair )		return CGAPointPair:New( pointPair ) end
+function CGAUtil.NewLine( line )				return CGALine:New( line ) end
+function CGAUtil.NewCircle( circle )			return CGACircle:New( circle ) end
+function CGAUtil.NewPlane( plane )				return CGAPlane:New( plane ) end
+function CGAUtil.NewSphere( sphere )			return CGASphere:New( sphere ) end
 
 ------------------------------------------------------------------------
--- Identify the given geometry.  Return the API sub-table containing
--- information about the identified geometry and methods that operate
--- on such types of geometries.  NIL is returned if here we fail to
--- identify the given element as a blade representative of a CGA geometry.
-------------------------------------------------------------------------
-function CGAUtil.IdentifyGeometry( geo )
-	return nil
-end
-
 -- Return the API table for this module.
 return CGAUtil
 
