@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>How to use the GALua module -- Printing multi-vectors</title>
+	</head>
+	<body>
+	
+	<h1>Printing multi-vectors</h1>
+	
+	<p>
+	Printing a multi-vector is super easy.  One way to do it is as follows.
+	</p>
+
+<pre>
+  local multivec = 2 - 7*e1^e3 + 2*e2^e1 + e2 - e1^e2^e3
+  print( "multivec = " .. tostring( multivec ) )</pre>
+
+	<p>
+	Printing the multi-vectors of GALua is simply a matter of converting them to a string, and
+	then printing the string.  In general, there are two routines supported by the GALua module
+	that provide conversion between string values and multi-vector values.
+	</p>
+
+<pre>
+  local multivec = galua_api.from_string( "2 - 7*e1^e3 + 2*e2^e1 + e2 - e1^e2^e3" )
+  local multivec_str = galua_api.to_string( multivec )
+  print( "multivec = " .. multivec_str )</pre>
+
+	<p>
+	These functions are designed to be inverses of one another.  That is, strings created by
+	<code>galua_api.to_string(...)</code> should be consumable by <code>galua_api.from_string(...)</code>.
+	As of this writing, there are some known bugs, but it works for the most part.  You must
+	be aware that the <code>galua_api.from_string(...)</code> function does not take a string
+	interpreted as Lua code!  Just what language is being interpreted by the <code>galua_api.from_string(...)</code>
+	function is covered in an up-coming tutorial.  For now, it is safest to only convert
+	strings that are the basis vectors you have defined for your geometric algebra.
+	</p>
+	
+	<p>
+	You should also be aware that the functionality provided by <code>galua_api.to_string(...)</code>
+	and <code>galua_api.from_string(...)</code> functions is the same functionality being tapped
+	by GALua's overload of the built-in <code>tostring(...)</code> function, as well as our function
+	call syntax overload of the GALua API table.
+	</p>
+	
+	<p>
+	Though currently experimental, you may want to be aware of a latex option for printing.
+	By calling <code>galua_api.to_latex_string(...)</code>, you can generate a string for the
+	given multi-vector value that may be compiled by latex for type-setting purposes.
+	This feature is mainly useful in conjunction with the limited support for symbolic manipulation
+	in the underlying GA computation engine of GALua.  The coverage of such support is beyond
+	the scope of these tutorials.
+	</p>
+	
+	<p><a href="tutorial_manipulating_mvs.html">Manipulating multi-vectors</a></p>
+	
+	<p>Copyright (C) 2013, by Spencer T. Parkin</p>
+	
+	</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title>How to use the GALua module</title>
+	<title>How to use the GALua module -- Defining the geometric algebra</title>
 	</head>
 	<body>
 	
@@ -42,9 +42,9 @@
   galua_api.def_sig( function( i, j )
     local ip_table =
     {
-      { +1,  0,  0,  0,  0 },
-      {  0, +1,  0,  0,  0 },
-      {  0,  0, +1,  0,  0 },
+      {  1,  0,  0,  0,  0 },
+      {  0,  1,  0,  0,  0 },
+      {  0,  0,  1,  0,  0 },
       {  0,  0,  0,  0, -1 },
       {  0,  0,  0, -1,  0 },
     }
@@ -52,12 +52,39 @@
   end )</pre>
     
 	<p>
-	As of this writing, there is no way to define the inner product to be used by
+	As of this writing, there is no way to define the type of inner product to be used by
 	the underlying GA calculation engine.  The inner product that is used by GALua
 	is an overloaded operator that implements the left contraction,
 	right contraction, and the traditional vector-based inner product generalized to the taking of that product
 	between any two blades of the same grade.
 	</p>
-		
+	
+	<p>
+	To make things a bit simpler, a companion module named GAUtil is provided with GALua
+	that provides a set of convenient functions of defining a number of built-in geometric algebras.
+	Make sure that GAUtil.lua is where Lua can find it.  Adjust the LUA_PATH environment variable, if necessary.
+	Utilizing this module, we may write the following as the start of any script.
+	</p>
+	
+<pre>
+local galua_api = require "galua"
+local gautil = require 'gautil'
+
+gautil.EGA3D( galua_api )</pre>
+
+	<p>
+	This goes ahead and defines the same 3-dimensional Euclidean geometric algebra we defined earlier.
+	You can also call the <code>CGA3D</code> method in the same way to define the Minkowski geometric
+	algebra also defined earlier.  As of this writing, there is not much more to say about the GAUtil module.
+	</p>
+	
+	<p>
+	On to the next tutorial!
+	</p>
+	
+	<p><a href="tutorial_basic_math.html">Basic math operations</a></p>
+
+	<p>Copyright (C) 2013, by Spencer T. Parkin</p>
+	
 	</body>
 </html>

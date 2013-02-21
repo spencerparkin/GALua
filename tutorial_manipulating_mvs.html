@@ -1,12 +1,88 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title>How to use the GALua module</title>
+	<title>How to use the GALua module -- Manipulating multi-vectors</title>
 	</head>
 	<body>
 	
 	<h1>Manipulating multi-vectors</h1>
 	
+	<p>
+	In this tutorial we cover GALua's overload of the indexing operator ("<code>[]</code>") for multi-vector values.
+	We have already seen that if the value used as an index with this operator is a multi-vector
+	value, then we just get the inner product.  If, however, your provide an integer index,
+	the result is a multi-vector that is the part of the index multi-vector and behind homogeneous
+	of the grade that is the intergral index.  An example may make this clearer.
+	</p>
+	
+<pre>
+  local vecA = e1 + e2
+  local vecB = e2 + e3
+  local rotor = vecA * vecB
+  print( "rotor = " .. tostring( rotor ) )
+  print( "rotor[0] = " .. tostring( rotor[0] ) )
+  print( "rotor[1] = " .. tostring( rotor[1] ) )
+  print( "rotor[2] = " .. tostring( rotor[2] ) )</pre>
+
+	<p>
+	Running this Lua code, we get the following output.
+	</p>
+<pre>
+  rotor = 1.00 + e1^e2 + e1^e3 + e2^e3
+  rotor[0] = 1.00
+  rotor[1] = 0
+  rotor[2] = e1^e2 + e1^e3 + e2^e3</pre>
+  
+	<p>
+	We can also use the indexing operator ("<code>[]</code>") to assign certain grade
+	parts of a given multi-vector.
+	</p>
+	
+<pre>
+  rotor[0] = e2 .. e1
+  rotor[2] = e2 ^ e1</pre>
+
+	<p>
+	Be aware that if you try to assign a multi-vector homogeneous of the wrong grade,
+	you will get a fatal error.
+	</p>
+
+<pre>
+  rotor[2] = vecB    -- Error!</pre>
+
+	<p>
+	Being able to manipulate multi-vectors this way, it also becomes important to realize
+	that a multi-vector variable is nothing more than a reference to a multi-vector value.
+	Consider the following Lua code.
+	</p>
+	
+<pre>
+  local multivecA = 5 + e1 + e1^e2
+  local multivecB = multivecA
+  multivecB[1] = e2
+  print( "multivecA = " .. tostring( multivecA ) )</pre>
+
+	<p>
+	This script will print "<code>5 + e2 + e1^e2</code>", not "<code>5 + e1 + e1^e2</code>"
+	as one might expect.  What the programmer may have intended to do is the following.
+	</p>
 		
+<pre>
+  local multivecA = 5 + e1 + e1^e2
+  local multivecB = multivecA:copy()
+  multivecB[1] = e2
+  print( "multivecA = " .. tostring( multivecA ) )</pre>
+	
+	<p>
+	By utilizing the <code>:copy()</code> meta-method of the multi-vector data-type, we're
+	able to return a new copy of the value referenced by the <code>multivecA</code> variable to
+	be referenced by the <code>multivecB</code> variable.  This new code now prints
+	"<code>5 + e1 + e1^e2</code>" as originally intended.
+	</p>
+	
+	<p><a href="tutorial_cgautil.html">Utilizing the CGA companion module</a></p>
+	
+	<p>Copyright (C) 2013, by Spencer T. Parkin</p>
+	
 	</body>
 </html>
