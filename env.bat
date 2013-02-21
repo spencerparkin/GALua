@@ -1,7 +1,8 @@
 @echo OFF
 
-rem Make sure we can find the interpreter.
-set PATH=%PATH%;C:/GALua/lua-5.2.1/bin;D:/GALua/lua-5.2.1/bin
+rem Make sure we can find the interpreter.  Note that we prepend our path so that we don't find
+rem an earlier version of the interpreter on the system.  Our module is not compatible with Lua 5.1.
+set PATH=C:/GALua/lua-5.2.1/bin;D:/GALua/lua-5.2.1/bin;%PATH%
 
 rem Set the LUA_CPATH env-var so that Lua can find our Lua modules written in C++.
 set GALUA_CPATH=C:/GALua/Build/GALua/Debug/?.dll;D:/GALua/Build/GALua/Debug/?.dll
