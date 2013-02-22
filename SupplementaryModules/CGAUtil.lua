@@ -12,12 +12,13 @@ local e1, e2, e3, no, ni
 local Ie, no_ni, I
 
 ------------------------------------------------------------------------
+-- This needs to be called before the module gets used!
 function CGAUtil.Setup( galua_api )
 	
 	-- Keep our own reference around to the GALua API table.
 	galua = galua_api
 	
-	-- Create a frequently recuring constant.
+	-- Create frequently recuring constants.
 	e1 = galua( "e1" )
 	e2 = galua( "e2" )
 	e3 = galua( "e3" )
@@ -52,6 +53,16 @@ function CGAGeometry:New( geo )
 	geo:Setup()
 	return geo
 end
+
+------------------------------------------------------------------------
+-- Create the CGA geometric primitives as derivatives of our CGA geometry base class.
+local CGAPoint = CGAGeometry:New()
+local CGAFlatPoint = CGAGeometry:New()
+local CGAPointPair = CGAGeometry:New()
+local CGALine = CGAGeometry:New()
+local CGACircle = CGAGeometry:New()
+local CGAPlane = CGAGeometry:New()
+local CGASphere = CGAGeometry:New()
 
 ------------------------------------------------------------------------
 -- Notice that we do not attempt to check whether the given multi-vector
@@ -90,22 +101,18 @@ function CGAGeometry:GrabDualGeometry( blade, dualGrade )
 	
 end
 
-------------------------------------------------------------------------
--- Create the CGA geometric primitives as derivatives of our CGA geometry base class.
-local CGAPoint = CGAGeometry:New()
-local CGAFlatPoint = CGAGeometry:New()
-local CGAPointPair = CGAGeometry:New()
-local CGALine = CGAGeometry:New()
-local CGACircle = CGAGeometry:New()
-local CGAPlane = CGAGeometry:New()
-local CGASphere = CGAGeometry:New()
+-----------------------------
+-- GEOMETRY IDENTIFICATION --
+-----------------------------
 
 ------------------------------------------------------------------------
 function CGAUtil.IdentifyBlade( blade )
-	-- TODO: Return here the class table that can decompose the given blade?
-	--       No maybe just an instance of an object that is its decomposition.
 	return nil
 end
+
+--------------------
+-- GEOMETRY SETUP --
+--------------------
 
 ------------------------------------------------------------------------
 function CGAPoint:Setup()
@@ -114,6 +121,69 @@ function CGAPoint:Setup()
 	self.weight = self.weight or 1
 	self.center = self.center or 0
 end
+
+------------------------------------------------------------------------
+function CGAFlatPoint:Setup()
+	self.type = "flatpoint"
+	self.dual = self.dual or true
+	self.weight = self.weight or 1
+	self.center = self.center or 0
+end
+
+------------------------------------------------------------------------
+function CGAPointPair:Setup()
+	self.type = "pointpair"
+	self.dual = self.dual or true
+	self.weight = self.weight or 1
+	self.center = self.center or 0
+	self.normal = self.normal or e2
+	self.radius = self.radius or 1
+	self.imaginary = self.imaginary or false
+end
+
+------------------------------------------------------------------------
+function CGALine:Setup()
+	self.type = "line"
+	self.dual = self.dual or true
+	self.weight = self.weight or 1
+	self.center = self.center or 0
+	self.normal = self.normal or e2
+end
+
+------------------------------------------------------------------------
+function CGACircle:Setup()
+	self.type = "circle"
+	self.dual = self.dual or true
+	self.weight = self.weight or 1
+	self.center = self.center or 0
+	self.normal = self.normal or e2
+	self.radius = self.radius or 1
+	self.imaginary = self.imaginary or false
+end
+
+------------------------------------------------------------------------
+function CGAPlane:Setup()
+	self.type = "plane"
+	self.dual = self.dual or true
+	self.weight = self.weight or 1
+	self.center = self.center or 0
+	self.normal = self.normal or e2
+end
+
+------------------------------------------------------------------------
+-- The default sphere is a degenerate sphere, which is a point.
+function CGASphere:Setup()
+	self.type = "sphere"
+	self.dual = self.dual or true
+	self.weight = self.weight or 1
+	self.center = self.center or 0
+	self.radius = self.radius or 1
+	self.imaginary = self.imaginary or false
+end
+
+--------------------------
+-- GEOMETRY COMPOSITION --
+--------------------------
 
 ------------------------------------------------------------------------
 -- Something needs to be said here about dual point and direct points.
@@ -137,6 +207,70 @@ function CGAPoint:ComposeBlade()
 end
 
 ------------------------------------------------------------------------
+function CGAFlatPoint:ComposeBlade()
+end
+
+------------------------------------------------------------------------
+function CGAPointPair:ComposeBlade()
+end
+
+------------------------------------------------------------------------
+function CGALine:ComposeBlade()
+
+	-- Formulate a dual or direct line.
+	if self.dual then
+		blade = self.weight * ( self.normal + self.center ^ self.normal ^ ni ) * Ie
+	else
+		blade = self.weight * ( self.normal + self.center ^ self.normal ^ ni ) * -no_ni
+	end
+	
+	-- Return the blade representative of the line.
+	return blade
+	
+end
+
+------------------------------------------------------------------------
+function CGACircle:ComposeBlade()
+end
+
+------------------------------------------------------------------------
+function CGAPlane:ComposeBlade()
+
+	-- Formulate a dual plane.
+	local blade = self.weight * ( self.normal + ( self.normal .. self.center ) * ni )
+	
+	-- Make it a direct plane, if needed.
+	if not self.dual then
+		blade = blade * I
+	end
+	
+	-- Return a vector representative of the plane.
+	return blade
+	
+end
+
+------------------------------------------------------------------------
+function CGASphere:ComposeBlade()
+
+	-- Formulate a dual sphere.
+	local sign = self.imaginary and -1 or 1
+	local blade = self.weight * ( no + self.center + 0.5 * ( self.center .. self.center - sign * self.radius * self.radius ) * ni )
+	
+	-- Make it a direct sphere, if needed.
+	if not self.dual then
+		blade = blade * I
+	end
+	
+	-- Return a vector representative of the sphere.
+	return blade
+	
+end
+
+----------------------------
+-- GEOMETRY DECOMPOSITION --
+----------------------------
+
+------------------------------------------------------------------------
 function CGAPoint:DecomposeBlade( blade )
 
 	-- Try to find the dual point that is the point represented by the given blade.
@@ -154,7 +288,7 @@ function CGAPoint:DecomposeBlade( blade )
 	dualPoint = dualPoint / weight
 	local center = no_ni .. ( dualPoint ^ no_ni )
 	if ( #( -2 * dualPoint .. no - center * center ) ):tonumber() >= self.epsilon then
-		return false	-- In thsi case what we have is really a dual sphere.
+		return false	-- In this case what we have is really a dual sphere.
 	end
 	
 	-- Store the decomposition.
@@ -168,53 +302,11 @@ function CGAPoint:DecomposeBlade( blade )
 end
 
 ------------------------------------------------------------------------
-function CGAFlatPoint:Setup()
-	self.type = "flatpoint"
-end
-
-------------------------------------------------------------------------
-function CGAFlatPoint:ComposeBlade()
-end
-
-------------------------------------------------------------------------
 function CGAFlatPoint:DecomposeBlade( blade )
 end
 
 ------------------------------------------------------------------------
-function CGAPointPair:Setup()
-	self.type = "pointpair"
-end
-
-------------------------------------------------------------------------
-function CGAPointPair:ComposeBlade()
-end
-
-------------------------------------------------------------------------
 function CGAPointPair:DecomposeBlade( blade )
-end
-
-------------------------------------------------------------------------
-function CGALine:Setup()
-	self.type = "line"
-	self.dual = self.dual or true
-	self.weight = self.weight or 1
-	self.center = self.center or 0
-	self.normal = self.normal or e2
-end
-
-------------------------------------------------------------------------
-function CGALine:ComposeBlade()
-
-	-- Formulate a dual or direct line.
-	if self.dual then
-		blade = self.weight * ( self.normal + self.center ^ self.normal ^ ni ) * Ie
-	else
-		blade = self.weight * ( self.normal + self.center ^ self.normal ^ ni ) * -no_ni
-	end
-	
-	-- Return the blade representative of the line.
-	return blade
-	
 end
 
 ------------------------------------------------------------------------
@@ -249,41 +341,7 @@ function CGALine:DecomposeBlade( blade )
 end
 
 ------------------------------------------------------------------------
-function CGACircle:Setup()
-	self.type = "circle"
-end
-
-------------------------------------------------------------------------
-function CGACircle:ComposeBlade()
-end
-
-------------------------------------------------------------------------
 function CGACircle:DecomposeBlade( blade )
-end
-
-------------------------------------------------------------------------
-function CGAPlane:Setup()
-	self.type = "plane"
-	self.dual = self.dual or true
-	self.weight = self.weight or 1
-	self.center = self.center or 0
-	self.normal = self.normal or e2
-end
-
-------------------------------------------------------------------------
-function CGAPlane:ComposeBlade()
-
-	-- Formulate a dual plane.
-	local blade = self.weight * ( self.normal + ( self.normal .. self.center ) * ni )
-	
-	-- Make it a direct plane, if needed.
-	if not self.dual then
-		blade = blade * I
-	end
-	
-	-- Return a vector representative of the plane.
-	return blade
-	
 end
 
 ------------------------------------------------------------------------
@@ -321,34 +379,6 @@ function CGAPlane:DecomposeBlade( blade )
 end
 
 ------------------------------------------------------------------------
--- The default sphere is a degenerate sphere, which is a point.
-function CGASphere:Setup()
-	self.type = "sphere"
-	self.dual = self.dual or true
-	self.weight = self.weight or 1
-	self.center = self.center or galua( "0" )
-	self.radius = self.radius or 0
-	self.imaginary = self.imaginary or false
-end
-
-------------------------------------------------------------------------
-function CGASphere:ComposeBlade()
-
-	-- Formulate a dual sphere.
-	local sign = self.imaginary and -1 or 1
-	local blade = self.weight * ( no + self.center + 0.5 * ( self.center .. self.center - sign * self.radius * self.radius ) * ni )
-	
-	-- Make it a direct sphere, if needed.
-	if not self.dual then
-		blade = blade * I
-	end
-	
-	-- Return a vector representative of the sphere.
-	return blade
-	
-end
-
-------------------------------------------------------------------------
 -- Note that if we were really given a point, we simply return a
 -- degenerate sphere.  So any check for geometric type should test
 -- points before spheres.
@@ -382,6 +412,10 @@ function CGASphere:DecomposeBlade( blade )
 	return true
 	
 end
+
+----------------------
+-- MODULE INTERFACE --
+----------------------
 
 ------------------------------------------------------------------------
 -- Provide a way to create instances of the CGA geometry classes.
