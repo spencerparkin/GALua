@@ -305,6 +305,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="SuppMods"
+			>
+			<File
+				RelativePath="..\SupplementaryModules\CGAUtil.lua"
+				>
+			</File>
+			<File
+				RelativePath="..\SupplementaryModules\GAUtil.lua"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
