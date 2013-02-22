@@ -25,3 +25,8 @@ Build/
 lua-5.2.1/bin/Lua.exe
 lua-5.2.1/bin/LuaDLL.dll
 lua-5.2.1/bin/LuaDLL.lib
+
+# Latex intermmediates
+*.log
+*.synctex.gz
+*.aux

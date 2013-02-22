@@ -1,0 +1,188 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{float}
+
+\title{CGA Math}
+\author{Spencer T. Parkin}
+
+\newcommand{\G}{\mathbb{G}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\B}{\mathbb{B}}
+\newcommand{\nvao}{o}
+\newcommand{\nvai}{\infty}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{identity}{Identity}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{result}{Result}[section]
+
+\begin{document}
+\maketitle
+
+This document is formal documentation for the CGAUtil Lua module,
+supplementary to the GALua Lua module.  Here in is explained the
+mathematics used by the CGAUtil module to compose and decompose
+each geometric primitive of 3-dimensional CGA, the conformal model of geometric algebra
+for 3-dimensional euclidean space.  It is assumed the reader is already
+familiar with CGA.  In this document we let the outer product take precedence
+over the inner product, and the geometric product take precedence over
+the inner and outer products.
+
+It should be noted that the CGA system is patented by David Hestenes, Hongbo Li, et. al.
+
+\section{Composition}
+
+We begin with an explanation of the composition of each geometric primitive.
+The geometric primitives of CGA are listed in Table~\ref{table_geo_char}, along with
+the parameters characterizing each geometry.
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ & weight & center & normal & radius & real/imaginary \\
+\hline
+point & yes & yes & no & no & no \\
+\hline
+flat-point & yes & yes & no & no & no \\
+\hline
+point-pair & yes & yes & yes & yes & yes \\
+\hline
+line & yes & yes & yes & no & no \\
+\hline
+circle & yes & yes & yes & yes & yes \\
+\hline
+plane & yes & yes & yes & no & no \\
+\hline
+sphere & yes & yes & no & yes & yes \\
+\hline
+\end{tabular}
+\caption{The parameters characterizing each CGA geometry.}\label{table_geo_char}
+\end{center}
+\end{table}
+Each geometry can be represented in a direct or dual form.
+Table~\ref{tab_geo_dual_grades} lists each geometry again, this time giving
+the grade of blade representing each geometrying in dual form.
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+grade 1 & grade 2 & grade 3 \\
+\hline
+point & circle & point-pair \\
+\hline
+sphere & line & flat-point \\
+\hline
+plane & & \\
+\hline
+\end{tabular}
+\caption{CGAUtil's grades for dual geometries.}\label{tab_geo_dual_grades}
+\end{center}
+\end{table}
+This table is not a comprehensive listing for each grade.
+For example, the null pseudo-vectors of CGA are also dually
+representative of points.  The table does, however, completely
+describe the CGAUtil module's choice of which grades of blades it uses
+to dually represent the geometric primitives of CGA.
+The grade $g$ of a blade used by CGAUtil to directly represent each of the
+geometric primitives in this table is given by $5-g$.
+
+The composition (and decomposition) of each CGA geometry is given in terms of its
+dual form, because a such form naturally presents the parameters (the columns of
+Table~\ref{table_geo_char}) characterising each geometry (a row of Table~\ref{table_geo_char}).
+
+For the compositions (and decompositions) of this document, we will let the variables $w$,
+$c$, $n$ and $r$ denote the weight, center, normal and radius of each geometry, respectively.
+Each of $w$ and $r$ are scalars while each of $c$ and $n$ are euclidean vectors.  The normal vector
+$n$ is always of unit-length.  We always require $r\geq 0$.
+Then, letting $\{e_1,e_2,e_2,\nvao,\nvai\}$ be a set of basis vectors generating the
+vector space $\V$ that in turn generates the geometric algebra $\G$, and
+letting $I$ denote the unit-pseudo scalar of $G$ and $i$ denote the
+unit-pseudo scalar of the largest euclidean geometric sub-algebra of $G$,
+we can now procede to give the composition of each geometry.
+
+\subsection{Point Composition}
+
+A point $\rho$ being characterized by a weight $w$ and center $c$, is given by
+\begin{equation}\label{equ_point}
+\rho = w\left(\nvao + c + \frac{1}{2}c^2\nvai\right).
+\end{equation}
+
+\subsection{Sphere Composition}
+
+A sphere $\sigma$ being characterized by a weight $w$, center $c$ and radius $r$,
+is given by
+\begin{equation}\label{equ_sphere}
+\sigma = w\left(\nvao + c + \frac{1}{2}(c^2-sr^2)\nvai\right),
+\end{equation}
+where $s$ is a scalar being $1$ or $-1$.  We have $s=1$ in the
+case that $\sigma$ is a real sphere, and $s=-1$ in the case that
+$\sigma$ is an imaginary sphere.
+
+\subsection{Plane Composition}
+
+A plane $\pi$ being characterized by a weight $w$, center $c$ and normal $n$, is
+given by
+\begin{equation}\label{equ_plane}
+\pi = w\left(n + (c\cdot n)\nvai\right).
+\end{equation}
+
+\subsection{Circle Composition}
+
+A circle $\gamma$ being characgterized by a weight $w$, center $c$, normal $n$
+and radius $r$, is given by
+\begin{align}\label{equ_circle}
+\gamma &=w\left(\nvao+c+\frac{1}{2}(c^2-sr^2)\nvai\right)\wedge(n+(c\cdot n)\nvai) \\
+ &= w\left(\nvao\wedge n+(c\cdot n)\nvao\wedge\nvai+c\wedge n+
+\left((c\cdot n)c - \frac{1}{2}(c^2-sr^2)n\right)\wedge\nvai\right),
+\end{align}
+where $s$ is a scalar being $1$ or $-1$.  We have $s=1$ in the
+case that $\gamma$ is a real circle, and $s=-1$ in the case that
+$\gamma$ is an imaginary circle.  Our choice to multiply the sphere
+left of the plane in the outer product is arbitrary, but a choice
+warrenting documentation as this affects the sign of $w$.
+
+\subsection{Line Composition}
+
+A line $\lambda$ being characterized by a weight $w$, center $c$ and normal $n$, is
+given by
+\begin{equation}\label{equ_line}
+\lambda = w\left(n + (c\wedge n)\nvai\right)i.
+\end{equation}
+
+\subsection{Point-Pair Composition}
+
+A point-pair $\beta$ being characterized by a weight $w$, center $c$, normal $n$
+and radius $r$, is given by
+\begin{align}\label{equ_piontpair}
+\beta &= w\left(\nvao + c + \frac{1}{2}(c^2-sr^2)\nvai\right)\wedge(n+(c\wedge n)\nvai)i \\
+ &= w\left(\nvao\wedge n+c\wedge n\wedge\nvao\wedge\nvai + c\cdot n +
+\left((c\cdot n)c-\frac{1}{2}(c^2+sr^2)n\right)\wedge\nvai\right)i,
+\end{align}
+where $s$ is a scalar being $1$ or $-1$.  We have $s=1$ in the case
+that $\beta$ is a real point-pair, and $s=-1$ in the case that $\beta$ is an imaginary piont-pair.
+Our choice to multiply the sphere left of the line in the otuer product is arbitrary, but a
+choice warrenting documentation as this affects the sign of $w$.
+
+\subsection{Flat-Point Composition}
+
+A flat-point $\phi$ being characterized by a weight $w$ and center $c$, is given
+by
+\begin{align}\label{equ_flatpoint}
+\phi &= w(n+(c\cdot n)\nvai)\wedge(n+(c\wedge n)\nvai)i \\
+ &= w(1-c\wedge\nvai)i,
+\end{align}
+where here the unit-length normal $n$ cancels.  Our choice to multiply the plane
+left of the line is arbitrary, but a choice warrenting documentation as this affects the sign of $w$.
+
+\section{Decomposition}
+
+Blah...
+
+\end{document}
