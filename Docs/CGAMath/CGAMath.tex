@@ -183,6 +183,37 @@ left of the line is arbitrary, but a choice warrenting documentation as this aff
 
 \section{Decomposition}
 
-Blah...
+Decomposition begins with a treatment of identification.  In CGA, it is possible
+to show that the blades dually representative of real non-degenerate rounds are also
+directly representative of imaginary rounds.  Given such a blade, we cannot
+uniquely determine a method of decomposition.  Between the two possible
+geometric interpretations of the blade, we must choose which one we want,
+and then apply the corresponding decomposition method.
+There may be other instances were such a
+choice needs to be made.  Any decomposition method of CGAUtil, therefore, does not attempt to identify
+blades as being of any particular type of CGA geometry.  Instead, the decomposition
+methods of CGAUtil attempt to decompose a given blade under the assumption
+that it is of the a specific geometric type.  Such an attempt will either pass or fail.
+An attempt has been made, however, in a provided routine, to identify
+a given blade as being one of a number returned geometric types.  The user
+can then use this information to select a decomposition method.
+
+% To identify a CGA geometry, why not just run it through all decomposers,
+% and see which ones pass and which ones fail?  There's probably a faster
+% way to identify blades, but it's a good start, and must be correct.
+
+\subsection{Point Decomposition}
+
+\subsection{Sphere Decomposition}
+
+\subsection{Plane Decomposition}
+
+\subsection{Circle Decomposition}
+
+\subsection{Line Decomposition}
+
+\subsection{Point-Pair Decomposition}
+
+\subsection{Flat-Point Decomposition}
 
 \end{document}
