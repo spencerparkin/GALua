@@ -207,11 +207,63 @@ can then use this information to select a decomposition method.
 % and see which ones pass and which ones fail?  There's probably a faster
 % way to identify blades, but it's a good start, and must be correct.
 
+% if grade == 1 then
+% try point
+% then sphere
+% then plane
+% elseif grade == 2 then
+% end
+
 \subsection{Point Decomposition}
+
+A point $\rho$, given in equation \eqref{equ_point}, may be decomposed as follows.
+\begin{align}
+w &= -\rho\cdot\nvai \\
+c &= \nvao\wedge\nvai\cdot\frac{\rho}{w}\wedge\nvao\wedge\nvai
+\end{align}
+If the weight $w$ is zero, the decomposition fails.
+Furthermore, to insure a correct decomposition, the validity of the following equation should be checked.
+\begin{equation}
+-2\frac{\rho}{w}\cdot\nvao=c^2
+\end{equation}
+The decomposition also fails if this equation is not satisified.
 
 \subsection{Sphere Decomposition}
 
+A sphere $\sigma$, given in equation \eqref{equ_sphere}, may be decomposed as follows.
+\begin{align}
+w &= -\sigma\cdot\nvai \\
+c &= \nvao\wedge\nvai\cdot\frac{\sigma}{w}\wedge\nvao\wedge\nvai
+\end{align}
+If the weight $w$ is zero, the decomposition fails.
+Realizing that $s^{-1}=s$, the radius $r$ may be found as
+\begin{equation}
+r^2 = s\left(c^2+2\frac{\sigma}{w}\cdot\nvao\right),
+\end{equation}
+where here we may choose $s=1$ or $s=-1$ so that $r^2\geq 0$.
+
+Note that given any vector $\sigma$, we should first attempt to decompose it as a point
+before decomposing it as a sphere.  This is because every point is a sphere, but the
+converse of this statement is not true.
+
 \subsection{Plane Decomposition}
+
+A plane $\pi$, given in equation \eqref{equ_plane}, may be decomposed as follows.
+\begin{align}
+w &= |\nvao\cdot\pi\wedge\nvai| \\
+n &= \nvao\cdot\frac{\pi}{w}\wedge\nvai
+\end{align}
+Then, assumping $c\wedge n=0$, we may write
+\begin{equation}
+c=\left(-\frac{\pi}{w}\cdot\nvao\right)n.
+\end{equation}
+Such an assumption is necessary, because the center of a plane is arbitrary
+and not recoverable from composition.  Our choice of center $c$ here
+gives us a position on the plane closest to the origin.
+
+Note that given any vector $\pi$, we should first try to decompose it as a point or
+sphere before decomposing it as a plane.  If $\pi\cdot\nvai\neq 0$, then we consider
+the above decomposition as undefined.
 
 \subsection{Circle Decomposition}
 
