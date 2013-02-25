@@ -190,29 +190,25 @@ left of the line is arbitrary, but a choice warrenting documentation as this aff
 
 Decomposition begins with a treatment of identification.  In CGA, it is possible
 to show that the blades dually representative of real non-degenerate rounds are also
-directly representative of imaginary rounds.  Given such a blade, we cannot
-uniquely determine a method of decomposition.  Between the two possible
-geometric interpretations of the blade, we must choose which one we want,
-and then apply the corresponding decomposition method.
-There may be other instances were such a
-choice needs to be made.  Any decomposition method of CGAUtil, therefore, does not attempt to identify
-blades as being of any particular type of CGA geometry.  Instead, the decomposition
-methods of CGAUtil attempt to decompose a given blade under the assumption
-that it is of the a specific geometric type.  Such an attempt will either pass or fail.
-An attempt has been made, however, in a provided routine, to identify
-a given blade as being one of a number returned geometric types.  The user
-can then use this information to select a decomposition method.
+directly representative of imaginary rounds.  Given such a blade, CGAUtil resolves
+the ambiguity in its identification as a specific geometric primitive of CGA by always
+choosing the dual interpretation.  CGAUtil, therefore, only provides decomposition methods
+that interpret blades as being dually representive of CGA geometries.  An attempt
+to decompose the geometry directly reppresented by a given blade can then be
+performed by simply applying a CGAUtil decomposition method to one of its duals.
 
-% To identify a CGA geometry, why not just run it through all decomposers,
-% and see which ones pass and which ones fail?  There's probably a faster
-% way to identify blades, but it's a good start, and must be correct.
-
-% if grade == 1 then
-% try point
-% then sphere
-% then plane
-% elseif grade == 2 then
-% end
+A given decomposition method attempts to decompose a given blade
+under the assumption that
+it is of a specific dual form (i.e., the dual forms found in previous section on composition.)
+Such an attempt will either pass or fail.
+The decomposition methods are designed to fail if and only if the given blade
+simply does not represent the assumed geomtric type.  It follows that the identification of
+what geometries are dually represented by a given blade are found by simplying
+attempting to apply, in any order, the set of all decomposition methods approriate
+to the grade of that blade.  A convenience routine has been provided by CGAUtil
+that performs this analysis on a given blade.  More than one geometric type
+may be identified in certain cases (e.g., in the case of a degenerate sphere, this
+is also a point.)
 
 \subsection{Point Decomposition}
 
@@ -242,10 +238,6 @@ r^2 = s\left(c^2+2\frac{\sigma}{w}\cdot\nvao\right),
 \end{equation}
 where here we may choose $s=1$ or $s=-1$ so that $r^2\geq 0$.
 
-Note that given any vector $\sigma$, we should first attempt to decompose it as a point
-before decomposing it as a sphere.  This is because every point is a sphere, but the
-converse of this statement is not true.
-
 \subsection{Plane Decomposition}
 
 A plane $\pi$, given in equation \eqref{equ_plane}, may be decomposed as follows.
@@ -253,7 +245,9 @@ A plane $\pi$, given in equation \eqref{equ_plane}, may be decomposed as follows
 w &= |\nvao\cdot\pi\wedge\nvai| \\
 n &= \nvao\cdot\frac{\pi}{w}\wedge\nvai
 \end{align}
-Then, assumping $c\wedge n=0$, we may write
+If the weight $w$ is zero, the decomposition fails.
+
+Then, assuming $c\wedge n=0$, we may write
 \begin{equation}
 c=\left(-\frac{\pi}{w}\cdot\nvao\right)n.
 \end{equation}
@@ -261,11 +255,38 @@ Such an assumption is necessary, because the center of a plane is arbitrary
 and not recoverable from composition.  Our choice of center $c$ here
 gives us a position on the plane closest to the origin.
 
-Note that given any vector $\pi$, we should first try to decompose it as a point or
-sphere before decomposing it as a plane.  If $\pi\cdot\nvai\neq 0$, then we consider
-the above decomposition as undefined.
+Notice that the sign of the weight $w$ is also lost in composition, and therefore
+unrecoverable in decomposition.  The weight calculated here always satisfies
+the condition $w>0$.
+
+Also notice that the results of the above decomposition steps are considered
+undefined in the case that $\pi\cdot\nvai\neq 0$.  For this reason, before
+any steps are taken, we fail under this condition.
 
 \subsection{Circle Decomposition}
+
+A circle $\gamma$, given in equation \eqref{equ_circle}, may be decomposed as follows.
+\begin{align}
+w &= |-\nvao\wedge\nvai\cdot\gamma\wedge\nvai| \\
+n &= -\nvao\wedge\nvai\cdot\frac{\gamma}{w}\wedge\nvai
+\end{align}
+If the weight $w$ is zero, the decomposition fails.
+Like the plane, here, the weight $w$ and normal $n$ are recovered
+only up to sign.  That we are able to recover the center $c$ then follows
+from two observations; first, that $c=cn^2=c(-n)^2$, and secondly,
+that if we recover $-n$ instead of $n$, then we recover $c\cdot -n$
+instead of $c\cdot n$ and $c\wedge -n$ instead of $c\wedge n$.
+We therefore have
+\begin{equation}
+c = cn^2=(c\cdot n+c\wedge n)n=\left(\nvao\wedge\nvai\cdot\left(
+\frac{\gamma}{w}\wedge(1+\nvao\wedge\nvai)\right)\right)n.
+\end{equation}
+Realizing that $s^{-1}=s$, the radius $r$ may be found as
+\begin{equation}
+r^2=s\left(c^2+2\left(\nvao\wedge\nvai\cdot\nvao\wedge\frac{\gamma}{w}-
+(c\cdot n)c\right)n\right),
+\end{equation}
+where here we may choose $s=1$ or $s=-1$ so that $r^2\geq 0$.
 
 \subsection{Line Decomposition}
 
