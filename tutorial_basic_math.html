@@ -23,7 +23,7 @@
 
 	<p>
 	Here we see that the function call syntax has been implemented for the API table so that
-	we may call it with a string value.  Each of the strings given above correspond to the
+	we may call it with a string value.  Each of the strings given above correspond to
 	one of the basis vectors we registered with the module earlier.  (Here we are assuming
 	that we have defined the conformal geometric algebra of 3-dimensional space.)
 	</p>
@@ -65,16 +65,16 @@
 	
 	<p>
 	As you can see, there are quite a few option available for the inner product.  Some effort has been made
-	to allow the use of the indexing operator ("."), but its use is not recommended, because it requires the GALua
+	to allow the use of the indexing operator ("<code>.</code>"), but its use is not recommended, because it requires the GALua
 	module to synthesize Lua's scoping algorithm.  Though its use may make your scripts easier to read, refraining
-	from its use gives you a greater guarentee of correctness.  The concationation operator ("..") is therefore the
-	preferred method while the indexing operator ("[]") is also supported for those that are assuming a left or
-	perhaps right contraction.  Of course, Lua syntax always requires that the indexing operator ("[]") appear
+	from its use gives you a greater guarentee of correctness.  The concationation operator ("<code>..</code>") is therefore the
+	preferred method while the indexing operator ("<code>[]</code>") is also supported for those that are assuming a left or
+	perhaps right contraction.  Of course, Lua syntax always requires that the indexing operator ("<code>[]</code>") appear
 	on the right, so this may not be entirely useful.  Never-the-less, it's there.
 	</p>
 	
 	<p>
-	The multilication operator ("*") implements the geometric product.  The division operator ("/") is
+	The multilication operator ("<code>*</code>") implements the geometric product.  The division operator ("<code>/</code>") is
 	simply short-hand for multiplying its left operand by the inverse of its right operand.  If the
 	right operand is a singular multi-vector, a Lua exception will be thrown, and your program will
 	halt at this location.  A way to attempt the calculation of multi-vector inverses without incurring
@@ -119,8 +119,8 @@
 	</table>
 	
 	<p>
-	Like any binary operation, every unary operator returns a new multi-vector value.  It does
-	not alter the multi-vector value it is operating upon.
+	Like any binary operation, every unary operator returns a new multi-vector value, leaving the multi-vector variable untouched.
+	That is, it does not alter the multi-vector value referenced by the multi-vector variable it is operating upon.
 	</p>
 	
 	<p>

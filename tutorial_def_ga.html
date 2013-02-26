@@ -25,7 +25,7 @@
 	
 	<p>
 	The indices given to the <code>def_sig</code> function correspond to the array
-	given to the <code>def_basis</code> function.  Note than when GA calculations are
+	given to the <code>def_basis</code> function.  Note that when GA calculations are
 	performed by the module, this function does not get called to determine the result
 	of an inner product between two basis vectors.  The function given here is immediately
 	evaluated to generate the full inner-product table, which is then kept and use
@@ -62,14 +62,14 @@
 	
 	<p>
 	To make things a bit simpler, a companion module named GAUtil is provided with GALua
-	that provides a set of convenient functions of defining a number of built-in geometric algebras.
+	that provides a set of convenient functions for defining a number of built-in geometric algebras.
 	Make sure that GAUtil.lua is where Lua can find it.  Adjust the LUA_PATH environment variable, if necessary.
-	Utilizing this module, we may write the following as the start of any script.
+	Utilizing this companion module, we may write the following at the start of our script.
 	</p>
 	
 <pre>
 local galua_api = require "galua"
-local gautil = require 'gautil'
+local gautil = require "gautil"
 
 gautil.EGA3D( galua_api )</pre>
 

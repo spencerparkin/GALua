@@ -30,7 +30,12 @@
 	<p>
 	These functions are designed to be inverses of one another.  That is, strings created by
 	<code>galua_api.to_string(...)</code> should be consumable by <code>galua_api.from_string(...)</code>.
-	As of this writing, there are some known bugs, but it works for the most part.  You must
+	As of this writing, there are some known bugs, but it works for the most part.  (I know that's not
+	very reassuring.  The bugs will get fixed.)
+	</p>
+	
+	<p>
+	You must
 	be aware that the <code>galua_api.from_string(...)</code> function does not take a string
 	interpreted as Lua code!  Just what language is being interpreted by the <code>galua_api.from_string(...)</code>
 	function is covered in an up-coming tutorial.  For now, it is safest to only convert
@@ -50,7 +55,8 @@
 	given multi-vector value that may be compiled by latex for type-setting purposes.
 	This feature is mainly useful in conjunction with the limited support for symbolic manipulation
 	in the underlying GA computation engine of GALua.  The coverage of such support is beyond
-	the scope of these tutorials.
+	the scope of these tutorials.  However, if you would like to type-set any numerical multi-vector
+	value, (as apposed to an abstract variable multi-vector value), you may use <code>galua_api.to_latex_string(...)</code> to do so.
 	</p>
 	
 	<p><a href="tutorial_manipulating_mvs.html">Manipulating multi-vectors</a></p>
