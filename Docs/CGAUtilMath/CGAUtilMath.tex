@@ -249,7 +249,7 @@ If the weight $w$ is zero, the decomposition fails.
 
 Then, assuming $c\wedge n=0$, we may write
 \begin{equation}
-c=\left(-\nvao\cdot\frac{\pi}{w}\right)n.
+c=-\left(\nvao\cdot\frac{\pi}{w}\right)n.
 \end{equation}
 Such an assumption is necessary, because the center of a plane is arbitrary
 and not recoverable from composition.  Our choice of center $c$ here
@@ -272,13 +272,10 @@ n &= -\nvao\wedge\nvai\cdot\frac{\gamma}{w}\wedge\nvai
 \end{align}
 If the weight $w$ is zero, the decomposition fails.
 Like the plane, here, the weight $w$ and normal $n$ are recovered
-only up to sign.  That we are able to recover the center $c$ then follows
-from two observations; first, that $c=n^2c=(-n)^2c$, and secondly,
-that if we recover $-n$ instead of $n$, then we recover $c\cdot -n$
-instead of $c\cdot n$ and $c\wedge -n$ instead of $c\wedge n$.
-We therefore have
+only up to sign.  That we are able to recover the center $c$ follows
+from cancellation of sines.
 \begin{equation}
-c = n^2c=n(c\cdot n-c\wedge n)=-n\left(\nvao\wedge\nvai\cdot
+c = -n\left(\nvao\wedge\nvai\cdot
 \frac{\gamma}{w}\wedge\nvao\nvai\right).
 \end{equation}
 Realizing that $s^{-1}=s$, the radius $r$ may be found as
@@ -290,19 +287,17 @@ where here we may choose $s=1$ or $s=-1$ so that $r^2\geq 0$.
 
 \subsection{Line Decomposition}
 
-% todo: factor i out
-
 A line $\lambda$, given in equation \eqref{equ_line}, may be decomposed
 as follows.
 \begin{align}
-w &= |\nvao\cdot\lambda i\wedge\nvai| \\
-n &= -\nvao\cdot\frac{\lambda}{w}i\wedge\nvai
+w &= |(\nvao\cdot\lambda\wedge\nvai)i| \\
+n &= \left|\left(\nvao\cdot\frac{\lambda}{w}\wedge\nvai\right)i\right|
 \end{align}
 If the weight $w$ is zero, the decomposition fails.
 
 Then, assuming $c\cdot n=0$, we may write
 \begin{equation}
-c = \left(\nvao\cdot\frac{\lambda}{w}i\right)n.
+c = \left(\left(\nvao\cdot\frac{\lambda}{w}\right)n\right)i.
 \end{equation}
 Like planes, the center $c$ is lost in composition.  Our choice
 of $c$ here is a position on the line closest to the origin.
@@ -312,16 +307,30 @@ and therefore fails, in the case that $\lambda i\cdot\nvai\neq 0$.
 
 \subsection{Point-Pair Decomposition}
 
-% todo: factor i out
-
 A point-pair $\beta$, given in equation \eqref{equ_pointpair}, may be
 decomposed as follows.
 \begin{align}
-w &= |\nvao\wedge\nvai\cdot\beta i\wedge\nvai| \\
-n &= \nvao\wedge\nvai\cdot\frac{\beta}{w} i\wedge\nvai
+w &= |(\nvao\wedge\nvai\cdot\beta\wedge\nvai)i| \\
+n &= \left(\nvao\wedge\nvai\cdot\frac{\beta}{w}\wedge\nvai\right)i
 \end{align}
 The decomposition fails if the weight $w$ is zero.
 
+Like the circle, cancellation of sines allows us to recover the center $c$ as
+\begin{equation}
+c = -n\left(\nvao\wedge\nvai\cdot\frac{\beta}{w}\wedge\nvao\nvai\right)i.
+\end{equation}
+Realizing that $s^{-1}=s$, the radius $r$ may be found as
+\begin{equation}
+r^2 = s\left(-c^2 + 2\left(\left(\nvao\wedge\nvai\cdot\nvao\wedge\frac{\beta}{w}\right)i+(c\cdot n)c\right)n\right),
+\end{equation}
+where here we may choose $s=1$ or $s=-1$ so that $r^2\geq 0$.
+
 \subsection{Flat-Point Decomposition}
+
+A flat-point $\phi$, given in equation \eqref{equ_flatpoint}, may be decomposed as follows.
+\begin{align}
+w &= -(\nvao\cdot\phi\wedge\nvai)i \\
+c &= \left(\nvao\cdot\frac{\phi}{w}\right)i
+\end{align}
 
 \end{document}
