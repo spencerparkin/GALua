@@ -142,10 +142,10 @@ given by
 
 A circle $\gamma$ being characgterized by a weight $w$, center $c$, normal $n$
 and radius $r$, is given by
-\begin{align}\label{equ_circle}
+\begin{align}
 \gamma &=w\left(\nvao+c+\frac{1}{2}(c^2-sr^2)\nvai\right)\wedge(n+(c\cdot n)\nvai) \\
  &= w\left(\nvao\wedge n+(c\cdot n)\nvao\wedge\nvai+c\wedge n+
-\left((c\cdot n)c - \frac{1}{2}(c^2-sr^2)n\right)\wedge\nvai\right),
+\left((c\cdot n)c - \frac{1}{2}(c^2-sr^2)n\right)\wedge\nvai\right),\label{equ_circle}
 \end{align}
 where $s$ is a scalar being $1$ or $-1$.  We have $s=1$ in the
 case that $\gamma$ is a real circle, and $s=-1$ in the case that
@@ -165,10 +165,10 @@ given by
 
 A point-pair $\beta$ being characterized by a weight $w$, center $c$, normal $n$
 and radius $r$, is given by
-\begin{align}\label{equ_piontpair}
+\begin{align}
 \beta &= w\left(\nvao + c + \frac{1}{2}(c^2-sr^2)\nvai\right)\wedge(n+(c\wedge n)\nvai)i \\
- &= w\left(\nvao\wedge n+c\wedge n\wedge\nvao\wedge\nvai + c\cdot n +
-\left((c\cdot n)c-\frac{1}{2}(c^2+sr^2)n\right)\wedge\nvai\right)i,
+ &= w\left(\nvao\wedge n+c\wedge n\wedge\nvao\wedge\nvai + c\cdot n -
+\left((c\cdot n)c-\frac{1}{2}(c^2+sr^2)n\right)\wedge\nvai\right)i,\label{equ_pointpair}
 \end{align}
 where $s$ is a scalar being $1$ or $-1$.  We have $s=1$ in the case
 that $\beta$ is a real point-pair, and $s=-1$ in the case that $\beta$ is an imaginary piont-pair.
@@ -220,7 +220,7 @@ c &= \nvao\wedge\nvai\cdot\frac{\rho}{w}\wedge\nvao\wedge\nvai
 If the weight $w$ is zero, the decomposition fails.
 Furthermore, to insure a correct decomposition, the validity of the following equation should be checked.
 \begin{equation}
--2\frac{\rho}{w}\cdot\nvao=c^2
+-2\nvao\cdot\frac{\rho}{w}=c^2
 \end{equation}
 The decomposition also fails if this equation is not satisified.
 
@@ -234,7 +234,7 @@ c &= \nvao\wedge\nvai\cdot\frac{\sigma}{w}\wedge\nvao\wedge\nvai
 If the weight $w$ is zero, the decomposition fails.
 Realizing that $s^{-1}=s$, the radius $r$ may be found as
 \begin{equation}
-r^2 = s\left(c^2+2\frac{\sigma}{w}\cdot\nvao\right),
+r^2 = s\left(c^2+2\nvao\cdot\frac{\sigma}{w}\right),
 \end{equation}
 where here we may choose $s=1$ or $s=-1$ so that $r^2\geq 0$.
 
@@ -249,7 +249,7 @@ If the weight $w$ is zero, the decomposition fails.
 
 Then, assuming $c\wedge n=0$, we may write
 \begin{equation}
-c=\left(-\frac{\pi}{w}\cdot\nvao\right)n.
+c=\left(-\nvao\cdot\frac{\pi}{w}\right)n.
 \end{equation}
 Such an assumption is necessary, because the center of a plane is arbitrary
 and not recoverable from composition.  Our choice of center $c$ here
@@ -267,19 +267,19 @@ any steps are taken, we fail under this condition.
 
 A circle $\gamma$, given in equation \eqref{equ_circle}, may be decomposed as follows.
 \begin{align}
-w &= |-\nvao\wedge\nvai\cdot\gamma\wedge\nvai| \\
+w &= |\nvao\wedge\nvai\cdot\gamma\wedge\nvai| \\
 n &= -\nvao\wedge\nvai\cdot\frac{\gamma}{w}\wedge\nvai
 \end{align}
 If the weight $w$ is zero, the decomposition fails.
 Like the plane, here, the weight $w$ and normal $n$ are recovered
 only up to sign.  That we are able to recover the center $c$ then follows
-from two observations; first, that $c=cn^2=c(-n)^2$, and secondly,
+from two observations; first, that $c=n^2c=(-n)^2c$, and secondly,
 that if we recover $-n$ instead of $n$, then we recover $c\cdot -n$
 instead of $c\cdot n$ and $c\wedge -n$ instead of $c\wedge n$.
 We therefore have
 \begin{equation}
-c = cn^2=(c\cdot n+c\wedge n)n=\left(\nvao\wedge\nvai\cdot\left(
-\frac{\gamma}{w}\wedge(1+\nvao\wedge\nvai)\right)\right)n.
+c = n^2c=n(c\cdot n-c\wedge n)=-n\left(\nvao\wedge\nvai\cdot
+\frac{\gamma}{w}\wedge\nvao\nvai\right).
 \end{equation}
 Realizing that $s^{-1}=s$, the radius $r$ may be found as
 \begin{equation}
@@ -290,7 +290,37 @@ where here we may choose $s=1$ or $s=-1$ so that $r^2\geq 0$.
 
 \subsection{Line Decomposition}
 
+% todo: factor i out
+
+A line $\lambda$, given in equation \eqref{equ_line}, may be decomposed
+as follows.
+\begin{align}
+w &= |\nvao\cdot\lambda i\wedge\nvai| \\
+n &= -\nvao\cdot\frac{\lambda}{w}i\wedge\nvai
+\end{align}
+If the weight $w$ is zero, the decomposition fails.
+
+Then, assuming $c\cdot n=0$, we may write
+\begin{equation}
+c = \left(\nvao\cdot\frac{\lambda}{w}i\right)n.
+\end{equation}
+Like planes, the center $c$ is lost in composition.  Our choice
+of $c$ here is a position on the line closest to the origin.
+
+Also like the plane, here our decomposition is undefined,
+and therefore fails, in the case that $\lambda i\cdot\nvai\neq 0$.
+
 \subsection{Point-Pair Decomposition}
+
+% todo: factor i out
+
+A point-pair $\beta$, given in equation \eqref{equ_pointpair}, may be
+decomposed as follows.
+\begin{align}
+w &= |\nvao\wedge\nvai\cdot\beta i\wedge\nvai| \\
+n &= \nvao\wedge\nvai\cdot\frac{\beta}{w} i\wedge\nvai
+\end{align}
+The decomposition fails if the weight $w$ is zero.
 
 \subsection{Flat-Point Decomposition}
 
