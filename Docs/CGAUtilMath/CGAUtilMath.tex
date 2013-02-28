@@ -95,12 +95,13 @@ For example, the null pseudo-vectors of CGA are also dually
 representative of points.  The table does, however, completely
 describe the CGAUtil module's choice of which grades of blades it uses
 to dually represent the geometric primitives of CGA.
-The grade $g$ of a blade used by CGAUtil to directly represent each of the
-geometric primitives in this table is given by $5-g$.
+%The grade $g$ of a blade used by CGAUtil to directly represent each of the
+%geometric primitives in this table is therefore given by $5-g$.
 
 The composition (and decomposition) of each CGA geometry is given in terms of its
-dual form, because a such form naturally presents the parameters (the columns of
-Table~\ref{table_geo_char}) characterising each geometry (a row of Table~\ref{table_geo_char}).
+dual form, because such a form naturally presents the parameters (the columns of
+Table~\ref{table_geo_char}) characterising each geometry (a row of Table~\ref{table_geo_char})
+more so than seems to be the case with the direct form.
 
 For the compositions (and decompositions) of this document, we will let the variables $w$,
 $c$, $n$ and $r$ denote the weight, center, normal and radius of each geometry, respectively.
@@ -108,20 +109,20 @@ Each of $w$ and $r$ are scalars while each of $c$ and $n$ are euclidean vectors.
 $n$ is always of unit-length.  We always require $r\geq 0$.
 Then, letting $\{e_1,e_2,e_2,\nvao,\nvai\}$ be a set of basis vectors generating the
 vector space $\V$ that in turn generates the geometric algebra $\G$, and
-letting $I$ denote the unit-pseudo scalar of $G$ and $i$ denote the
-unit-pseudo scalar of the largest euclidean geometric sub-algebra of $G$,
+letting $I$ denote the unit-pseudo scalar of $\G$ and $i$ denote the
+unit-pseudo scalar of the largest euclidean geometric sub-algebra of $\G$,
 we can now procede to give the composition of each geometry.
 
 \subsection{Point Composition}
 
-A point $\rho$ being characterized by a weight $w$ and center $c$, is given by
+A point $\rho$, being characterized by a weight $w$ and center $c$, is given by
 \begin{equation}\label{equ_point}
 \rho = w\left(\nvao + c + \frac{1}{2}c^2\nvai\right).
 \end{equation}
 
 \subsection{Sphere Composition}
 
-A sphere $\sigma$ being characterized by a weight $w$, center $c$ and radius $r$,
+A sphere $\sigma$, being characterized by a weight $w$, center $c$ and radius $r$,
 is given by
 \begin{equation}\label{equ_sphere}
 \sigma = w\left(\nvao + c + \frac{1}{2}(c^2-sr^2)\nvai\right),
@@ -132,7 +133,7 @@ $\sigma$ is an imaginary sphere.
 
 \subsection{Plane Composition}
 
-A plane $\pi$ being characterized by a weight $w$, center $c$ and normal $n$, is
+A plane $\pi$, being characterized by a weight $w$, center $c$ and normal $n$, is
 given by
 \begin{equation}\label{equ_plane}
 \pi = w\left(n + (c\cdot n)\nvai\right).
@@ -140,7 +141,7 @@ given by
 
 \subsection{Circle Composition}
 
-A circle $\gamma$ being characgterized by a weight $w$, center $c$, normal $n$
+A circle $\gamma$, being characgterized by a weight $w$, center $c$, normal $n$
 and radius $r$, is given by
 \begin{align}
 \gamma &=w\left(\nvao+c+\frac{1}{2}(c^2-sr^2)\nvai\right)\wedge(n+(c\cdot n)\nvai) \\
@@ -155,7 +156,7 @@ warrenting documentation as this affects the sign of $w$.
 
 \subsection{Line Composition}
 
-A line $\lambda$ being characterized by a weight $w$, center $c$ and normal $n$, is
+A line $\lambda$, being characterized by a weight $w$, center $c$ and normal $n$, is
 given by
 \begin{equation}\label{equ_line}
 \lambda = w\left(n + (c\wedge n)\nvai\right)i.
@@ -177,7 +178,7 @@ choice warrenting documentation as this affects the sign of $w$.
 
 \subsection{Flat-Point Composition}
 
-A flat-point $\phi$ being characterized by a weight $w$ and center $c$, is given
+A flat-point $\phi$, being characterized by a weight $w$ and center $c$, is given
 by
 \begin{align}\label{equ_flatpoint}
 \phi &= w(n+(c\cdot n)\nvai)\wedge(n+(c\wedge n)\nvai)i \\
