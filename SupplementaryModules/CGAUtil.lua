@@ -187,7 +187,7 @@ function CGASphere:ComposeBlade()
 	local center = self.center
 	local radius = self.radius
 	local sign = self.imaginary and -1 or 1
-	local blade = weight * ( no + center + 0.5 * ( center .. center - sign * radius * radius ) * ni
+	local blade = weight * ( no + center + 0.5 * ( center .. center - sign * radius * radius ) * ni )
 	return blade
 end
 
