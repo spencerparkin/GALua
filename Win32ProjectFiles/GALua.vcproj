@@ -193,6 +193,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\LuaModuleCode\Convert.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\LuaModuleCode\Convert.h"
+				>
+			</File>
+			<File
 				RelativePath="..\LuaModuleCode\Debug.cpp"
 				>
 			</File>

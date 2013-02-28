@@ -18,6 +18,7 @@
 #include "BasisVec.h"
 #include "Operation.h"
 #include "Version.h"
+#include "Convert.h"
 
 //=========================================================================================
 // By avoiding the use of DllMain, our Lua module has the potential to be portable to other platforms.
@@ -58,6 +59,7 @@ static luaL_Reg galua_api[] =
 	{ "left_inverse", l_left_inverse },
 	{ "reverse", l_reverse },
 	{ "mag", l_mag },
+	{ "convert", l_convert },
 	{ NULL, NULL },
 };
 
@@ -97,7 +99,7 @@ GALUA_FUNC int luaopen_galua( lua_State* L )
 	lua_newtable( L );
 	lua_pushcfunction( L, &luaclose_galua );
 	lua_setfield( L, -2, "__gc" );
-	lua_pushcfunction( L, &l_from_string );
+	lua_pushcfunction( L, &l_convert );
 	lua_setfield( L, -2, "__call" );
 	lua_setmetatable( L, -2 );
 

@@ -47,6 +47,11 @@ int l_cmp_eq( lua_State* L )
 	if( squareMag == 0.0 )
 		equal = true;
 
+	if( squareMag != 0.0 )
+	{
+		int b = 0;
+	}
+
 	// Pop our given arguments.  This is not a requirement when being called
 	// from Lua, but if we want to call this function internally, it's a good
 	// convention to have.
