@@ -148,7 +148,7 @@ function CGAPointPair:ComposeBlade()
 	local normal = self.normal
 	local sign = self.imaginary and -1 or 1
 	local blade = weight * ( no ^ normal + center ^ normal ^ no_ni - center .. normal -
-			( ( center .. normal ) * center - 0.5 * ( center .. center + sign * radius * radius ) * normal ) ^ ni ) * i
+			( ( center .. normal ) * center - 0.5 * ( ( center .. center ) + sign * radius * radius ) * normal ) ^ ni ) * i
 	return blade
 end
 
@@ -168,7 +168,7 @@ function CGACircle:ComposeBlade()
 	local radius = self.radius
 	local sign = self.imaginary and -1 or 1
 	local blade = weight * ( no ^ normal + ( center .. normal ) * no_ni + center ^ normal +
-			( ( center .. normal ) * center - 0.5 * ( center .. center - sign * radius * radius ) * normal ) ^ ni )
+			( ( center .. normal ) * center - 0.5 * ( ( center .. center ) - sign * radius * radius ) * normal ) ^ ni )
 	return blade
 end
 
@@ -187,7 +187,7 @@ function CGASphere:ComposeBlade()
 	local center = self.center
 	local radius = self.radius
 	local sign = self.imaginary and -1 or 1
-	local blade = weight * ( no + center + 0.5 * ( center .. center - sign * radius * radius ) * ni )
+	local blade = weight * ( no + center + 0.5 * ( ( center .. center ) - sign * radius * radius ) * ni )
 	return blade
 end
 
@@ -215,7 +215,7 @@ function CGAPoint:DecomposeBlade( blade )
 	local center = no_ni .. ( blade ^ no_ni )
 	
 	-- It must be a degenerate sphere.
-	if ( #( center .. center + 2 * no .. blade ) ):tonumber() >= self.epsilon then
+	if ( #( ( center .. center ) + 2 * ( no .. blade ) ) ):tonumber() >= self.epsilon then
 		return false
 	end
 	
@@ -354,7 +354,7 @@ function CGACircle:DecomposeBlade( blade )
 	blade = blade / weight
 	local normal = -no_ni .. ( blade ^ ni )
 	local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) )
-	local radius_squared = center .. center - 2 * ( no_ni .. ( no ^ blade ) + ( center .. normal ) * center ) * normal
+	local radius_squared = center .. center - 2 * ( ( no_ni .. ( no ^ blade ) ) + ( center .. normal ) * center ) * normal
 	radius_squared = radius_squared[0]		-- Kill any round-off error
 	radius_squared = radius_squared:tonumber()
 	local imaginary = false
@@ -429,7 +429,8 @@ function CGASphere:DecomposeBlade( blade )
 	-- Perform the decomposition.
 	blade = blade / weight
 	local center = no_ni .. ( blade ^ no_ni )
-	local radius_squared = ( center .. center + 2 * no .. blade ):tonumber()
+	local radius_squared = ( center .. center ) + 2 * ( no .. blade )
+	radius_squared = radius_squared:tonumber()
 	local imaginary = false
 	if radius_squared < 0 then
 		imaginary = true
