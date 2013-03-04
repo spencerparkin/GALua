@@ -36,7 +36,7 @@ end
 local CGAGeometry = {}
 
 ------------------------------------------------------------------------
-function CGAGeometry:Setup()
+function CGAGeometry:Default()
 	self.epsilon = 0.0001
 end
 
@@ -45,7 +45,7 @@ function CGAGeometry:New( geo )
 	local geo = geo or {}
 	setmetatable( geo, self )
 	self.__index = self
-	geo:Setup()
+	geo:Default()
 	return geo
 end
 
@@ -58,26 +58,26 @@ local CGACircle = CGAGeometry:New()
 local CGAPlane = CGAGeometry:New()
 local CGASphere = CGAGeometry:New()
 
---------------------
--- GEOMETRY SETUP --
---------------------
+-----------------------
+-- GEOMETRY DEFAULTS --
+-----------------------
 
 ------------------------------------------------------------------------
-function CGAPoint:Setup()
+function CGAPoint:Default()
 	self.type = "point"
 	self.weight = self.weight or 1
 	self.center = self.center or 0
 end
 
 ------------------------------------------------------------------------
-function CGAFlatPoint:Setup()
+function CGAFlatPoint:Default()
 	self.type = "flatpoint"
 	self.weight = self.weight or 1
 	self.center = self.center or 0
 end
 
 ------------------------------------------------------------------------
-function CGAPointPair:Setup()
+function CGAPointPair:Default()
 	self.type = "pointpair"
 	self.weight = self.weight or 1
 	self.center = self.center or 0
@@ -87,7 +87,7 @@ function CGAPointPair:Setup()
 end
 
 ------------------------------------------------------------------------
-function CGALine:Setup()
+function CGALine:Default()
 	self.type = "line"
 	self.weight = self.weight or 1
 	self.center = self.center or 0
@@ -95,7 +95,7 @@ function CGALine:Setup()
 end
 
 ------------------------------------------------------------------------
-function CGACircle:Setup()
+function CGACircle:Default()
 	self.type = "circle"
 	self.weight = self.weight or 1
 	self.center = self.center or 0
@@ -105,7 +105,7 @@ function CGACircle:Setup()
 end
 
 ------------------------------------------------------------------------
-function CGAPlane:Setup()
+function CGAPlane:Default()
 	self.type = "plane"
 	self.weight = self.weight or 1
 	self.center = self.center or 0
@@ -113,7 +113,7 @@ function CGAPlane:Setup()
 end
 
 ------------------------------------------------------------------------
-function CGASphere:Setup()
+function CGASphere:Default()
 	self.type = "sphere"
 	self.weight = self.weight or 1
 	self.center = self.center or 0
