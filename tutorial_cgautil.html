@@ -7,7 +7,80 @@
 	
 	<h1>Utilizing the CGA companion module</h1>
 	
-	<p>Documentation coming soon!</p>
+	<h2>Introduction</h2>
+	
+	<p>The CGA companion module comes along with and is dependent upon the GALua module.
+	It provides a number of Lua classes, each representative of a geometric primitive of
+	the conformal geometric algebra (CGA) for 3-dimensional space.
+	These geometries are listed in the following table, each accompanied with a loose description.</p>
+	
+	<table border="1">
+	<tr><td>Geometry</td><td>Description</td></tr>
+	<tr><td>Point</td><td>The basic element making up all geometries.</td></tr>
+	<tr><td>Sphere</td><td>A set of all points equidistance to a given point.</td></tr>
+	<tr><td>Plane</td><td>A set of coplanar points.</td></tr>
+	<tr><td>Line</td><td>A set of colinear points.</td></tr>
+	<tr><td>Point-Pair</td><td>A set of colinear points equidistant to a given point.</td></tr>
+	<tr><td>Circle</td><td>A set of coplanar points equidistant to a given point.</td></tr>
+	<tr><td>Flat-Point</td><td>Another point representation of CGA.</td></tr>
+	</table>
+	
+	<p>
+	The flat-point has some interesting properties in CGA, one of which is that it is
+	the only geometries of CGA that, when expressed in direct form, cannot be written
+	as the outer product of (round) points.
+	In any case case, this page is not an attempt to teach CGA.  For that, I refer the
+	reader to the following list of sources.
+	</p>
+	
+	<ul>
+	<li><a href="http://geocalc.clas.asu.edu/pdf-preAdobe8/OldWine.pdf">http://geocalc.clas.asu.edu/pdf-preAdobe8/OldWine.pdf</a> -- What may have been the original white paper on CGA.</li>
+	<li><a href="http://www.geometricalgebra.net/">http://www.geometricalgebra.net/</a> -- This book covers CGA in great detail, although I feel it lacks a great deal of rigor.  Be sure to consult the errata page.</li>
+	<li><a href="http://www.gaalop.de/dhilden_data/CLUScripts/CandG_PrePrint.pdf">http://www.gaalop.de/dhilden_data/CLUScripts/CandG_PrePrint.pdf</a> -- A short tutorial on CGA.</li>
+	</ul>
+	
+	<p>
+	An instance of one of the classes of the CGAUtil module is an object representative of
+	a CGA geometry.  Being a Lua table, it's entries give the defining characteristics
+	of that geometry.  As we know from CGA, however, it is the blades of the Minkownski
+	geometric algebra that are either dually or directly representative of a given piece
+	of geometry.  (On the other hand, a given blade simultaneously represents two
+	different geometries; one dually, the other directly.  Which we care about is simply
+	a matter of interpretation -- a choice we are free to make.)  Where the use of the
+	CGAUtil module comes into play, therefore, is in its ability to convert between such
+	blades and objects (class instances).  The conversion from object to blade is known
+	as composition, while the conversion from blade to object is known as decomposition.
+	</p>
+	
+	<p>
+	To free this tutorial from the great many mathematical details chosen by the CGAUtil module,
+	such details are given at length in the following document, which has been prepared
+	specifically for the CGAUtil module.
+	</p>
+	
+	<p><a href="CGAUtilMath.pdf">CGAUtilMath.pdf</a></p>
+	
+	<p>
+	A great deal of thought and effort has gone into making sure that this math is correct.
+	Any update to the math performed in the CGAUtil module will also be reflected in a
+	change to this document.
+	</p>
+	
+	<p>
+	All of this said, we're ready to show how one may go about using the CGAUtil module.
+	We will do so by simply giving a number of examples that illustrate the usage of
+	various features of the module.
+	</p>
+	
+	<h2>Fitting a sphere to 3 points</h2>
+	
+	<p>Coming soon...</p>
+	
+	<h2>The point-sphere silhouette problem</h2>
+	
+	<h2>The inversion of a line in a sphere</h2>
+	
+	<h2>Conclusion</h2>
 	
 	<p>Copyright (C) 2013, by Spencer T. Parkin</p>
 	
