@@ -29,7 +29,7 @@
 	
 	<p>
 	Once we have a geometric algebra defined, we're ready to start making GA calculations.
-	One way to get started is by creating multi-vectors for each basis vector we registered with the module.
+	One way to get started is by creating multivectors for each basis vector we registered with the module.
 	This can be accomplisehd as follows.
 	</p>
 
@@ -97,16 +97,16 @@ local circle = sphere ^ norm
 	<p>
 	The multilication operator ("<code>*</code>") implements the geometric product.  The division operator ("<code>/</code>") is
 	simply short-hand for multiplying its left operand by the inverse of its right operand.  If the
-	right operand is a singular multi-vector, a Lua exception will be thrown, and your program will
-	halt at this location.  A way to attempt the calculation of multi-vector inverses without incurring
+	right operand is a singular multivector, a Lua exception will be thrown, and your program will
+	halt at this location.  A way to attempt the calculation of multivector inverses without incurring
 	such a fatal error will be given shortly.
 	</p>
 	
 	<p>
 	The idea of coercion is supported by all of the binary operations given in the table above.
-	This is important to realize, and means that the GALua module, if not given a multi-vector value
-	for both arguments in a call to one of its binary operations, will try to coerce any non-multi-vector value
-	into an appropriate corresponding multi-vector value.  This is mainly useful for Lua number values as can be seen
+	This is important to realize, and means that the GALua module, if not given a multivector value
+	for both arguments in a call to one of its binary operations, will try to coerce any non-multivector value
+	into an appropriate corresponding multivector value.  This is mainly useful for Lua number values as can be seen
 	in the formulation of the position of the dual sphere given above, and in the subsequent calculations made.
 	Any strings that are encountered will be treated in the same way that the function call syntax overload of the API
 	table treats such strings.  That is, the following two lines of Lua are the same.
@@ -130,7 +130,7 @@ bivec = -3 * e1 ^ galua_api( "e2" )
 	<p>
 	Of course, this is the not the full list of unary operations supported by GALua, just the
 	full list of such operations that are implemented as overloads of existing Lua unary operators.
-	The rest of the unary operations are given as meta-methods you can call on a multi-vector value.
+	The rest of the unary operations are given as meta-methods you can call on a multivector value.
 	</p>
 	
 	<table border="1">
@@ -140,18 +140,18 @@ bivec = -3 * e1 ^ galua_api( "e2" )
 	</table>
 	
 	<p>
-	Like any binary operation, every unary operator returns a new multi-vector value, leaving the multi-vector variable untouched.
-	That is, it does not alter the multi-vector value referenced by the multi-vector variable it is operating upon.
+	Like any binary operation, every unary operator returns a new multivector value, leaving the multivector variable untouched.
+	That is, it does not alter the multivector value referenced by the multivector variable it is operating upon.
 	</p>
 	
 	<p>
-	If the <code>inverse</code> meta-method is called on a singular multi-vector, the result
-	will be zero.  If you are ever unsure about the invertibility of a given multi-vector value,
+	If the <code>inverse</code> meta-method is called on a singular multivector, the result
+	will be zero.  If you are ever unsure about the invertibility of a given multivector value,
 	it is best to call this instead of performing a division operation.  By default, the <code>:inverse()</code>
-	meta-method calculates a right-inverse.  That is, the multi-vector that, if multiplied by the given
-	multi-vector on the right in the geometric product, gives the multiplicative identity.  Use the
+	meta-method calculates a right-inverse.  That is, the multivector that, if multiplied by the given
+	multivector on the right in the geometric product, gives the multiplicative identity.  Use the
 	<code>:left_inverse()</code> and <code>:right_inverse()</code> meta-methods to be explicit about
-	which inverse you desire to calculate.  (At the time of this writing, I'm not sure if multi-vectors
+	which inverse you desire to calculate.  (At the time of this writing, I'm not sure if multivectors
 	generally commute in the geometric product with their inverses.  For now, left and right inverse operations
 	are supported under an absense of making such an assumption.)
 	</p>
@@ -160,7 +160,7 @@ bivec = -3 * e1 ^ galua_api( "e2" )
 	Now that we're capable of doing some basic math, we're ready to cover our printing options.
 	</p>
 	
-	<p><a href="tutorial_printing_mvs.html">Printing multi-vectors</a></p>
+	<p><a href="tutorial_printing_mvs.html">Printing multivectors</a></p>
 	
 	</div><!-- id="content" -->
 	

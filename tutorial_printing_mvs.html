@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title>How to use the GALua module -- Printing multi-vectors</title>
+	<title>How to use the GALua module -- Printing multivectors</title>
 	<link rel="stylesheet" type="text/css" href="http://www.keplerproject.org/doc.css"/>
 	</head>
 	<body>
@@ -25,10 +25,10 @@
 	
 	<div id="content">
 	
-	<h1>Printing multi-vectors</h1>
+	<h1>Printing multivectors</h1>
 	
 	<p>
-	Printing a multi-vector is super easy.  One way to do it is as follows.
+	Printing a multivector is super easy.  One way to do it is as follows.
 	</p>
 
 <pre class="example">
@@ -37,9 +37,9 @@ print( "multivec = " .. tostring( multivec ) )
 </pre>
 
 	<p>
-	Printing the multi-vectors of GALua is simply a matter of converting them to a string, and
+	Printing the multivectors of GALua is simply a matter of converting them to a string, and
 	then printing the string.  In general, there are two routines supported by the GALua module
-	that provide conversion between string values and multi-vector values.
+	that provide conversion between string values and multivector values.
 	</p>
 
 <pre class="example">
@@ -73,14 +73,14 @@ print( "multivec = " .. multivec_str )
 	<p>
 	Though currently experimental, you may want to be aware of a latex option for printing.
 	By calling <code>galua_api.to_latex_string(...)</code>, you can generate a string for the
-	given multi-vector value that may be compiled by latex for type-setting purposes.
+	given multivector value that may be compiled by latex for type-setting purposes.
 	This feature is mainly useful in conjunction with the limited support for symbolic manipulation
 	in the underlying GA computation engine of GALua.  The coverage of such support is beyond
-	the scope of these tutorials.  However, if you would like to type-set any numerical multi-vector
-	value, (as apposed to an abstract variable multi-vector value), you may use <code>galua_api.to_latex_string(...)</code> to do so.
+	the scope of these tutorials.  However, if you would like to type-set any numerical multivector
+	value, (as apposed to an abstract variable multivector value), you may use <code>galua_api.to_latex_string(...)</code> to do so.
 	</p>
 	
-	<p><a href="tutorial_manipulating_mvs.html">Manipulating multi-vectors</a></p>
+	<p><a href="tutorial_manipulating_mvs.html">Manipulating multivectors</a></p>
 	
 	</div><!-- id="content" -->
 	

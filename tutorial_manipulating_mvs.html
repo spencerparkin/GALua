@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title>How to use the GALua module -- Manipulating multi-vectors</title>
+	<title>How to use the GALua module -- Manipulating multivectors</title>
 	<link rel="stylesheet" type="text/css" href="http://www.keplerproject.org/doc.css"/>
 	</head>
 	<body>
@@ -25,13 +25,13 @@
 	
 	<div id="content">
 	
-	<h1>Manipulating multi-vectors</h1>
+	<h1>Manipulating multivectors</h1>
 	
 	<p>
-	In this tutorial we cover GALua's overload of the indexing operator ("<code>[]</code>") for multi-vector values.
-	We have already seen that if the value used as an index with this operator is a multi-vector
+	In this tutorial we cover GALua's overload of the indexing operator ("<code>[]</code>") for multivector values.
+	We have already seen that if the value used as an index with this operator is a multivector
 	value, then we just get the inner product.  If, however, you provide an integer index,
-	the result is a multi-vector that is the part of the indexed multi-vector being homogeneous
+	the result is a multivector that is the part of the indexed multivector being homogeneous
 	of the grade that is the intergral index.  An example may make this clearer.
 	</p>
 	
@@ -57,7 +57,7 @@ rotor[2] = e1^e2 + e1^e3 + e2^e3
   
 	<p>
 	We can also use the indexing operator ("<code>[]</code>") to assign certain grade
-	parts of a given multi-vector.
+	parts of a given multivector.
 	</p>
 	
 <pre class="example">
@@ -66,7 +66,7 @@ rotor[2] = e2 ^ e1
 </pre>
 
 	<p>
-	Be aware that if you try to assign a multi-vector homogeneous of the wrong grade,
+	Be aware that if you try to assign a multivector homogeneous of the wrong grade,
 	you will get a fatal error.
 	</p>
 
@@ -75,8 +75,8 @@ rotor[2] = vecB    -- Error!
 </pre>
 
 	<p>
-	Being able to manipulate multi-vectors this way, it also becomes important to realize
-	that a multi-vector variable is nothing more than a reference to a multi-vector value.
+	Being able to manipulate multivectors this way, it also becomes important to realize
+	that a multivector variable is nothing more than a reference to a multivector value.
 	Consider the following Lua code.
 	</p>
 	
@@ -100,7 +100,7 @@ print( "multivecA = " .. tostring( multivecA ) )
 </pre>
 	
 	<p>
-	By utilizing the <code>:copy()</code> meta-method of the multi-vector data-type, we're
+	By utilizing the <code>:copy()</code> meta-method of the multivector data-type, we're
 	able to return a new copy of the value referenced by the <code>multivecA</code> variable to
 	be referenced by the <code>multivecB</code> variable.  This new code now prints
 	"<code>5 + e1 + e1^e2</code>" as originally intended.
