@@ -20,7 +20,7 @@
 	<div id="main">
 	
 	<div id="navigation">
-	<!-- How do I include navbar.html??? -->
+	<!--#include virtual="navbar.html" -->
 	</div><!-- id="navigation" -->
 	
 	<div id="content">
