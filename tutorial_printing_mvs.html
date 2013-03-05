@@ -31,9 +31,10 @@
 	Printing a multi-vector is super easy.  One way to do it is as follows.
 	</p>
 
-<pre>
-  local multivec = 2 - 7*e1^e3 + 2*e2^e1 + e2 - e1^e2^e3
-  print( "multivec = " .. tostring( multivec ) )</pre>
+<pre class="example">
+local multivec = 2 - 7*e1^e3 + 2*e2^e1 + e2 - e1^e2^e3
+print( "multivec = " .. tostring( multivec ) )
+</pre>
 
 	<p>
 	Printing the multi-vectors of GALua is simply a matter of converting them to a string, and
@@ -41,10 +42,11 @@
 	that provide conversion between string values and multi-vector values.
 	</p>
 
-<pre>
-  local multivec = galua_api.from_string( "2 - 7*e1^e3 + 2*e2^e1 + e2 - e1^e2^e3" )
-  local multivec_str = galua_api.to_string( multivec )
-  print( "multivec = " .. multivec_str )</pre>
+<pre class="example">
+local multivec = galua_api.from_string( "2 - 7*e1^e3 + 2*e2^e1 + e2 - e1^e2^e3" )
+local multivec_str = galua_api.to_string( multivec )
+print( "multivec = " .. multivec_str )
+</pre>
 
 	<p>
 	These functions are designed to be inverses of one another.  That is, strings created by

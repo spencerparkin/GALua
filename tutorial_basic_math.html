@@ -33,12 +33,13 @@
 	This can be accomplisehd as follows.
 	</p>
 
-<pre>
-  local e1 = galua_api( "e1" )
-  local e2 = galua_api( "e2" )
-  local e3 = galua_api( "e3" )
-  local no = galua_api( "no" )
-  local ni = galua_api( "ni" )</pre>
+<pre class="example">
+local e1 = galua_api( "e1" )
+local e2 = galua_api( "e2" )
+local e3 = galua_api( "e3" )
+local no = galua_api( "no" )
+local ni = galua_api( "ni" )
+</pre>
 
 	<p>
 	Here we see that the function call syntax has been implemented for the API table so that
@@ -51,15 +52,16 @@
 	We're now ready to get down to business!  Consider the following sequence of script code.
 	</p>
 
-<pre>
-  local pos = 3*e1 + 2*e2 - e3
-  local radius = 5.5
-  local sphere = no + pos + 0.5*( pos*pos - radius*radius )*ni
-  pos = 2*e2
-  local norm = e2 + 2*e3
-  norm = norm / #norm
-  local plane = norm + ( norm .. pos )*ni
-  local circle = sphere ^ norm</pre>
+<pre class="example">
+local pos = 3*e1 + 2*e2 - e3
+local radius = 5.5
+local sphere = no + pos + 0.5*( pos*pos - radius*radius )*ni
+pos = 2*e2
+local norm = e2 + 2*e3
+norm = norm / #norm
+local plane = norm + ( norm .. pos )*ni
+local circle = sphere ^ norm
+</pre>
   
 	<p>
 	This example calculates a dual circle that is the intersection of a dual sphere and a dual plane.
@@ -110,9 +112,9 @@
 	table treats such strings.  That is, the following two lines of Lua are the same.
 	</p>
 	
-<pre>
-  bivec = -3 * e1 ^ "e2"
-  bivec = -3 * e1 ^ galua_api( "e2" )
+<pre class="example">
+bivec = -3 * e1 ^ "e2"
+bivec = -3 * e1 ^ galua_api( "e2" )
 </pre>
 	
 	<p>

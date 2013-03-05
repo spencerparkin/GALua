@@ -31,9 +31,10 @@
 	To use the GALua module, begin by requiring it in your script.  Like so...
 	</p>
 	
-<pre>
-  -- Grab the GALua API table.
-  local galua_api = require "galua"</pre>
+<pre class="example">
+-- Grab the GALua API table.
+local galua_api = require "galua"
+</pre>
 	
 	<p>
 	Of course, this will fail if the GALua.dll file has not been installed in a place where Lua can find it.
@@ -48,45 +49,47 @@
 	To see what's available, you might simply do a dump of the API table.
 	</p>
 	
-<pre>
-  for key, value in pairs( galua_api ) do
-    if type( value ) == "function" then
-      print( key )
-    end
-  end</pre>
+<pre class="example">
+for key, value in pairs( galua_api ) do
+  if type( value ) == "function" then
+    print( key )
+  end
+end
+</pre>
 	
 	<p>
 	As of this writing, this prints the following text to your console.  Your results, of course, may be in a different order!
 	</p>
 	
-<pre>
-  to_number
-  def_bar
-  version
-  to_latex_string
-  mag
-  copy
-  add
-  def_sig
-  reverse
-  from_string
-  op
-  dif
-  sum
-  left_inverse
-  right_inverse
-  inverse
-  ip
-  gp_inv
-  gp
-  set_grade_part
-  to_string
-  get_grade_part
-  coef
-  neg
-  sub
-  def_basis
-  from_number</pre>
+<pre class="example">
+to_number
+def_bar
+version
+to_latex_string
+mag
+copy
+add
+def_sig
+reverse
+from_string
+op
+dif
+sum
+left_inverse
+right_inverse
+inverse
+ip
+gp_inv
+gp
+set_grade_part
+to_string
+get_grade_part
+coef
+neg
+sub
+def_basis
+from_number
+</pre>
 	
 	<p>
 	Many of these functions perform mathematical operations, but a program that uses these exclusively would get too wordy and
