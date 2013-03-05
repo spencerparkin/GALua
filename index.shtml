@@ -2,7 +2,7 @@
 <html>
 	<head>
 	<title>GALua</title>
-    <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="doc.css"/>
 	</head>
 	<body>
 	
