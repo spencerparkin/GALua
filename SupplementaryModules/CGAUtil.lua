@@ -266,8 +266,7 @@ function CGAPointPair:DecomposeBlade( blade )
 	end
 	
 	-- It must have non-zero weight.
-	local weight_squared = ( #( ( no_ni .. ( blade ^ ni ) ) * i ) ):tonumber()
-	local weight = math.sqrt( weight_squared )
+	local weight = ( #( ( no_ni .. ( blade ^ ni ) ) * i ) ):tonumber()
 	if weight == 0 then
 		return false
 	end
@@ -308,14 +307,13 @@ function CGALine:DecomposeBlade( blade )
 	end
 	
 	-- It must have non-zero weight.
-	local weight_squared = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
-	local weight = math.sqrt( weight_squared )
+	local weight = ( #( ( no .. ( blade ^ ni ) ) * i ) ):tonumber()
 	if weight == 0 then
 		return false
 	end
 	
 	-- It must have the right form.
-	if blade .. ni ~= 0 then
+	if blade .. ni ~= galua( 0 ) then
 		return false
 	end
 	
@@ -344,8 +342,7 @@ function CGACircle:DecomposeBlade( blade )
 	end
 	
 	-- It must have non-zero weight.
-	local weight_squared = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
-	local weight = math.sqrt( weight_squared )
+	local weight = ( #( no_ni .. ( blade ^ ni ) ) ):tonumber()
 	if weight == 0 then
 		return false
 	end
@@ -385,14 +382,13 @@ function CGAPlane:DecomposeBlade( blade )
 	end
 	
 	-- It must have non-zero weight.
-	local weight_squared = ( #( no .. ( blade ^ ni ) ) ):tonumber()
-	local weight = math.sqrt( weight_squared )
+	local weight = ( #( no .. ( blade ^ ni ) ) ):tonumber()
 	if weight == 0 then
 		return false
 	end
 	
 	-- It must have the right form.
-	if blade .. ni ~= 0 then
+	if blade .. ni ~= galua( 0 ) then
 		return false
 	end
 	

@@ -14,15 +14,37 @@ local e1 = galua( "e1" )
 local e2 = galua( "e2" )
 local e3 = galua( "e3" )
 
+local epsilon = 0.000001
+
 ------------------------------------------------------------------------
-function VerifyGeoData( cgaGeo, cgaGeoTestData )
+function CompareVectors( gaVector, testVector )
+
+	if ( ( gaVector .. e1 ) - galua( testVector.x ) ):tonumber() >= epsilon then
+		return false, "Wrong x-component"
+	end
+	if ( ( gaVector .. e2 ) - galua( testVector.y ) ):tonumber() >= epsilon then
+		return false, "Wrong y-component"
+	end
+	if ( ( gaVector .. e3 ) - galua( testVector.z ) ):tonumber() >= epsilon then
+		return false, "Wrong z-component"
+	end
+	return true
+
+end
+
+------------------------------------------------------------------------
+function VerifyGeoData( cgaGeo, cgaGeoTestData, weightSignMatters )
 
 	if cgaGeoTestData.weight then
 		if not cgaGeo.weight then
 			return false, "Weight missing"
 		end
-		if galua( cgaGeo.weight ) ~= galua( cgaGeoTestData.weight ) then
-			return false, "Wrong weight"
+		if ( galua( cgaGeo.weight ) - galua( cgaGeoTestData.weight ) ):tonumber() >= epsilon then
+			if weightSignMatters then
+				return false, "Wrong weight"
+			elseif ( galua( cgaGeo.weight ) - galua( -cgaGeoTestData.weight ) ):tonumber() >= epsilon then
+				return false, "Wrong weight (even after sign change)"
+			end
 		end
 	end
 	
@@ -30,14 +52,9 @@ function VerifyGeoData( cgaGeo, cgaGeoTestData )
 		if not cgaGeo.center then
 			return false, "Center missing"
 		end
-		if ( cgaGeo.center .. e1 ) ~= galua( cgaGeoTestData.center.x ) then
-			return false, "Center: Wrong x-component"
-		end
-		if ( cgaGeo.center .. e2 ) ~= galua( cgaGeoTestData.center.y ) then
-			return false, "Center: Wrong y-component"
-		end
-		if ( cgaGeo.center .. e3 ) ~= galua( cgaGeoTestData.center.z ) then
-			return false, "Center: Wrong z-component"
+		local passFail, failReason = CompareVectors( cgaGeo.center, cgaGeoTestData.center )
+		if not passFail then
+			return false, "Center: " .. failReason
 		end
 	end
 	
@@ -45,14 +62,9 @@ function VerifyGeoData( cgaGeo, cgaGeoTestData )
 		if not cgaGeo.normal then
 			return false, "Normal missing"
 		end
-		if ( cgaGeo.normal .. e1 ) ~= galua( cgaGeoTestData.normal.x ) then
-			return false, "Normal: Wrong x-component"
-		end
-		if ( cgaGeo.normal .. e2 ) ~= galua( cgaGeoTestData.normal.y ) then
-			return false, "Normal: Wrong y-component"
-		end
-		if ( cgaGeo.normal .. e3 ) ~= galua( cgaGeoTestData.normal.z ) then
-			return false, "Normal: Wrong z-component"
+		local passFail, failReason = CompareVectors( cgaGeo.normal, cgaGeoTestData.normal )
+		if not passFail then
+			return false, "Normal: " .. failReason
 		end
 	end
 	
@@ -60,7 +72,7 @@ function VerifyGeoData( cgaGeo, cgaGeoTestData )
 		if not cgaGeo.radius then
 			return false, "Radius missing"
 		end
-		if galua( cgaGeo.radius ) ~= galua( cgaGeoTestData.radius ) then
+		if ( galua( cgaGeo.radius ) - galua( cgaGeoTestData.radius ) ):tonumber() >= epsilon then
 			return false, "Wrong radius: " .. tostring( cgaGeo.radius ) .. " ~= " .. tostring( cgaGeoTestData.radius )
 		end
 	end
@@ -87,7 +99,7 @@ function cgaTest.perform()
 	local pointTestData =
 	{
 		weight = -3,
-		center = { x = -1, y = -3, z = -2 },
+		center = { x = -1, y = 3, z = -2 },
 	}
 	
 	local pointGeo = cga.NewPoint
@@ -96,7 +108,7 @@ function cgaTest.perform()
 		center = cga.evec( pointTestData.center.x, pointTestData.center.y, pointTestData.center.z )
 	}
 	
-	local passFail, failReason = VerifyGeoData( pointGeo, pointTestData )
+	local passFail, failReason = VerifyGeoData( pointGeo, pointTestData, true )
 	if not passFail then
 		return false, failReason .. " (Failed basic object construction.)"
 	end
@@ -106,7 +118,7 @@ function cgaTest.perform()
 		return false, "Decomposition failed"
 	end
 	
-	passFail, failReason = VerifyGeoData( pointGeo, pointTestData )
+	passFail, failReason = VerifyGeoData( pointGeo, pointTestData, true )
 	if not passFail then
 		return false, failReason .. " (Failed basic decomposition.)"
 	end
@@ -124,7 +136,7 @@ function cgaTest.perform()
 	local sphereTestData =
 	{
 		weight = -3,
-		center = { x = -1, y = -3, z = -2 },
+		center = { x = -1, y = 3, z = -2 },
 		radius = 8,
 		imaginary = true,
 	}
@@ -137,7 +149,7 @@ function cgaTest.perform()
 		imaginary = sphereTestData.imaginary,
 	}
 
-	local passFail, failReason = VerifyGeoData( sphereGeo, sphereTestData )
+	local passFail, failReason = VerifyGeoData( sphereGeo, sphereTestData, true )
 	if not passFail then
 		return false, failReason .. " (Failed basic object construction.)"
 	end
@@ -147,9 +159,53 @@ function cgaTest.perform()
 		return false, "Decomposition failed"
 	end
 	
-	local passFail, failReason = VerifyGeoData( sphereGeo, sphereTestData )
+	passFail, failReason = VerifyGeoData( sphereGeo, sphereTestData, true )
 	if not passFail then
 		return false, failReason .. " (Failed basic decomposition.)"
+	end
+	
+	return true
+	
+end
+
+------------------------------------------------------------------------
+cgaTest = {}
+cgaTestList[ #cgaTestList + 1 ] = cgaTest
+cgaTest.name = "CGAPlane Trivial Test"
+function cgaTest.perform()
+	
+	local planeTestData =
+	{
+		weight = -3,
+		center = { x = -1, y = 3, z = -2 },
+		normal = { x = math.sqrt(2) / 2, y = math.sqrt(2) / 2, z = 0 },
+	}
+	
+	local planeGeo = cga.NewPlane
+	{
+		weight = planeTestData.weight,
+		center = cga.evec( planeTestData.center.x, planeTestData.center.y, planeTestData.center.z ),
+		normal = cga.evec( planeTestData.normal.x, planeTestData.normal.y, planeTestData.normal.z ),
+	}
+	
+	local passFail, failReason = VerifyGeoData( planeGeo, planeTestData, true )
+	if not passFail then
+		return false, failReason .. " (Failed basic object construction.)"
+	end
+	
+	local planeBlade = planeGeo:ComposeBlade()
+	if not planeGeo:DecomposeBlade( planeBlade ) then
+		return false, "Decomposition failed"
+	end
+	
+	planeTestData.center = nil		-- We'll verify the position seperately.
+	passFail, failReason = VerifyGeoData( planeGeo, planeTestData, false )
+	if not passFail then
+		return false, failReason .. " (Failed basic decomposition.)"
+	end
+	
+	if ( planeGeo.center .. planeBlade ):tonumber() >= epsilon then
+		return false, "Decomposed center not on originaly composed plane."
 	end
 	
 	return true
