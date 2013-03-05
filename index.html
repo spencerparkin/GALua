@@ -23,36 +23,24 @@
 	
 	<p>
 	The current, official distribution of GALua is <a href="GALua-win32-v1.0.zip">GALua-win32-v1.0.zip</a>.
-	It is compatible with Lua 5.2.
+	It is compatible with Lua 5.2.  As of this writing, there is is not yet a zipped archive
+	for Linux or other platforms, but Linux is on the list of things to do.
 	</p>
 	
 	<p>
-	If you are interested in seeing the entire project tree, you can obtain
-	a copy of the module as a ZIP archive or tar-ball, along with the entire project
-	source.  GALua depends upon a statically linked library known as
-	<a href="https://github.com/spencerparkin/CalcLib">CalcLib</a> which
-	provides the GA calculation engine.
-	The <a href="http://spencerparkin.github.com/GAVisTool/">GAVisTool</a>
-	program is also based upon this library.
-	</p>
-	
-	<p>
-	Following is a list of links giving you the entire module project source which you can use to build the DLL
-	yourself for your platform.  As of this writing, there are no project files or makefiles for platforms other than Win32.
-	</p>
-	
-	<ul>
-	<li><a href="https://github.com/spencerparkin/GALua/zipball/master">Download</a> GALua as a .zip file.</li>
-	<li><a href="https://github.com/spencerparkin/GALua/tarball/master">Download</a> GALua as a .tar.gz file.</li>
-	<li><a href="https://github.com/spencerparkin/CalcLib/zipball/master">Download</a> CalcLib as a .zip file.</li>
-	<li><a href="https://github.com/spencerparkin/CalcLib/tarball/master">Download</a> CalcLib as a .tar.gx file.</li>
-	</ul>
-
-	<p>
-	To simply clone the GALua repository, issue the following command.
+	Alternatively, you can grab the entire project tree and build GALua yourself.
+	To do that, simply clone the GALua reposirty by issuing the following command.
 	</p>
 <pre>
  $ git clone https://github.com/spencerparkin/GALua.git</pre>
+ 
+	<p>
+	You'll need to know that GALua depends upon a statically linked library known as
+	<a href="https://github.com/spencerparkin/CalcLib">CalcLib</a> which
+	provides the GA calculation engine.  It is kept in a seperate repository, because
+	other projects, (such as <a href="http://spencerparkin.github.com/GAVisTool/">GAVisTool</a>),
+	depend upon it too.
+	</p>
 	
 	<H2><A NAME="how">How do I learn GALua?</A></H2>
 	
