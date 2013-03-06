@@ -44,10 +44,10 @@ end )
 </pre>
 	
 	<p>
-	The indices given to the <code>def_sig</code> function correspond to the array
+	The indices given to the function that is the argument of the function <code>def_sig</code> correspond to the array
 	given to the <code>def_basis</code> function.  Note that when GA calculations are
 	performed by the module, this function does not get called to determine the result
-	of an inner product between two basis vectors.  The function given here is immediately
+	of an inner product between two basis vectors.  The function given here to <code>def_sig</code> is immediately
 	evaluated to generate the full inner-product table, which is then kept and use
 	internally for use in evaluating subsequent calculations.
 	</p>
