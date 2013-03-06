@@ -65,9 +65,21 @@ print( "multivec = " .. multivec_str )
 	
 	<p>
 	You should also be aware that the functionality provided by <code>galua_api.to_string(...)</code>
-	and <code>galua_api.from_string(...)</code> functions is the same functionality being tapped
+	and <code>galua_api.from_string(...)</code> is the same functionality being tapped
 	by GALua's overload of the built-in <code>tostring(...)</code> function, as well as our function
-	call syntax overload of the GALua API table.
+	call syntax overload of the GALua API table, as well as coercion of strings encountered in
+	mathematical expressions.  The coercion process can be tapped directly by a use of calling
+	the GALua API table.  That is, if a variable <code>blah</code> holds the value of any Lua data-type, you may attempt
+	to convert it to a multivector as follows.
+	</p>
+	
+<pre class="example">
+local multivec = galua_api( blah )
+</pre>
+	
+	<p>
+	An exception will be thrown, and the program will halt at this location, if a failure to
+	perform the coercion occurs.
 	</p>
 	
 	<p>

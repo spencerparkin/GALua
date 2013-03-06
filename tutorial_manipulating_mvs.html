@@ -67,11 +67,13 @@ rotor[2] = e2 ^ e1
 
 	<p>
 	Be aware that if you try to assign a multivector homogeneous of the wrong grade,
+	or try to assign a multivector that is not homogeneous of any grade,
 	you will get a fatal error.
 	</p>
 
 <pre class="example">
-rotor[2] = vecB    -- Error!
+rotor[2] = vecB          -- Error!
+rotor[0] = vecA * vecB   -- Error!
 </pre>
 
 	<p>
