@@ -255,7 +255,46 @@ function cgaTest.perform()
 		return false, "Decomposition failed"
 	end
 	
-	local passFail, failReason = VerifyGeoData( circleGeo, circleTestData, false, false )
+	passFail, failReason = VerifyGeoData( circleGeo, circleTestData, false, false )
+	if not passFail then
+		return false, failReason .. " (Failed basic decomposition.)"
+	end
+	
+	return true
+
+end
+
+------------------------------------------------------------------------
+cgaTest = {}
+cgaTestList[ #cgaTestList + 1 ] = cgaTest
+cgaTest.name = "CGALine Trivial Test"
+function cgaTest.perform()
+
+	local lineTestData =
+	{
+		weight = -3,
+		center = { x = -1, y = 3, z = -2 },
+		normal = { x = math.sqrt(2) / 2, y = math.sqrt(2) / 2, z = 0 },
+	}
+	
+	local lineGeo = cga.NewLine
+	{
+		weight = lineTestData.weight,
+		center = cga.evec( lineTestData.center.x, lineTestData.center.y, lineTestData.center.z ),
+		normal = cga.evec( lineTestData.normal.x, lineTestData.normal.y, lineTestData.normal.z ),
+	}
+	
+	local passFail, failReason = VerifyGeoData( lineGeo, lineTestData, true, true )
+	if not passFail then
+		return false, failReason .. " (Failed basic object construction.)"
+	end
+	
+	local lineBlade = lineGeo:ComposeBlade()
+	if not lineGeo:DecomposeBlade( lineBlade ) then
+		return false, "Decomposition failed"
+	end
+	
+	passFail, failReason = VerifyGeoData( lineGeo, lineTestData, false, false )
 	if not passFail then
 		return false, failReason .. " (Failed basic decomposition.)"
 	end

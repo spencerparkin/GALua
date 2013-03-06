@@ -156,6 +156,7 @@ end
 function CGALine:ComposeBlade()
 	local weight = self.weight
 	local center = self.center
+	local normal = self.normal
 	local blade = weight * ( normal + ( center ^ normal ) * ni ) * i
 	return blade
 end
@@ -320,7 +321,7 @@ function CGALine:DecomposeBlade( blade )
 	-- Perform the decomposition.
 	blade = blade / weight
 	local normal = ( no .. ( blade ^ ni ) ) * i
-	local center = ( no .. blade ) * n * i
+	local center = ( no .. blade ) * normal * i
 	
 	-- Store the decomposition.
 	self.weight = weight
