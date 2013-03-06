@@ -17,15 +17,19 @@ local e3 = galua( "e3" )
 local epsilon = 0.000001
 
 ------------------------------------------------------------------------
-function CompareVectors( gaVector, testVector )
+function CompareVectors( gaVector, testVector, sign )
 
-	if ( ( gaVector .. e1 ) - galua( testVector.x ) ):tonumber() >= epsilon then
+	if not sign then
+		sign = 1
+	end
+
+	if ( ( gaVector .. e1 ) - galua( sign * testVector.x ) ):tonumber() >= epsilon then
 		return false, "Wrong x-component"
 	end
-	if ( ( gaVector .. e2 ) - galua( testVector.y ) ):tonumber() >= epsilon then
+	if ( ( gaVector .. e2 ) - galua( sign * testVector.y ) ):tonumber() >= epsilon then
 		return false, "Wrong y-component"
 	end
-	if ( ( gaVector .. e3 ) - galua( testVector.z ) ):tonumber() >= epsilon then
+	if ( ( gaVector .. e3 ) - galua( sign * testVector.z ) ):tonumber() >= epsilon then
 		return false, "Wrong z-component"
 	end
 	return true
@@ -33,7 +37,7 @@ function CompareVectors( gaVector, testVector )
 end
 
 ------------------------------------------------------------------------
-function VerifyGeoData( cgaGeo, cgaGeoTestData, weightSignMatters )
+function VerifyGeoData( cgaGeo, cgaGeoTestData, weightSignMatters, normalSignMatters )
 
 	if cgaGeoTestData.weight then
 		if not cgaGeo.weight then
@@ -64,7 +68,14 @@ function VerifyGeoData( cgaGeo, cgaGeoTestData, weightSignMatters )
 		end
 		local passFail, failReason = CompareVectors( cgaGeo.normal, cgaGeoTestData.normal )
 		if not passFail then
-			return false, "Normal: " .. failReason
+			if normalSignMatters then
+				return false, "Normal: " .. failReason
+			else
+				passFail, failReason = CompareVectors( cgaGeo.normal, cgaGeoTestData.normal, -1 )
+				if not PassFail then
+					return false, "Normal: " .. failReason .. " (even after sign change)"
+				end
+			end
 		end
 	end
 	
@@ -188,7 +199,7 @@ function cgaTest.perform()
 		normal = cga.evec( planeTestData.normal.x, planeTestData.normal.y, planeTestData.normal.z ),
 	}
 	
-	local passFail, failReason = VerifyGeoData( planeGeo, planeTestData, true )
+	local passFail, failReason = VerifyGeoData( planeGeo, planeTestData, true, true )
 	if not passFail then
 		return false, failReason .. " (Failed basic object construction.)"
 	end
@@ -199,7 +210,7 @@ function cgaTest.perform()
 	end
 	
 	planeTestData.center = nil		-- We'll verify the position seperately.
-	passFail, failReason = VerifyGeoData( planeGeo, planeTestData, false )
+	passFail, failReason = VerifyGeoData( planeGeo, planeTestData, false, false )
 	if not passFail then
 		return false, failReason .. " (Failed basic decomposition.)"
 	end
@@ -210,6 +221,47 @@ function cgaTest.perform()
 	
 	return true
 	
+end
+
+------------------------------------------------------------------------
+cgaTest = {}
+cgaTestList[ #cgaTestList + 1 ] = cgaTest
+cgaTest.name = "CGACircle Trivial Test"
+function cgaTest.perform()
+
+	local circleTestData =
+	{
+		weight = -3,
+		center = { x = -1, y = 3, z = -2 },
+		normal = { x = math.sqrt(2) / 2, y = math.sqrt(2) / 2, z = 0 },
+		radius = 9,
+	}
+	
+	local circleGeo = cga.NewCircle
+	{
+		weight = circleTestData.weight,
+		center = cga.evec( circleTestData.center.x, circleTestData.center.y, circleTestData.center.z ),
+		normal = cga.evec( circleTestData.normal.x, circleTestData.normal.y, circleTestData.normal.z ),
+		radius = circleTestData.radius,
+	}
+	
+	local passFail, failReason = VerifyGeoData( circleGeo, circleTestData, true, true )
+	if not passFail then
+		return false, failReason .. " (Failed basic object construction.)"
+	end
+	
+	local circleBlade = circleGeo:ComposeBlade()
+	if not circleGeo:DecomposeBlade( circleBlade ) then
+		return false, "Decomposition failed"
+	end
+	
+	local passFail, failReason = VerifyGeoData( circleGeo, circleTestData, false, false )
+	if not passFail then
+		return false, failReason .. " (Failed basic decomposition.)"
+	end
+	
+	return true
+
 end
 
 -- TODO: Put more tests here...
