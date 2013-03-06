@@ -16,6 +16,9 @@ local e3 = galua( "e3" )
 
 local epsilon = 0.000001
 
+-- TODO: Take a seed as an argument.  Use this to seed the random number generator.
+--       Use the random number generated to generate test data.
+
 ------------------------------------------------------------------------
 function CompareVectors( gaVector, testVector, sign )
 
@@ -317,7 +320,7 @@ function cgaTest.perform()
 		radius = 9,
 	}
 	
-	local pointPairGeo = cga.NewLine
+	local pointPairGeo = cga.NewPointPair
 	{
 		weight = pointPairTestData.weight,
 		center = cga.evec( pointPairTestData.center.x, pointPairTestData.center.y, pointPairTestData.center.z ),
@@ -343,6 +346,25 @@ function cgaTest.perform()
 	return true
 
 end
+
+------------------------------------------------------------------------
+--[[cgaTest = {}
+cgaTestList[ #cgaTestList + 1 ] = cgaTest
+cgaTest.name = "CGAFlatPoint Trivial Test"
+function cgaTest.perform()
+
+	local flatPointTestData =
+	{
+		weight = -3,
+		center = { x = -1, y = 3, z = -2 },
+	}
+	
+	local flatPointGeo = cga.NewFlatPoint
+	{
+	}
+
+end
+]]
 
 -- TODO: Put more tests here...
 

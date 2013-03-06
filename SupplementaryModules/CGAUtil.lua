@@ -146,8 +146,9 @@ function CGAPointPair:ComposeBlade()
 	local weight = self.weight
 	local center = self.center
 	local normal = self.normal
+	local radius = self.radius
 	local sign = self.imaginary and -1 or 1
-	local blade = weight * ( no ^ normal + center ^ normal ^ no_ni - center .. normal -
+	local blade = weight * ( no ^ normal + center ^ normal ^ no_ni - ( center .. normal ) -
 			( ( center .. normal ) * center - 0.5 * ( ( center .. center ) + sign * radius * radius ) * normal ) ^ ni ) * i
 	return blade
 end
@@ -274,7 +275,7 @@ function CGAPointPair:DecomposeBlade( blade )
 	
 	-- Perform the decomposition.
 	blade = blade / weight
-	local normal = ( no_ni .. ( blade ^ ni ) ) * i
+	local normal = -( no_ni .. ( blade ^ ni ) ) * i
 	local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) ) * i
 	local radius_squared = -center .. center + 2 * ( ( no_ni .. ( no ^ blade ) ) * i + ( center .. normal ) * center ) * normal
 	radius_squared = radius_squared[0]		-- Kill any round-off error
