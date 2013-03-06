@@ -303,6 +303,47 @@ function cgaTest.perform()
 
 end
 
+------------------------------------------------------------------------
+cgaTest = {}
+cgaTestList[ #cgaTestList + 1 ] = cgaTest
+cgaTest.name = "CGAPointPair Trivial Test"
+function cgaTest.perform()
+
+	local pointPairTestData =
+	{
+		weight = -3,
+		center = { x = -1, y = 3, z = -2 },
+		normal = { x = math.sqrt(2) / 2, y = math.sqrt(2) / 2, z = 0 },
+		radius = 9,
+	}
+	
+	local pointPairGeo = cga.NewLine
+	{
+		weight = pointPairTestData.weight,
+		center = cga.evec( pointPairTestData.center.x, pointPairTestData.center.y, pointPairTestData.center.z ),
+		normal = cga.evec( pointPairTestData.normal.x, pointPairTestData.normal.y, pointPairTestData.normal.z ),
+		radius = pointPairTestData.radius,
+	}
+	
+	local passFail, failReason = VerifyGeoData( pointPairGeo, pointPairTestData, true, true )
+	if not passFail then
+		return false, failReason .. " (Failed basic object construction.)"
+	end
+	
+	local pointPairBlade = pointPairGeo:ComposeBlade()
+	if not pointPairGeo:DecomposeBlade( pointPairBlade ) then
+		return false, "Decomposition failed"
+	end
+	
+	passFail, failReason = VerifyGeoData( pointPairGeo, pointPairTestData, false, false )
+	if not passFail then
+		return false, failReason .. " (Failed basic decomposition.)"
+	end
+	
+	return true
+
+end
+
 -- TODO: Put more tests here...
 
 ------------------------------------------------------------------------
