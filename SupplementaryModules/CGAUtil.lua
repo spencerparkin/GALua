@@ -240,7 +240,7 @@ function CGAFlatPoint:DecomposeBlade( blade )
 	end
 	
 	-- It must have non-zero weight.
-	local weight = -( no .. ( blade ^ ni ) ) * ni
+	local weight = -( no .. ( blade ^ ni ) ) * i
 	if weight == 0 then
 		return false
 	end

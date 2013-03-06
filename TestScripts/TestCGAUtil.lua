@@ -348,7 +348,7 @@ function cgaTest.perform()
 end
 
 ------------------------------------------------------------------------
---[[cgaTest = {}
+cgaTest = {}
 cgaTestList[ #cgaTestList + 1 ] = cgaTest
 cgaTest.name = "CGAFlatPoint Trivial Test"
 function cgaTest.perform()
@@ -361,10 +361,28 @@ function cgaTest.perform()
 	
 	local flatPointGeo = cga.NewFlatPoint
 	{
+		weight = flatPointTestData.weight,
+		center = cga.evec( flatPointTestData.center.x, flatPointTestData.center.y, flatPointTestData.center.z ),
 	}
+	
+	local passFail, failReason = VerifyGeoData( flatPointGeo, flatPointTestData, true, true )
+	if not passFail then
+		return false, failReason .. " (Failed basic object construction.)"
+	end
+	
+	local flatPointBlade = flatPointGeo:ComposeBlade()
+	if not flatPointGeo:DecomposeBlade( flatPointBlade ) then
+		return false, "Decomposition failed"
+	end
+	
+	passFail, failReason = VerifyGeoData( flatPointGeo, flatPointTestData, true, true )
+	if not passFail then
+		return false, failReason .. " (Failed basic decomposition.)"
+	end
+	
+	return true
 
 end
-]]
 
 -- TODO: Put more tests here...
 
