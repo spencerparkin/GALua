@@ -174,7 +174,8 @@ local circleObj = cga.NewCircle( dualCircle )
 <p>Here we see that instead of passing a table to the creation function, we have
 passed in a blade dually representative of the computed circle.  Doing this, the
 constructor of the object will attempt to decompose the given blade.  Nil is returned
-if the decomposition fails.</p>
+if the decomposition fails.  All composition functions create a dual geometry as output and all
+decomposition functions expect a dual geometry as input.</p>
 
 <p>You'll also notice the <code>cga.I</code> constant.  This is defined as the unit pseudo-scalar
 of our Minkownski geometric algebra.  CGAUtil also defines <code>cga.i</code> as the unit pseudo-scalar
