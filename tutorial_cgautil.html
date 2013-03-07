@@ -127,8 +127,9 @@ which we are referring.</p>
 
 <p>
 To be more precise, given any CGA geometry, there exist two blades representative
-of that geometry: one does so dually, the other directly.
-Given any blade, we can choose a dual or direct interpretation of it; and often,
+of that geometry: one does so dually, the other directly, and it's not hard to show
+that these are simply duals of one another.
+Given any blade, we can choose a dual or direct interpretation of it; and often
 it is to our advantage to pick between the two the geometry most applicable to the
 problem we are trying to solve.  (You'll see an example of this in the next example.)
 </p>
@@ -175,10 +176,10 @@ passed in a blade dually representative of the computed circle.  Doing this, the
 constructor of the object will attempt to decompose the given blade.  Nil is returned
 if the decomposition fails.</p>
 
-	<p>You'll also notice the <code>cga.I</code> constant.  This is defined as the unit pseudo-scalar
-	of our Minkownski geometric algebra.  CGAUtil also defines <code>cga.i</code> as the unit pseudo-scalar
-	of the largest Euclidean geometric sub-algebra of our Minkowski geometric algebra.  To be precise about
-	the sign of these pseudo-scalars, they are defined internally as follows.</p>
+<p>You'll also notice the <code>cga.I</code> constant.  This is defined as the unit pseudo-scalar
+of our Minkownski geometric algebra.  CGAUtil also defines <code>cga.i</code> as the unit pseudo-scalar
+of the largest Euclidean geometric sub-algebra of our Minkowski geometric algebra.  To be precise about
+the sign of these pseudo-scalars, they are defined internally as follows.</p>
 	
 <pre class="example">
 no_ni = no ^ ni
@@ -195,7 +196,7 @@ for key, value in pairs( circleObj ) do
 end
 </pre>
 
-	<p>Running the entire example, you should get the following, listed in perhaps some other order, of course.</p>
+<p>Running the entire example, you should get the following, listed in perhaps some other order, of course.</p>
 	
 <pre class="example">
 weight: 2
@@ -206,8 +207,8 @@ center: 0
 type: circle
 </pre>
 
-	<p>If given any object instance, and you are not sure what type of object it may be, you may always
-	check the <code>type</code> entry of the object table to find out what type of object it is.
+<p>If given any object instance, and you are not sure what type of object it may be, you may always
+check the <code>type</code> entry of the object table to find out what type of object it is.
 
 <h2>Example 2: The point-sphere silhouette problem</h2>
 
