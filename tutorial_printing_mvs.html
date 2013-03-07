@@ -1,46 +1,24 @@
-<!DOCTYPE html>
-<html>
-	<head>
-	<title>How to use the GALua module -- Printing multivectors</title>
-	<link rel="stylesheet" type="text/css" href="http://www.keplerproject.org/doc.css"/>
-	</head>
-	<body>
+---
+layout: common_layout
+---
+<section class="content">
 	
-	<div id="container">
-	
-	<div id="product">
-		<div id="product_logo">
-			<a href="http://www.lua.org/"><img alt="GALua" src="lua-logo-ga.png"></a>
-		</div><!-- id="product_logo" -->
-		<div id="product_name"><big><strong>GALua</strong></big></div>
-		<div id="product_description">Geometric Algebra Library for the Lua Programming Language</div>
-	
-	</div><!-- id="product" -->
-	
-	<div id="main">
-	
-	<div id="navigation">
-	<object type="text/html" data="navbar.html" width="176" height="300"></object>
-	</div><!-- id="navigation" -->
-	
-	<div id="content">
-	
-	<h1>Printing multivectors</h1>
-	
-	<p>
-	Printing a multivector is super easy.  One way to do it is as follows.
-	</p>
+<h1>Printing multivectors</h1>
+
+<p>
+Printing a multivector is super easy.  One way to do it is as follows.
+</p>
 
 <pre class="example">
 local multivec = 2 - 7*e1^e3 + 2*e2^e1 + e2 - e1^e2^e3
 print( "multivec = " .. tostring( multivec ) )
 </pre>
 
-	<p>
-	Printing the multivectors of GALua is simply a matter of converting them to a string, and
-	then printing the string.  In general, there are two routines supported by the GALua module
-	that provide conversion between string values and multivector values.
-	</p>
+<p>
+Printing the multivectors of GALua is simply a matter of converting them to a string, and
+then printing the string.  In general, there are two routines supported by the GALua module
+that provide conversion between string values and multivector values.
+</p>
 
 <pre class="example">
 local multivec = galua_api.from_string( "2 - 7*e1^e3 + 2*e2^e1 + e2 - e1^e2^e3" )
@@ -48,61 +26,50 @@ local multivec_str = galua_api.to_string( multivec )
 print( "multivec = " .. multivec_str )
 </pre>
 
-	<p>
-	These functions are designed to be inverses of one another.  That is, strings created by
-	<code>galua_api.to_string(...)</code> should be consumable by <code>galua_api.from_string(...)</code>.
-	As of this writing, there are some known bugs, but it works for the most part.  (I know that's not
-	very reassuring.  The bugs will get fixed.)
-	</p>
+<p>
+These functions are designed to be inverses of one another.  That is, strings created by
+<code>galua_api.to_string(...)</code> should be consumable by <code>galua_api.from_string(...)</code>.
+As of this writing, there are some known bugs, but it works for the most part.  (I know that's not
+very reassuring.  The bugs will get fixed.)
+</p>
+
+<p>
+You must
+be aware that the <code>galua_api.from_string(...)</code> function does not take a string
+interpreted as Lua code!  Just what language is being interpreted by the <code>galua_api.from_string(...)</code>
+function is covered in an up-coming tutorial.  For now, it is safest to only convert
+strings that are the basis vectors you have defined for your geometric algebra.
+</p>
 	
-	<p>
-	You must
-	be aware that the <code>galua_api.from_string(...)</code> function does not take a string
-	interpreted as Lua code!  Just what language is being interpreted by the <code>galua_api.from_string(...)</code>
-	function is covered in an up-coming tutorial.  For now, it is safest to only convert
-	strings that are the basis vectors you have defined for your geometric algebra.
-	</p>
-	
-	<p>
-	You should also be aware that the functionality provided by <code>galua_api.to_string(...)</code>
-	and <code>galua_api.from_string(...)</code> is the same functionality being tapped
-	by GALua's overload of the built-in <code>tostring(...)</code> function, as well as our function
-	call syntax overload of the GALua API table, as well as coercion of strings encountered in
-	mathematical expressions.  The coercion process can be tapped directly by a use of calling
-	the GALua API table.  That is, if a variable <code>blah</code> holds the value of any Lua data-type, you may attempt
-	to convert it to a multivector as follows.
-	</p>
+<p>
+You should also be aware that the functionality provided by <code>galua_api.to_string(...)</code>
+and <code>galua_api.from_string(...)</code> is the same functionality being tapped
+by GALua's overload of the built-in <code>tostring(...)</code> function, as well as our function
+call syntax overload of the GALua API table, as well as coercion of strings encountered in
+mathematical expressions.  The coercion process can be tapped directly by a use of calling
+the GALua API table.  That is, if a variable <code>blah</code> holds the value of any Lua data-type, you may attempt
+to convert it to a multivector as follows.
+</p>
 	
 <pre class="example">
 local multivec = galua_api( blah )
 </pre>
 	
-	<p>
-	An exception will be thrown, and the program will halt at this location, if a failure to
-	perform the coercion occurs.
-	</p>
+<p>
+An exception will be thrown, and the program will halt at this location, if a failure to
+perform the coercion occurs.
+</p>
+
+<p>
+Though currently experimental, you may want to be aware of a latex option for printing.
+By calling <code>galua_api.to_latex_string(...)</code>, you can generate a string for the
+given multivector value that may be compiled by latex for type-setting purposes.
+This feature is mainly useful in conjunction with the limited support for symbolic manipulation
+in the underlying GA computation engine of GALua.  The coverage of such support is beyond
+the scope of these tutorials.  However, if you would like to type-set any numerical multivector
+value, (as apposed to an abstract variable multivector value), you may use <code>galua_api.to_latex_string(...)</code> to do so.
+</p>
 	
-	<p>
-	Though currently experimental, you may want to be aware of a latex option for printing.
-	By calling <code>galua_api.to_latex_string(...)</code>, you can generate a string for the
-	given multivector value that may be compiled by latex for type-setting purposes.
-	This feature is mainly useful in conjunction with the limited support for symbolic manipulation
-	in the underlying GA computation engine of GALua.  The coverage of such support is beyond
-	the scope of these tutorials.  However, if you would like to type-set any numerical multivector
-	value, (as apposed to an abstract variable multivector value), you may use <code>galua_api.to_latex_string(...)</code> to do so.
-	</p>
+<p><a href="tutorial_manipulating_mvs.html">Manipulating multivectors</a></p>
 	
-	<p><a href="tutorial_manipulating_mvs.html">Manipulating multivectors</a></p>
-	
-	</div><!-- id="content" -->
-	
-	</div><!-- id="main" -->
-	
-	<div id="about">
-	<p>Copyright (C) 2013, by Spencer T. Parkin</p>
-	</div><!-- id="about" -->
-	
-	</div><!-- id="container" -->
-	
-	</body>
-</html>
+</section>
