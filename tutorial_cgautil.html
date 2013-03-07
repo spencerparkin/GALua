@@ -75,7 +75,7 @@
 	<p>
 	To free this tutorial from the great many mathematical details chosen by the CGAUtil module,
 	such details are given at length in the following document, which has been prepared
-	specifically for the CGAUtil module.
+	specifically for the CGAUtil module and its documentation.
 	</p>
 	
 	<p><a href="CGAUtilMath.pdf">CGAUtilMath.pdf</a></p>
@@ -92,13 +92,126 @@
 	various features of the module.
 	</p>
 	
-	<h2>Fitting a sphere to 3 points</h2>
+	<h2>Example 1: Fitting a circle to 3 points</h2>
 	
-	<p>Coming soon...</p>
+	<p>We start by simply created 3 points that determine a circle.  To determine a circle,
+	they must be non-colinear.</p>
 	
-	<h2>The point-sphere silhouette problem</h2>
+<pre class="example">
+local point1 = cga.NewPoint{ center = cga.evec( -1, 0, 0 ) }:ComposeBlade()
+local point2 = cga.NewPoint{ center = cga.evec( 1, 0, 0 ) }:ComposeBlade()
+local point3 = cga.NewPoint{ center = cga.evec( 0, 1, 0 ) }:ComposeBlade()
+</pre>
 	
-	<h2>The inversion of a line in a sphere</h2>
+	<p>
+	This code illustrates a number of features.  First, notice the <code>cga.evec(...)</code> function.
+	This is a convenience function provided by CGAUtil that allows you to easily formulate euclidean
+	vectors.  It is simply implemented as follows.
+	</p>
+	
+<pre class="example">
+function CGAUtil.evec( x, y, z )
+	return x*e1 + y*e2 + z*e3
+end
+</pre>
+
+	<p>
+	Secondly, notice the <code>cga.NewPoint(...)</code> function.  This function creates and
+	returns an object representative of a conformal point.  Such a function is provided
+	for all the conformal geometries.  The entire list is given in the following table.
+	</p>
+	
+	<table>
+	<tr><td>Creation function</td></tr>
+	<tr><td><code>cga.NewPoint(...)</td></tr>
+	<tr><td><code>cga.NewSphere(...)</td></tr>
+	<tr><td><code>cga.NewCircle(...)</td></tr>
+	<tr><td><code>cga.NewPlane(...)</td></tr>
+	<tr><td><code>cga.NewPointPair(...)</td></tr>
+	<tr><td><code>cga.NewLine(...)</td></tr>
+	<tr><td><code>cga.NewFlatPoint(...)</td></tr>
+	</table>
+	
+	<p>
+	Tangent points and free blades will be discussed later on.
+	</p>
+	
+	<p>Unlike a consideration we would have concerning a given blade, for
+	any object returned by one of these creation routines,
+	we never care about how that object represents its geometry.  For example,
+	an object does not dually or directly represent a CGA geometry.  This brings up
+	what may be a confusing point in the semantics of CGA.  Geometrically speaking,
+	there is no difference, for example, between a dual sphere and a direct sphere.
+	A sphere is just a sphere.  Those terms arrise, however, in an attempt to be
+	more specific about <i>how</i> a given blade represents a certain geometry,
+	but despite the difference in names, it has no bearing on the actual physical geometry to
+	which we are referring.</p>
+	
+	<p>
+	To be more precise, given any CGA geometry, there exist two blades representative
+	of that geometry: one does so dually, the other directly.
+	Given any blade, we can choose a dual or direct interpretation of it; and often,
+	it is to our advantage to pick between the two the geometry most applicable to the
+	problem we are trying to solve.  (You'll see an example of this in the next example.)
+	</p>
+	
+	<p>
+	Returning to the example at hand, notice that we handed a table to the
+	<code>cga.NewPoint(...)</code> function.  This table is expected to
+	contain zero or more of the following entries, not all of which are
+	applicable to conformal points, but may be applicable to other CGA geometries.
+	We give the full list here for completeness.
+	</p>
+	
+	<table>
+	<tr><td>Table Entry Key</td><td>Table Entry Value Description</td><td>Default Value</td></tr>
+	<tr><td>"<code>weight</code>"</td><td>A non-zero scalar value.</td><td>One</td></tr>
+	<tr><td>"<code>center</code>"</td><td>A euclidean location vector.</td><td>Zero</td></tr>
+	<tr><td>"<code>normal</code>"</td><td>A unit-length euclidean direction vector.</td><td>e1</td></tr>
+	<tr><td>"<code>radius</code>"</td><td>A non-negative scalar value.</td><td>One</td></tr>
+	<tr><td>"<code>imaginary</code>"</td><td>A boolean value.</td><td>False</td></tr>
+	</table>
+	
+	<p>
+	If any one of these table entries is missing, a default will be used.  The default
+	values are also listed in the above table.
+	</p>
+	
+	<p>
+	Thirdly and lastly, notice the "<code>:ComposeBlade()</code> method call.  Supported by
+	all geometry objects of CGAUtil, this function formulates a blade as a function of the defining characteristics
+	of its geometry that is dually representative of that geometry.  To get the direct representation of
+	the geometry, simply take the dual of the returned result.
+	</p>
+	
+	<p>Having created our 3 points, we can easily find the circle fitting these points as follows.</p>
+	
+<pre class="example">
+local circle = point1 ^ point2 ^ point3
+local circleObj = cga.NewCircle( circle )
+</pre>
+	
+	<p>Here we see that instead of passing a table to the creation function, we have
+	passed in a blade dually representative of the computed circle.  Doing this, the
+	constructor of the object will attempt to decompose the given blade.  Nil is returned
+	if the decomposition fails.</p>
+	
+	<p>Having now created <code>circleObj</code>, we are free to inspect its table entries
+	to learn about the circle fitting the 3 points.</p>
+	
+	<h2>Example 2: The point-sphere silhouette problem</h2>
+	
+	<p>
+	Given a sphere and a point some distance from the sphere, imagine viewing
+	the sphere from this distant point.  Imagine a circle that outlines the
+	sphere from this perspective.  Now, if this circle shared every point with
+	the sphere, what circle would it be?  This is the problem we want to solve,
+	and we'll do it with CGAUtil.
+	</p>
+	
+	<p>Do that here...</p>
+	
+	<h2>Example 3: The inversion of a line in a sphere</h2>
 	
 	<h2>Conclusion</h2>
 	
