@@ -25,6 +25,9 @@ function CGAUtil.Setup( galua_api )
 	i = e1 ^ e2 ^ e3
 	I = i ^ no_ni
 	
+	CGAUtil.i = i
+	CGAUtil.I = I
+	
 end
 
 ------------------------------------------------------------------------
@@ -287,7 +290,7 @@ function CGAPointPair:DecomposeBlade( blade )
 	blade = blade / weight
 	local normal = -( no_ni .. ( blade ^ ni ) ) * i
 	local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) ) * i
-	local radius_squared = -center .. center + 2 * ( ( no_ni .. ( no ^ blade ) ) * i + ( center .. normal ) * center ) * normal
+	local radius_squared = -( center .. center ) + 2 * ( ( no_ni .. ( no ^ blade ) ) * i + ( center .. normal ) * center ) * normal
 	radius_squared = radius_squared[0]		-- Kill any round-off error
 	radius_squared = radius_squared:tonumber()
 	local imaginary = false
@@ -363,7 +366,7 @@ function CGACircle:DecomposeBlade( blade )
 	blade = blade / weight
 	local normal = -no_ni .. ( blade ^ ni )
 	local center = -normal * ( no_ni .. ( blade ^ ( no * ni ) ) )
-	local radius_squared = center .. center - 2 * ( ( no_ni .. ( no ^ blade ) ) + ( center .. normal ) * center ) * normal
+	local radius_squared = ( center .. center ) - 2 * ( ( no_ni .. ( no ^ blade ) ) + ( center .. normal ) * center ) * normal
 	radius_squared = radius_squared[0]		-- Kill any round-off error
 	radius_squared = radius_squared:tonumber()
 	local imaginary = false
