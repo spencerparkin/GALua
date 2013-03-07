@@ -1,37 +1,15 @@
-<!DOCTYPE html>
-<html>
-	<head>
-	<title>How to use the GALua module -- Basic math operations</title>
-	<link rel="stylesheet" type="text/css" href="http://www.keplerproject.org/doc.css"/>
-	</head>
-	<body>
+---
+layout: common_layout
+---
+<section class="content">
 	
-	<div id="container">
-	
-	<div id="product">
-		<div id="product_logo">
-			<a href="http://www.lua.org/"><img alt="GALua" src="lua-logo-ga.png"></a>
-		</div><!-- id="product_logo" -->
-		<div id="product_name"><big><strong>GALua</strong></big></div>
-		<div id="product_description">Geometric Algebra Library for the Lua Programming Language</div>
-	
-	</div><!-- id="product" -->
-	
-	<div id="main">
-	
-	<div id="navigation">
-	<object type="text/html" data="navbar.html" width="176" height="300"></object>
-	</div><!-- id="navigation" -->
-	
-	<div id="content">
-	
-	<h1>Basic math operations</h1>
-	
-	<p>
-	Once we have a geometric algebra defined, we're ready to start making GA calculations.
-	One way to get started is by creating multivectors for each basis vector we registered with the module.
-	This can be accomplisehd as follows.
-	</p>
+<h1>Basic math operations</h1>
+
+<p>
+Once we have a geometric algebra defined, we're ready to start making GA calculations.
+One way to get started is by creating multivectors for each basis vector we registered with the module.
+This can be accomplisehd as follows.
+</p>
 
 <pre class="example">
 local e1 = galua_api( "e1" )
@@ -41,16 +19,16 @@ local no = galua_api( "no" )
 local ni = galua_api( "ni" )
 </pre>
 
-	<p>
-	Here we see that the function call syntax has been implemented for the API table so that
-	we may call it with a string value.  Each of the strings given above correspond to
-	one of the basis vectors we registered with the module earlier.  (Here we are assuming
-	that we have defined the conformal geometric algebra of 3-dimensional space.)
-	</p>
+<p>
+Here we see that the function call syntax has been implemented for the API table so that
+we may call it with a string value.  Each of the strings given above correspond to
+one of the basis vectors we registered with the module earlier.  (Here we are assuming
+that we have defined the conformal geometric algebra of 3-dimensional space.)
+</p>
 	
-	<p>
-	We're now ready to get down to business!  Consider the following sequence of script code.
-	</p>
+<p>
+We're now ready to get down to business!  Consider the following sequence of script code.
+</p>
 
 <pre class="example">
 local pos = 3*e1 + 2*e2 - e3
@@ -63,114 +41,103 @@ local plane = norm + ( norm .. pos )*ni
 local circle = sphere ^ norm
 </pre>
   
-	<p>
-	This example calculates a dual circle that is the intersection of a dual sphere and a dual plane.
-	Convenience methods for composing and decomposing such geometries are available in a companion module named CGAUtil.
-	More on that is given in a later tutorial.  For now, the above script code serves to illustrate what kinds
-	of math operations we can perform and how to to perform them.  Much of it is fairly intuitive and straight-forward,
-	but we'll continue now to explain in detail what math operations are available and what they do.
-	</p>
+<p>
+This example calculates a dual circle that is the intersection of a dual sphere and a dual plane.
+Convenience methods for composing and decomposing such geometries are available in a companion module named CGAUtil.
+More on that is given in a later tutorial.  For now, the above script code serves to illustrate what kinds
+of math operations we can perform and how to to perform them.  Much of it is fairly intuitive and straight-forward,
+but we'll continue now to explain in detail what math operations are available and what they do.
+</p>
   
-	<p>
-	The binary operations supported by the GALua module are summarized in the following table.
-	</p>
+<p>
+The binary operations supported by the GALua module are summarized in the following table.
+</p>
+
+<table border="1">
+<tr><td>Binary Operation</td><td>Overloaded Lua Operator</td></tr>
+<tr><td>Addition</td><td>"<code>+</code>"</td></tr>
+<tr><td>Subtraction</td><td>"<code>-</code>"</td></tr>
+<tr><td>Geometric Product</td><td>"<code>*</code>","<code>/</code>"</td></tr>
+<tr><td>Outer Product</td><td>"<code>^</code>"</td></tr>
+<tr><td>Inner Product</td><td>"<code>.</code>", "<code>..</code>", "<code>[]</code>"</td></tr>
+</table>
+
+<p>
+As you can see, there are quite a few options available for the inner product.  Some effort has been made
+to allow the use of the indexing operator ("<code>.</code>"), but its use is not recommended, because it requires the GALua
+module to synthesize Lua's scoping algorithm.  Though its use may make your scripts easier to read, refraining
+from its use gives you a greater guarentee of correctness.  The concationation operator ("<code>..</code>") is therefore the
+preferred method while the indexing operator ("<code>[]</code>") is also supported for those that are assuming a left or
+perhaps right contraction.  Of course, Lua syntax always requires that the indexing operator ("<code>[]</code>") appear
+on the right, so this may not be entirely useful.  Never-the-less, it's there.
+</p>
 	
-	<table border="1">
-	<tr><td>Binary Operation</td><td>Overloaded Lua Operator</td></tr>
-	<tr><td>Addition</td><td>"<code>+</code>"</td></tr>
-	<tr><td>Subtraction</td><td>"<code>-</code>"</td></tr>
-	<tr><td>Geometric Product</td><td>"<code>*</code>","<code>/</code>"</td></tr>
-	<tr><td>Outer Product</td><td>"<code>^</code>"</td></tr>
-	<tr><td>Inner Product</td><td>"<code>.</code>", "<code>..</code>", "<code>[]</code>"</td></tr>
-	</table>
-	
-	<p>
-	As you can see, there are quite a few options available for the inner product.  Some effort has been made
-	to allow the use of the indexing operator ("<code>.</code>"), but its use is not recommended, because it requires the GALua
-	module to synthesize Lua's scoping algorithm.  Though its use may make your scripts easier to read, refraining
-	from its use gives you a greater guarentee of correctness.  The concationation operator ("<code>..</code>") is therefore the
-	preferred method while the indexing operator ("<code>[]</code>") is also supported for those that are assuming a left or
-	perhaps right contraction.  Of course, Lua syntax always requires that the indexing operator ("<code>[]</code>") appear
-	on the right, so this may not be entirely useful.  Never-the-less, it's there.
-	</p>
-	
-	<p>
-	The multilication operator ("<code>*</code>") implements the geometric product.  The division operator ("<code>/</code>") is
-	simply short-hand for multiplying its left operand by the inverse of its right operand.  If the
-	right operand is a singular multivector, a Lua exception will be thrown, and your program will
-	halt at this location.  A way to attempt the calculation of multivector inverses without incurring
-	such a fatal error will be given shortly.
-	</p>
-	
-	<p>
-	The idea of coercion is supported by all of the binary operations given in the table above.
-	This is important to realize, and means that the GALua module, if not given a multivector value
-	for both arguments in a call to one of its binary operations, will try to coerce any non-multivector value
-	into an appropriate corresponding multivector value.  This is mainly useful for Lua number values as can be seen
-	in the formulation of the position of the dual sphere given above, and in the subsequent calculations made.
-	Any strings that are encountered will be treated in the same way that the function call syntax overload of the API
-	table treats such strings.  That is, the following two lines of Lua are the same.
-	</p>
+<p>
+The multilication operator ("<code>*</code>") implements the geometric product.  The division operator ("<code>/</code>") is
+simply short-hand for multiplying its left operand by the inverse of its right operand.  If the
+right operand is a singular multivector, a Lua exception will be thrown, and your program will
+halt at this location.  A way to attempt the calculation of multivector inverses without incurring
+such a fatal error will be given shortly.
+</p>
+
+<p>
+The idea of coercion is supported by all of the binary operations given in the table above.
+This is important to realize, and means that the GALua module, if not given a multivector value
+for both arguments in a call to one of its binary operations, will try to coerce any non-multivector value
+into an appropriate corresponding multivector value.  This is mainly useful for Lua number values as can be seen
+in the formulation of the position of the dual sphere given above, and in the subsequent calculations made.
+Any strings that are encountered will be treated in the same way that the function call syntax overload of the API
+table treats such strings.  That is, the following two lines of Lua are the same.
+</p>
 	
 <pre class="example">
 bivec = -3 * e1 ^ "e2"
 bivec = -3 * e1 ^ galua_api( "e2" )
 </pre>
 	
-	<p>
-	Now lets talk about the unary operators.  These are summarized in the following table.
-	</p>
+<p>
+Now lets talk about the unary operators.  These are summarized in the following table.
+</p>
+
+<table border="1">
+<tr><td>Unary Operation</td><td>Overloaded Lua Operator</td></tr>
+<tr><td>Negate</td><td>"<code>-</code>"</td></tr>
+<tr><td>Magnitude</td><td>"<code>#</code>"</td></tr>
+</table>
+
+<p>
+Of course, this is the not the full list of unary operations supported by GALua, just the
+full list of such operations that are implemented as overloads of existing Lua unary operators.
+The rest of the unary operations are given as meta-methods you can call on a multivector value.
+</p>
+
+<table border="1">
+<tr><td>Unary Operation</td><td>Meta-method</td></tr>
+<tr><td>Reverse</td><td>"<code>:reverse()</code>"</td></tr>
+<tr><td>Inverse</td><td>"<code>:inverse()</code>"</td></tr>
+</table>
 	
-	<table border="1">
-	<tr><td>Unary Operation</td><td>Overloaded Lua Operator</td></tr>
-	<tr><td>Negate</td><td>"<code>-</code>"</td></tr>
-	<tr><td>Magnitude</td><td>"<code>#</code>"</td></tr>
-	</table>
+<p>
+Like any binary operation, every unary operator returns a new multivector value, leaving the multivector variable untouched.
+That is, it does not alter the multivector value referenced by the multivector variable it is operating upon.
+</p>
+
+<p>
+If the <code>inverse</code> meta-method is called on a singular multivector, the result
+will be zero.  If you are ever unsure about the invertibility of a given multivector value,
+it is best to call this instead of performing a division operation.  By default, the <code>:inverse()</code>
+meta-method calculates a right-inverse.  That is, the multivector that, if multiplied by the given
+multivector on the right in the geometric product, gives the multiplicative identity.  Use the
+<code>:left_inverse()</code> and <code>:right_inverse()</code> meta-methods to be explicit about
+which inverse you desire to calculate.  (At the time of this writing, I'm not sure if multivectors
+generally commute in the geometric product with their inverses.  For now, left and right inverse operations
+are supported under an absense of making such an assumption.)
+</p>
+
+<p>
+Now that we're capable of doing some basic math, we're ready to cover our printing options.
+</p>
+
+<p><a href="tutorial_printing_mvs.html">Printing multivectors</a></p>
 	
-	<p>
-	Of course, this is the not the full list of unary operations supported by GALua, just the
-	full list of such operations that are implemented as overloads of existing Lua unary operators.
-	The rest of the unary operations are given as meta-methods you can call on a multivector value.
-	</p>
-	
-	<table border="1">
-	<tr><td>Unary Operation</td><td>Meta-method</td></tr>
-	<tr><td>Reverse</td><td>"<code>:reverse()</code>"</td></tr>
-	<tr><td>Inverse</td><td>"<code>:inverse()</code>"</td></tr>
-	</table>
-	
-	<p>
-	Like any binary operation, every unary operator returns a new multivector value, leaving the multivector variable untouched.
-	That is, it does not alter the multivector value referenced by the multivector variable it is operating upon.
-	</p>
-	
-	<p>
-	If the <code>inverse</code> meta-method is called on a singular multivector, the result
-	will be zero.  If you are ever unsure about the invertibility of a given multivector value,
-	it is best to call this instead of performing a division operation.  By default, the <code>:inverse()</code>
-	meta-method calculates a right-inverse.  That is, the multivector that, if multiplied by the given
-	multivector on the right in the geometric product, gives the multiplicative identity.  Use the
-	<code>:left_inverse()</code> and <code>:right_inverse()</code> meta-methods to be explicit about
-	which inverse you desire to calculate.  (At the time of this writing, I'm not sure if multivectors
-	generally commute in the geometric product with their inverses.  For now, left and right inverse operations
-	are supported under an absense of making such an assumption.)
-	</p>
-	
-	<p>
-	Now that we're capable of doing some basic math, we're ready to cover our printing options.
-	</p>
-	
-	<p><a href="tutorial_printing_mvs.html">Printing multivectors</a></p>
-	
-	</div><!-- id="content" -->
-	
-	</div><!-- id="main" -->
-	
-	<div id="about">
-	<p>Copyright (C) 2013, by Spencer T. Parkin</p>
-	</div><!-- id="about" -->
-	
-	</div><!-- id="container" -->
-	
-	</body>
-</html>
+</section>
