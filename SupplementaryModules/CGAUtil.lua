@@ -41,11 +41,21 @@ function CGAGeometry:Default()
 end
 
 ------------------------------------------------------------------------
-function CGAGeometry:New( geo )
-	local geo = geo or {}
+function CGAGeometry:New( arg )
+	local geo
+	if type( arg ) == "table" then
+		geo = arg
+	else
+		geo = {}
+	end
 	setmetatable( geo, self )
 	self.__index = self
 	geo:Default()
+	if type( arg ) == "userdata" then
+		if not geo:DecomposeBlade( arg ) then
+			geo = nil
+		end
+	end
 	return geo
 end
 
