@@ -165,8 +165,9 @@ To get the direct representation of the geometry, simply take the dual of the re
 <p>Having created our 3 points, we can easily find the circle fitting these points as follows.</p>
 
 <pre class="example">
-local circle = point1 ^ point2 ^ point3
-local circleObj = cga.NewCircle( circle )
+local dirCircle = point1 ^ point2 ^ point3
+local dualCircle = dirCircle * cga.I
+local circleObj = cga.NewCircle( dualCircle )
 </pre>
 
 <p>Here we see that instead of passing a table to the creation function, we have
@@ -174,8 +175,39 @@ passed in a blade dually representative of the computed circle.  Doing this, the
 constructor of the object will attempt to decompose the given blade.  Nil is returned
 if the decomposition fails.</p>
 
+	<p>You'll also notice the <code>cga.I</code> constant.  This is defined as the unit pseudo-scalar
+	of our Minkownski geometric algebra.  CGAUtil also defines <code>cga.i</code> as the unit pseudo-scalar
+	of the largest Euclidean geometric sub-algebra of our Minkowski geometric algebra.  To be precise about
+	the sign of these pseudo-scalars, they are defined internally as follows.</p>
+	
+<pre class="example">
+no_ni = no ^ ni
+i = e1 ^ e2 ^ e3
+I = i ^ no_ni
+</pre>
+	
 <p>Having now created <code>circleObj</code>, we are free to inspect its table entries
 to learn about the circle fitting the 3 points.</p>
+	
+<pre class="example">
+for key, value in pairs( circleObj ) do
+  print( key .. ": " .. tostring( value ) )
+end
+</pre>
+
+	<p>Running the entire example, you should get the following, listed in perhaps some other order, of course.</p>
+	
+<pre class="example">
+weight: 2
+radius: 1
+normal: -e3
+imaginary: false
+center: 0
+type: circle
+</pre>
+
+	<p>If given any object instance, and you are not sure what type of object it may be, you may always
+	check the <code>type</code> entry of the object table to find out what type of object it is.
 
 <h2>Example 2: The point-sphere silhouette problem</h2>
 

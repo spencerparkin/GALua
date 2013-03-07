@@ -73,6 +73,13 @@ on the right, so this may not be entirely useful.  Never-the-less, it's there.
 </p>
 	
 <p>
+	It is important to realize that GALua cannot change the operator precedence of Lua.  Consequently, you must be aware that
+	that the ("<code>..</code>") operator does not bind as tightly as addition ("<code>+</code>"), which is certainly not
+	the case in pure mathematics.  If you're not careful to wrap all inner products with parantheses, you might introduce bugs in your
+	calculations.
+	</p>
+	
+	<p>
 The multilication operator ("<code>*</code>") implements the geometric product.  The division operator ("<code>/</code>") is
 simply short-hand for multiplying its left operand by the inverse of its right operand.  If the
 right operand is a singular multivector, a Lua exception will be thrown, and your program will
