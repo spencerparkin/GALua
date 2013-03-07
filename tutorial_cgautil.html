@@ -99,19 +99,20 @@ returns an object representative of a conformal point.  Such a function is provi
 for all the conformal geometries.  The entire list is given in the following table.
 </p>
 
-<table>
+<table border="1">
 <tr><td>Creation function</td></tr>
-<tr><td><code>cga.NewPoint(...)</td></tr>
-<tr><td><code>cga.NewSphere(...)</td></tr>
-<tr><td><code>cga.NewCircle(...)</td></tr>
-<tr><td><code>cga.NewPlane(...)</td></tr>
-<tr><td><code>cga.NewPointPair(...)</td></tr>
-<tr><td><code>cga.NewLine(...)</td></tr>
-<tr><td><code>cga.NewFlatPoint(...)</td></tr>
+<tr><td><code>cga.NewPoint(...)</code></td></tr>
+<tr><td><code>cga.NewSphere(...)</code></td></tr>
+<tr><td><code>cga.NewCircle(...)</code></td></tr>
+<tr><td><code>cga.NewPlane(...)</code></td></tr>
+<tr><td><code>cga.NewPointPair(...)</code></td></tr>
+<tr><td><code>cga.NewLine(...)</code></td></tr>
+<tr><td><code>cga.NewFlatPoint(...)</code></td></tr>
 </table>
 
 <p>
-Tangent points and free blades will be discussed later on.
+Tangent points are the degenerate rounds of CGA, and not given their own object.
+Free blades are not yet supported.
 </p>
 
 <p>Unlike a consideration we would have concerning a given blade, for
@@ -142,7 +143,7 @@ applicable to conformal points, but may be applicable to other CGA geometries.
 We give the full list here for completeness.
 </p>
 
-<table>
+<table border="1">
 <tr><td>Table Entry Key</td><td>Table Entry Value Description</td><td>Default Value</td></tr>
 <tr><td>"<code>weight</code>"</td><td>A non-zero scalar value.</td><td>One</td></tr>
 <tr><td>"<code>center</code>"</td><td>A euclidean location vector.</td><td>Zero</td></tr>
