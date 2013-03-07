@@ -1,83 +1,50 @@
-<!DOCTYPE html>
-<html>
-	<head>
-	<title>GALua</title>
-    <link rel="stylesheet" type="text/css" href="http://www.keplerproject.org/doc.css"/>
-	</head>
-	<body>
+---
+layout: common_layout
+---
+<section class="content">
+
+<H2><A NAME="what">What is GALua?</A></H2>
 	
-	<div id="container">
+<p>
+GALua is a Lua module written in C++ adding support for GA (geometric algebra).
+The goal of the GALua module is to endow the Lua programming language with
+support for GA data-types (i.e. multivectors.)
+</p>
 	
-	<div id="product">
-		<div id="product_logo">
-			<a href="http://www.lua.org/"><img alt="GALua" src="lua-logo-ga.png"></a>
-		</div><!-- id="product_logo" -->
-		<div id="product_name"><big><strong>GALua</strong></big></div>
-		<div id="product_description">Geometric Algebra Library for the Lua Programming Language</div>
-	
-	</div><!-- id="product" -->
-	
-	<div id="main">
-	
-	<div id="navigation">
-	<object type="text/html" data="navbar.html" width="176" height="300"></object>
-	</div><!-- id="navigation" -->
-	
-	<div id="content">
-	
-	<H2><A NAME="what">What is GALua?</A></H2>
-	
-	<p>
-	GALua is a Lua module written in C++ adding support for GA (geometric algebra).
-	The goal of the GALua module is to endow the Lua programming language with
-	support for GA data-types (i.e. multivectors.)
-	</p>
-	
-	<H2><A NAME="how">How do I get GALua?</A></H2>
-	
-	<p>
-	The current, official distribution of GALua is <a href="GALua-win32-v1.0.zip">GALua-win32-v1.0.zip</a>.
-	It is compatible with Lua 5.2.  As of this writing, there is not yet a zipped archive
-	for Linux or other platforms, but Linux is on the list of things to do.
-	</p>
-	
-	<p>
-	Alternatively, you can grab the entire project tree and build GALua yourself.
-	To do that, simply clone the GALua repository by issuing the following command.
-	</p>
+<H2><A NAME="how">How do I get GALua?</A></H2>
+
+<p>
+The current, official distribution of GALua is <a href="GALua-win32-v1.0.zip">ALua-win32-v1.0.zip</a>.
+It is compatible with Lua 5.2.  As of this writing, there is not yet a zipped archive
+for Linux or other platforms, but Linux is on the list of things to do.
+</p>
+
+<p>
+Alternatively, you can grab the entire project tree and build GALua yourself.
+To do that, simply clone the GALua repository by issuing the following command.
+</p>
 	
 <pre class="example">
  $ git clone https://github.com/spencerparkin/GALua.git
 </pre>
  
-	<p>
-	You'll need to know that GALua depends upon a statically linked library known as
-	<a href="https://github.com/spencerparkin/CalcLib">CalcLib</a> which
-	provides the GA calculation engine.  It is kept in a seperate repository, because
-	other projects, (such as <a href="http://spencerparkin.github.com/GAVisTool/">GAVisTool</a>),
-	depend upon it too.
-	</p>
+<p>
+You'll need to know that GALua depends upon a statically linked library known as
+<a href="https://github.com/spencerparkin/CalcLib">CalcLib</a> which
+provides the GA calculation engine.  It is kept in a seperate repository, because
+other projects, (such as <a href="http://spencerparkin.github.com/GAVisTool/">GAVisTool</a>),
+depend upon it too.
+</p>
 	
-	<H2><A NAME="how">How do I learn GALua?</A></H2>
+<H2><A NAME="how">How do I learn GALua?</A></H2>
 	
-	<p>
-	Documentation on the module is provided <a href="howto.html">here</a>.
-	As of this writing, GALua is on its first major release (v1.0).
-	</p>
+<p>
+Documentation on the module is provided <a href="howto.html">here</a>.
+As of this writing, GALua is on its first major release (v1.0).
+</p>
 	
-	<p>
-	Please send bugs or feedback to spencer 'dot' parkin 'at' gmail 'dot' com.
-	</p>
-	
-	</div><!-- id="content" -->
-	
-	</div><!-- id="main" -->
-	
-	<div id="about">
-	<p>Copyright (C) 2013, by Spencer T. Parkin</p>
-	</div><!-- id="about" -->
-	
-	</div><!-- id="container" -->
-    
-	</body>
-</html>
+<p>
+Please send bugs or feedback to spencer 'dot' parkin 'at' gmail 'dot' com.
+</p>
+
+</section>
