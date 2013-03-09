@@ -222,9 +222,49 @@ the sphere, what circle would it be?  This is the problem we want to solve,
 and we'll do it with CGAUtil.
 </p>
 
-<p>Do that here...</p>
+<p>A visualization of the problem is given below.</p>
 
-<h2>Example 3: The inversion of a line in a sphere</h2>
+<center><img alt="The point-sphere silhouette problem diagram is gone?!" src="point-sphere-prob.png"></center>
+
+<p>Here, the red point is a flat point, and the sphere in question is the green sphere.
+By taking two blades, each dually representative of the red point and green sphere, respectively,
+we consider taking their intersection, which is found by simply taking their outer product.
+The result is a blade dually representative of the empty point-set geometry, (the geometry of nothing.)  However, it can be
+shown that if we re-interpret this blade in terms of what it directly represents, we get the
+cyan colored sphere above which has the property of intersecting the green sphere in exactly the
+circle, (shown above in blue), that is the answer to our problem.  Let's go ahead and carry out
+these calculations using CGAUtil.</p>
+
+<pre class="example">
+local greenSphereBlade = cga.NewSphere{ center = ..., radius = ..., }:ComposeBlade()
+local redPointBlade = cga.NewFlatPoint{ center = ... }:ComposeBlade()
+local cyanSphereBlade = ( redPointBlade ^ greenSphereBlade ) * cga.I
+local blueCircleBlade = greenSphereBlade ^ cyanSphereBlade
+local circleObj = cga.NewCircle( blueCircleBlade )
+print( "circle center: " .. tostring( circleObj.center ) )
+print( "circle radius: " .. tostring( circleObj.radius ) )
+</pre>
+
+<p>
+Ellipses were placed where actual data should be substituded.
+At each step in the process of finding the answer, this code calculates a blade dually representative of the named geometry.
+We could have calculated the answer without any need of <code>cyanSphereBlade</code> or <code>cga.I</code> as follows.
+</p>
+
+<pre class="example">
+local greenSphereBlade = cga.NewSphere{ center = ..., radius = ..., }:ComposeBlade()
+local redPointBlade = cga.NewFlatPoint{ center = ... }:ComposeBlade()
+local blueCircleBlade = greenSphereBlade .. ( redPointBlade ^ greenSphereBlade )
+</pre>
+
+<h2>Example 3: The inversion of a circle in a sphere</h2>
+
+<p>Suppose now that we wish to invert a circle in a sphere.  For some it may be obvious as to what
+we generally get when performing such an operation.  It is most often a circle, but sometimes a line.
+In any case, if we're not sure what the result of any operation is, we can use CGAUtil's general decomposition
+method to find out.</p>
+
+<p>Do that here...</p>
 
 <h2>Conclusion</h2>
 	
