@@ -264,8 +264,49 @@ we generally get when performing such an operation.  It is most often a circle, 
 In any case, if we're not sure what the result of any operation is, we can use CGAUtil's general decomposition
 method to find out.</p>
 
-<p>Do that here...</p>
+<pre class="example">
+local yellowCircleBlade = cga.NewCircle{ center = ..., radius = ..., normal = ..., }:ComposeBlade()
+local orangeSphereBlade = cga.NewSphere{ center = ..., radius = ..., }:ComposeBlade()
+local redUnknownGeometryBlade = orangeSphereBlade * yellowCircleBlade * orangeSphereBlade:inverse()
+local geoObjList = cga.Decompose( redUnknownGeometryBlade )
+if #geoObjList > 1 then
+  for _, geoObj in geoObjList do
+    local redKnownGeometryBlade = geoObj:ComposeBlade()
+    if geoObj.type == "circle" then
+      print( "circle: " .. tostring( redKnownGeometryBlade ) )
+    elseif geoObj.type == "line" then
+      print( "line: " .. tostring( redKnownGeometryBlade ) )
+    end
+  end
+else
+  error( "Decomposition failure!" )
+end
+</pre>
+
+<p>Note that the taking of an inverse here is not really necessary since the inverse of the sphere blade (a vector)
+is just a scalar multiple of that vector.</p>
+
+<p>A picture of the situation we have here is given as follows.</p>
+
+<center><img alt="The circle-inversion problem diagram is gone?!" src="circle-inv-prob.png"></center>
+
+<p>
+As you can see, the general decomposition method (<code>cga.Decompose(...)</code>) returns a list
+geometries.  There is nothing complicated about this method.  It simply tries all decomposition methods
+for each type of CGA geometry, and returns the list of those that successfully decomposed, the idea
+being that a given blade is a given geometry if and only if it successfully decomposes as such.
+This puts the responsibility of correct geometric identification on the individual decomposition methods
+for eacy type of CGA geometry.
+</p>
 
 <h2>Conclusion</h2>
-	
+
+This concludes the CGAUtil tutorial.  At the time of this writing, CGAUtil is still a work in progress,
+but as it stands now, allows you to use much of what CGA has to offer.  For example, although we didn't
+cover any of the conformal transformations, they are of course available to you by virtual of your own
+knowledge of how such transformations are formulated and applied in CGA.  We need not make any specific
+reference to such things in CGAUtil, because, as we know in CGA, the geometries of CGA are also
+the transformations of CGA, which is quite interesting.  Support for composing and decomposing specific
+types of transformations, however, is on the list of things to do for CGAUtil.
+
 </section>
