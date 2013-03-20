@@ -272,11 +272,7 @@ local geoObjList = cga.Decompose( redUnknownGeometryBlade )
 if #geoObjList > 1 then
   for _, geoObj in geoObjList do
     local redKnownGeometryBlade = geoObj:ComposeBlade()
-    if geoObj.type == "circle" then
-      print( "circle: " .. tostring( redKnownGeometryBlade ) )
-    elseif geoObj.type == "line" then
-      print( "line: " .. tostring( redKnownGeometryBlade ) )
-    end
+	print( geoObj.type .. ": " .. tostring( redKnownGeometryBlade ) )
   end
 else
   error( "Decomposition failure!" )
