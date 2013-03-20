@@ -272,7 +272,7 @@ local geoObjList = cga.Decompose( redUnknownGeometryBlade )
 if #geoObjList > 1 then
   for _, geoObj in geoObjList do
     local redKnownGeometryBlade = geoObj:ComposeBlade()
-	print( geoObj.type .. ": " .. tostring( redKnownGeometryBlade ) )
+    print( geoObj.type .. ": " .. tostring( redKnownGeometryBlade ) )
   end
 else
   error( "Decomposition failure!" )
