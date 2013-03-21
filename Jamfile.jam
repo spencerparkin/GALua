@@ -1,0 +1,51 @@
+# Jamfile for GALua
+
+SubDir GALUA ;
+
+GALUA_SRCS =
+	LuaModuleCode/BasisVec.cpp
+	LuaModuleCode/BasisVec.h
+	LuaModuleCode/Compare.cpp
+	LuaModuleCode/Compare.h
+	LuaModuleCode/Convert.cpp
+	LuaModuleCode/Convert.h
+	LuaModuleCode/Debug.cpp
+	LuaModuleCode/Debug.h
+	LuaModuleCode/Definition.cpp
+	LuaModuleCode/Definition.h
+	LuaModuleCode/Environment.cpp
+	LuaModuleCode/Environment.h
+	LuaModuleCode/Error.cpp
+	LuaModuleCode/Error.h
+	LuaModuleCode/GALua.cpp
+	LuaModuleCode/GALua.h
+	LuaModuleCode/Index.cpp
+	LuaModuleCode/Index.h
+	LuaModuleCode/Number.cpp
+	LuaModuleCode/Number.h
+	LuaModuleCode/Operation.cpp
+	LuaModuleCode/Operation.h
+	LuaModuleCode/Overload.cpp
+	LuaModuleCode/Overload.h
+	LuaModuleCode/Scope.cpp
+	LuaModuleCode/Scope.h
+	LuaModuleCode/String.cpp
+	LuaModuleCode/String.h
+	LuaModuleCode/UserData.cpp
+	LuaModuleCode/UserData.h
+	LuaModuleCode/Version.cpp
+	LuaModuleCode/Version.h
+;
+
+C.OutputPath GALuaDLL : Build ;
+C.IncludeDirectories GALuaDLL : lua-5.2.1/src ;
+C.Defines GALuaDLL : GALUA_EXPORTS LUA_BUILD_AS_DLL ;
+C.LinkLibraries GALuaDLL : CalcLib ;
+C.Library GALuaDLL : $(GALUA_SRCS) : shared ;
+
+Depends GALuaDLL : LuaInterpreter ;
+
+SubInclude GALUA lua-5.2.1 ;
+SubInclude CALCLIB .. CalcLib ;
+
+# Jamfile for GALua
