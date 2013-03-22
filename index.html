@@ -35,7 +35,21 @@ provides the GA calculation engine.  It is kept in a seperate repository, becaus
 other projects, (such as <a href="http://spencerparkin.github.com/GAVisTool/">GAVisTool</a>),
 depend upon it too.
 </p>
-	
+
+<p>
+You'll then need <a href="http://jamplus.org/projects/jamplus/wiki">JamPlus</a> installed
+to build the project using its existing Jamfiles.  Once installed, issue the following
+command in the GALua project root directory.
+</p>
+
+<pre class="example">
+ $ jam -sCONFIG=release -sPLATFORM=win32 GALua
+</pre>
+
+<p>
+Of course, replace the platform argument with the appropriate option for your platform.
+</p>
+
 <H2><A NAME="how">How do I learn GALua?</A></H2>
 	
 <p>
