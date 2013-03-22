@@ -1,6 +1,6 @@
 # Jamfile for GALua
 
-SubDir GALUA ;
+SubDir SPENCERS_PROJECTS GALua ;
 
 GALUA_SRCS =
 	LuaModuleCode/BasisVec.cpp
@@ -45,7 +45,7 @@ C.Library GALuaDLL : $(GALUA_SRCS) : shared ;
 
 Depends GALuaDLL : LuaInterpreter ;
 
-SubInclude GALUA lua-5.2.1 ;
-SubInclude CALCLIB .. CalcLib ;
+SubInclude SPENCERS_PROJECTS GALua lua-5.2.1 ;
+SubInclude SPENCERS_PROJECTS CalcLib ;
 
 # Jamfile for GALua

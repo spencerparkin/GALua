@@ -1,6 +1,6 @@
 # Jamfile for Lua
 
-SubDir GALUA lua-5.2.1 ;
+SubDir SPENCERS_PROJECTS GALua lua-5.2.1 ;
 
 # This is the list of sources needed to build the Lua DLL.
 local LUA_DLL_SRCS =
