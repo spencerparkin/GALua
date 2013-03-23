@@ -38,9 +38,11 @@ GALUA_SRCS =
 ;
 
 C.OutputPath GALuaDLL : Build ;
-C.IncludeDirectories GALuaDLL : lua-5.2.1/src ;
+C.OutputName GALuaDLL : GALua ;
+#C.OutputSuffix GALuaDLL : dll ;	# <-- This doesn't work.
+C.IncludeDirectories GALuaDLL : lua-5.2.1/src ../CalcLib/Code ;
 C.Defines GALuaDLL : GALUA_EXPORTS LUA_BUILD_AS_DLL ;
-C.LinkLibraries GALuaDLL : CalcLib ;
+C.LinkLibraries GALuaDLL : CalcLib LuaDLL ;
 C.Library GALuaDLL : $(GALUA_SRCS) : shared ;
 
 Depends GALuaDLL : LuaInterpreter ;

@@ -22,9 +22,9 @@
 
 # Intermediates and built files
 Build/
-lua-5.2.1/bin/Lua.exe
-lua-5.2.1/bin/LuaDLL.dll
-lua-5.2.1/bin/LuaDLL.lib
+lua-5.2.1/bin/
+GALua/
+CalcLib/
 
 # Latex intermmediates
 *.log

@@ -14,6 +14,7 @@ local LUA_DLL_SRCS =
 	src/lcorolib.c
 	src/lctype.c
 	src/lctype.h
+	src/ldblib.c
 	src/ldebug.c
 	src/ldebug.h
 	src/ldo.c
@@ -67,12 +68,14 @@ LUA_INTERPRETER_SRCS =
 # Tell jam about the lua shared library.
 C.OutputName LuaDLL : lua ;
 C.OutputPath LuaDLL : bin ;
+#C.OutputSuffix LuaDLL : dll ;   # <-- Can't get rid of .release.dll or .debug.dll suffixes; jamplus barfs.
 C.Defines LuaDLL : LUADLL_EXPORTS LUA_BUILD_AS_DLL _CRT_SECURE_NO_WARNINGS ;
 C.Library LuaDLL : $(LUA_DLL_SRCS) : shared ;
 
 # Tell jam about the lua stand-alone interpreter.
 C.OutputName LuaInterpreter : lua ;
 C.OutputPath LuaInterpreter : bin ;
+C.OutputSuffix LuaInterpreter : exe ;	# <-- This doesn't appear to have any affect.
 C.Defines LuaInterpreter : LUADLL_IMPORTS LUA_BUILD_AS_DLL _CRT_SECURE_NO_WARNINGS ;
 C.LinkLibraries LuaInterpreter : LuaDLL ;
 C.Application LuaInterpreter : $(LUA_INTERPRETER_SRCS) ;
