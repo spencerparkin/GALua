@@ -43,17 +43,31 @@ command in the GALua project root directory.
 </p>
 
 <pre class="example">
- $ jam -sCONFIG=release -sPLATFORM=win32 GALua
+ $ jam -sCONFIG=release -sPLATFORM=win32 GALuaDLL
 </pre>
 
 <p>
 Of course, replace the platform argument with the appropriate option for your platform.
+Once it's built, you can run the <code>env.bat</code> batch file to setup some environment
+variables making the newly build Lua interpreter visible to the shell, and making the
+newly built GALua shared library visible to the Lua interpreter.  To verify that things
+are working correctly, you might try changing to the test-scripts directory and running
+a few of the tests.
 </p>
 
 <H2><A NAME="how">How do I learn GALua?</A></H2>
 	
 <p>
-Documentation on the module is provided <a href="howto.html">here</a>.
+Documentation on the module is provided <a href="howto.html">here</a>.  In fact,
+the rest of this site is simply dedicated to documenting GALua.
+</p>
+
+<p>
+At the time of this writing, I support GALua as if it had a user-base, although,
+admittedly, I am the only user.  For any serious applications requiring GA support,
+GALua may not be well-enough along, or fast enough, but for basic matters, I believe
+that it could very well be useful to someone.  In any case, and if nothing else,
+GALua has served and continues to serve as an exercise in learning how to write Lua modules.
 </p>
 	
 <p>
