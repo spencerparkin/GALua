@@ -22,6 +22,19 @@ location where you have placed GALua.dll.
 </p>
 
 <p>
+Another problem that can occur is that of multiple virtual machines being detected by Lua.  In this event,
+Lua bails out with this as an error.  The problem is that the program hosting Lua, (the program with
+a Lua virtual machine embedded in it), is not sharing that virtual machine with the one being used
+by the Lua extension module, in this case GALua.  GALua run-time links against Lua.  If the host program
+does the same thing, then there's no problem, because the shared libraries loaded by a process are managed
+by the operating system, which can tell if a requested library is already loaded.  If, on the other hand,
+the host program is compile-time linked against Lua, there's no way that GALua can share the host
+program's virtual machine.  This is a problem on Windows, but one that is solvable on Unix.  Anyhow,
+this problem has given me personally a great bit of difficulty, and better solutions to the problem
+are under investigation.
+</p>
+
+<p>
 Once you have access to the API table, almost everything you'd ever want to do with the module can be accessed
 through this table.  (Everything else is accessible as a meta-method of the multivector data-type.  More on that later!)
 To see what's available, you might simply do a dump of the API table.
